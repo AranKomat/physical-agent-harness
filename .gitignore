@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+.venv/
+.env
+.env.*
+!.env.example
+
+# Generated demonstrations and experiment artifacts are not source.
+runs/
+artifacts/
+*.sqlite
+*.sqlite-*
+*.mcap
+*.mp4
+*.npz
+
+# Model/simulator material must remain outside this repository.
+checkpoints/
+models/
+datasets/
+references/
