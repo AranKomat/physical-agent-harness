@@ -7,9 +7,14 @@ Date: 2026-09-18
 
 Build the smallest reusable **physical-agent harness** needed to let a strong
 executive model (initially GPT-6) solve one difficult BEHAVIOR task using a
-swappable learned motor policy (initially G0.5 and/or GR00T N1.7), persistent
-world state, conventional navigation, tiered verification, and bounded direct
-control for recovery.
+swappable learned motor policy, persistent world state, conventional navigation,
+tiered verification, and bounded direct control for recovery.
+
+Current implementation decision (2026-09-18): no inspected general policy has a
+verified training-free BEHAVIOR/R1Pro path. G0.5 pairing is deferred, GR00T lacks
+a verified parallel-gripper R1Pro interface, and the official radio-trained
+pi0.5 checkpoint is an integration fixture only. The held-out generalization
+experiment remains deferred; no training is authorized.
 
 This is the robotics analogue of the environment around a coding agent:
 
@@ -56,7 +61,7 @@ projects as replaceable services/code donors.
           ┌───────────────┼───────────────────┐
           │               │                   │
    Navigation Service  Motor Skill        L3 Direct Control
-      metric+topo      G0.5/GR00T           EEF/IK
+      metric+topo      swappable backend     EEF/IK
           │               │                   │
           └───────────────┼───────────────────┘
                           │
@@ -410,12 +415,15 @@ observe
 
 GPT does not wake between chunks.
 
-Initial backends:
-1. G0.5 base, R1Pro zero-shot path.
-2. GR00T N1.7 base, R1Pro pretrain tag.
-3. Xiaomi-Robotics-1 if adapter is straightforward.
-4. DM0.5 later.
-5. π0.5 later if a clean general R1Pro path is available.
+Current backend status:
+1. Official radio-trained pi0.5: bounded wiring/integration fixture only.
+2. G0.5: native R1Pro observations produce gripper output, but BEHAVIOR pairing
+   and action compatibility are not qualified.
+3. GR00T N1.7: no verified parallel-gripper R1Pro interface.
+4. Xiaomi-Robotics-1 and DM0.5: no verified training-free BEHAVIOR/R1Pro path.
+
+Do not claim motor generalization from the radio fixture and do not train or
+adapt a policy without a separate explicit decision.
 
 Keep backend-specific action codecs entirely inside adapters.
 
@@ -481,6 +489,10 @@ Strict output:
 }
 ```
 
+Tier 2 remains a supported router extension, but it is disabled for the v0
+radio pilot. The tested Qwen diagnostic produced a high-confidence false
+positive and is not qualified to complete tasks.
+
 ### Tier 3 — GPT-6
 Use for:
 - disagreement;
@@ -490,6 +502,11 @@ Use for:
 - semantically complex verification.
 
 Do not use GPT-6 on every policy chunk.
+
+For v0, GPT-6 Astra medium Flex is the selected semantic verifier. It runs only
+at semantic boundaries, must cite supplied fresh evidence, and must abstain when
+the claimed state is not observable. World/controller evidence is evaluated
+before model escalation.
 
 ---
 
@@ -559,7 +576,7 @@ behavior_env process
     └─ Isaac Sim / OmniGibson
 
 motor server
-    └─ G0.5 / GR00T / later policies
+    └─ radio pi0.5 fixture / future qualified policy
 
 world-state service
     └─ RTSM + relation adapter
@@ -568,7 +585,7 @@ navigation service
     └─ mapper + planner
 
 verifier service
-    └─ cheap VLM
+    └─ GPT-6 semantic verifier (sparse tier 3)
 
 executive process
     └─ GPT API + context projector + task ledger
@@ -600,16 +617,10 @@ Implement:
 
 Explicitly test absence of privileged state.
 
-### Phase C — motor qualification in parallel (1–3 days)
-Implement G0.5 and GR00T adapters.
-
-Smoke-test:
-- base movement;
-- pick;
-- place;
-- open/close.
-
-Do not wait for the entire harness.
+### Phase C — motor integration fixture (completed, qualification unresolved)
+Use the official radio-trained pi0.5 checkpoint only to validate the native
+bridge, action-prefix execution, receipts and fresh observations. General motor
+qualification is a separate deferred workstream.
 
 ### Phase D — RTSM adapter (1–2 days)
 Feed RGB-D + legal pose estimate.
@@ -641,8 +652,8 @@ Bound context.
 
 ### Phase G — verification (1–2 days)
 World predicates first.
-Then cheap VLM.
-Then GPT escalation.
+Then sparse GPT-6 semantic verification. Do not enable a cheap tier-2 verifier
+until it passes an independent qualification set.
 
 ### Phase H — L3 recovery (2–3 days)
 EEF pose preview/execute.
@@ -662,7 +673,7 @@ Agent A:
 - BEHAVIOR observation/action adapter.
 
 Agent B:
-- G0.5 + GR00T motor qualification.
+- radio pi0.5 fixture integration; general policy selection deferred.
 
 Agent C:
 - RTSM + relation/event adapter.

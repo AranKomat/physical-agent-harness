@@ -27,7 +27,7 @@ execution, evidence, verification and task completion.
 | Motor | Chunk/prefix execution, cancellation, deadlines, resource ownership | Qualified policy and calibrated R1Pro controller |
 | Perception | Legal BEHAVIOR envelopes and RTSM translation | Live services and sensor calibration |
 | Navigation | Depth occupancy, NetworkX routes, frontiers, semantic gateways | Pose estimator and qualified N0 controller |
-| Verification | Evidence-bearing tier routing and completion gates | VLM transports and native evidence validator |
+| Verification | Evidence-bearing tier routing, GPT-6 role metadata and completion gates | Live GPT-6 transport and native evidence validator |
 | Recovery | Evidence-bound, one-use translation previews | Native IK, collision checks and control |
 
 ### Limits
@@ -46,9 +46,10 @@ movement callback must enforce safety and shared resource ownership before
 concurrent deployment. Strong verifiers must supply the evidence validator:
 reference membership alone does not prove freshness or provenance.
 
-Synthetic tests establish neither motor competence nor physical safety.
-G0.5 still requires documented joint calibration, gripper conversion and
-controller semantics; no guessed action slicing or scaling is used.
+Synthetic tests establish neither motor competence nor physical safety. No
+inspected general policy currently has a verified training-free BEHAVIOR/R1Pro
+path. G0.5 pairing is deferred, GR00T lacks a verified parallel-gripper R1Pro
+interface, and no guessed action slicing or scaling is used.
 
 See [adapter schemas](docs/ADAPTERS.md), [navigation assumptions](docs/NAVIGATION.md),
 the [native replay contract](docs/NATIVE_REPLAY.md), and the
@@ -58,6 +59,8 @@ The [native recording bridge](docs/NATIVE_REPLAY.md) now validates the saved
 The opt-in [live radio fixture bridge](docs/LIVE_RADIO_FIXTURE.md) connects native
 action prefixes to receipts, telemetry memory, conservative verification and
 deterministic executive events. It is not a general-policy or GPT planning result.
+The radio-trained pi0.5 checkpoint is an integration fixture only; held-out
+generalization and general motor-policy selection are deferred.
 
 A deliberately small, benchmark/model-agnostic core for the first
 BEHAVIOR experiment.
@@ -75,7 +78,8 @@ It is **not** a complete robot stack. It provides:
 ## Intended external components
 
 - **BEHAVIOR-1K v3.9.2**: simulator/evaluator, outside policy process.
-- **G0.5 or GR00T N1.7**: first motor-policy candidates.
+- **Motor backend**: swappable contract; no general R1Pro policy is qualified yet.
+- **Official radio pi0.5**: bounded native integration fixture, not generalization evidence.
 - **RTSM**: v0 object memory.
 - **RoboStream/DynaMem ideas**: action-conditioned relation updates and
   dynamic object disappearance/relocation behavior.
@@ -109,12 +113,12 @@ permission to copy, modify, or redistribute the code beyond applicable law.
 ## Native Integration Checklist
 
 1. Implement `BehaviorAdapter` using only legal RGB/depth/proprioception.
-2. Implement a `MotorBackend` for G0.5 and GR00T.
+2. Qualify a general motor backend with documented R1Pro action compatibility and training provenance.
 3. Run RTSM as a separate service and translate snapshots into `WorldState`.
 4. Add an online 2D metric occupancy map + local planner built from legal
    depth and odometry/SLAM estimates.
 5. Add a semantic place graph (rooms/doors/corridors) above the metric map.
-6. Add cheap-VLM and GPT-6 verifier adapters.
+6. Wire the tier-3 GPT-6 semantic verifier at sparse semantic boundaries; tier 2 remains disabled.
 7. Add bounded EEF/IK direct-control backend.
 8. Wire GPT-6 tool calling to these contracts at semantic event boundaries.
 

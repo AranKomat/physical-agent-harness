@@ -1,7 +1,7 @@
 import pytest
 
 from physical_harness.contracts import VerificationRequest
-from physical_harness.visual_verifier import EvidenceVisualVerifier
+from physical_harness.visual_verifier import EvidenceVisualVerifier, GPT6EvidenceVerifier
 
 
 @pytest.mark.parametrize(
@@ -17,12 +17,13 @@ def test_visual_citations_and_qualification(qualified, citation, expected):
     def judge(packet):
         assert packet["world"] == {}
         assert packet["expected"] == ["radio is on table"]
+        assert packet["verifier"]["role"] == "frontier_semantic_verifier"
         return {
             "verdict": "verified",
             "confidence": 0.95,
             "evidence_ids": [citation],
             "reason": "visible",
-            "tier": 2,
+            "tier": 3,
         }
 
     verifier = EvidenceVisualVerifier(
@@ -48,7 +49,7 @@ def test_foreign_frame_rejected_before_model_call():
         ("confidence", float("nan")),
         ("confidence", True),
         ("confidence", 1.1),
-        ("tier", 3),
+        ("tier", 2),
         ("evidence_ids", "after"),
         ("reason", None),
     ],
@@ -57,7 +58,7 @@ def test_malformed_result_is_not_accepted(field, value):
     raw = {
         "verdict": "verified",
         "confidence": 0.9,
-        "tier": 2,
+        "tier": 3,
         "evidence_ids": ["after"],
         "reason": "visible",
     }
@@ -67,3 +68,37 @@ def test_malformed_result_is_not_accepted(field, value):
     )
     with pytest.raises(ValueError):
         verifier.verify(VerificationRequest("r", "s", ("claim",), after_evidence_ids=("after",)))
+
+
+def test_gpt6_verifier_has_explicit_tier_role_and_model_metadata():
+    def judge(packet):
+        assert packet["verifier"] == {
+            "name": "gpt6-evidence-verifier",
+            "role": "frontier_semantic_verifier",
+            "model": "gpt-6-astra",
+        }
+        assert "tier (3)" in packet["instruction"]
+        return {
+            "verdict": "uncertain",
+            "confidence": 0.8,
+            "evidence_ids": ["after"],
+            "reason": "Electrical state is not visible.",
+            "tier": 3,
+        }
+
+    verifier = GPT6EvidenceVerifier(
+        judge, before=[], after=[{"id": "after"}], qualified=True
+    )
+    result = verifier.verify(
+        VerificationRequest("r", "s", ("radio powered",), after_evidence_ids=("after",))
+    )
+    assert result.verifier == "gpt6-evidence-verifier"
+    assert result.metadata["tier"] == 3
+    assert result.metadata["role"] == "frontier_semantic_verifier"
+    assert result.metadata["model"] == "gpt-6-astra"
+
+
+@pytest.mark.parametrize("tier", [True, 0, 1, 4, "3"])
+def test_invalid_visual_verifier_tier_rejected(tier):
+    with pytest.raises(ValueError):
+        EvidenceVisualVerifier(lambda _: {}, before=[], after=[], tier=tier)

@@ -58,7 +58,9 @@ class VerificationRouter:
 
     Tier 0 deterministic/controller checks should normally be folded into the
     SkillReceipt before this router is called. Tier 1 is world predicates,
-    Tier 2 cheap VLM, Tier 3 frontier VLM/GPT adjudication.
+    optional Tier 2 is a qualified cheap semantic model, and Tier 3 is strong
+    model adjudication. The v0 radio configuration leaves Tier 2 disabled and
+    uses GPT-6 at Tier 3 only at semantic boundaries.
 
     Model verdicts may cite only supplied before/after references. That default
     checks provenance, not existence or freshness. Production callers should
