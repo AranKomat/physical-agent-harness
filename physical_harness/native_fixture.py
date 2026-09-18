@@ -21,15 +21,25 @@ class UnknownRadioWorld:
 
 
 class NativeFixtureBridge:
-    def __init__(self, state):
+    def __init__(
+        self,
+        state,
+        *,
+        verifier=None,
+        after_observer=None,
+        on_verified=None,
+    ):
         self.state = state
         self.ledger = TaskLedger(state)
         self.ledger.add(TaskPredicate("radio", "ON(radio)", bindings=(("radio", "power", "on"),)))
+        self.verifier = verifier or VerificationRouter(UnknownRadioWorld())
+        self.after_observer = after_observer
+        self.on_verified = on_verified
         self.last_end = 0.0
         self.seen = set()
         self.records = []
 
-    def execute(self, skill_id, start, callback):
+    def execute(self, skill_id, start, callback, *, before_evidence_ids=()):
         if skill_id in self.seen or start != self.last_end:
             raise ValueError("Duplicate or discontinuous native boundary")
         self.seen.add(skill_id)  # Reserve before any physical action; never retry implicitly.
@@ -45,12 +55,21 @@ class NativeFixtureBridge:
             name = "deterministic-integration-executive-not-gpt"
 
             def decide(self, context):
+                if context["boundary"] == "after" and not bridge.ledger.pending():
+                    return {"tool": "finish", "arguments": {}}
                 return {
                     "tool": "run_skill" if context["boundary"] == "before" else "inspect",
                     "arguments": {},
                 }
 
-        runtime = HarnessRuntime(state.episode, Motor(), VerificationRouter(UnknownRadioWorld()))
+        bridge = self
+        runtime = HarnessRuntime(
+            state.episode,
+            Motor(),
+            self.verifier,
+            after_observer=self.after_observer,
+            on_verified=self.on_verified,
+        )
         boundary = "before"
         result = []
 
@@ -64,7 +83,8 @@ class NativeFixtureBridge:
                     "turn on the radio",
                     expected_predicates=("ON(radio)",),
                     target_entities=("radio",),
-                )
+                ),
+                before_evidence_ids=before_evidence_ids,
             )
             if (
                 receipt.sim_time_start != start
@@ -73,7 +93,8 @@ class NativeFixtureBridge:
             ):
                 raise ValueError("Invalid native receipt clock")
             self.last_end = receipt.sim_time_end
-            self.ledger.set_status("radio", "needs_verification")
+            if self.ledger.get("radio").status != "observed_complete":
+                self.ledger.set_status("radio", "needs_verification")
             result.append((receipt, verification))
             return receipt
 
@@ -88,6 +109,7 @@ class NativeFixtureBridge:
             {
                 "run_skill": run_skill,
                 "inspect": lambda args: {"status": "semantic_detector_required", "retry": False},
+                "finish": lambda args: {"status": "verified_complete"},
             },
             can_finish=lambda: not self.ledger.pending(),
             max_decisions=2,
