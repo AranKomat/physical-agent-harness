@@ -51,11 +51,22 @@ identical keys. Optical frames are named `<camera>_optical`.
 
 The transform is camera-to-arbitrary-local-map in meters; rotation must be
 proper and rigid. Methods: `rgbd_odometry`, `proprio_odometry`, `rgbd_slam`.
+The first frame cites itself; subsequent odometry estimates may cite the
+previous and current observation IDs, in that order.
 The source itself cannot supply this field. The estimator must actually derive
 pose from legal observations; provenance labels alone cannot prove that.
 Calibration must come from trusted sensor configuration, not scene traversal.
 The reference-only adapter cannot inspect pixel alignment, artifact hashes or
 content; the injected artifact writer/reader must validate those.
+
+`physical_harness.localization.RGBDOdometry` is the implemented legal estimator.
+It loads only the RGB/depth content references from the envelope, applies the
+declared depth-unit scale, uses calibrated
+Open3D hybrid RGB-D odometry, composes an arbitrary local-map transform, rejects
+large translation/rotation jumps and weak information matrices, and latches
+loss on unsafe updates or frame gaps. It never consumes simulator pose. NumPy
+and Open3D are optional dependencies under the `localization` extra. A native
+run must still qualify calibration, frame cadence and accuracy for its scene.
 
 `LegalObservation` retains original positional fields and adds `episode_id`,
 `estimated_pose`, `schema_version`. No shared contracts changed. Use
@@ -103,6 +114,18 @@ Relations: `IN`, `ON`, `HELD_BY`, `NEXT_TO`, `OPEN`, `CLOSED`. The initial proto
 allows one target per subject/predicate. OPEN/CLOSED use `object="true"` and share
 the `open_state` belief. Other relation targets must be observed IDs or `robot`.
 Verification expressions are `OPEN(id)`, `CLOSED(id)`, or `IN(id,target)` etc.
+
+Call `begin_relation_transition(...)` before a semantic action to register the
+expected effect and its before-evidence. This registration does not change any
+belief. A later snapshot that observes the same relation records matched action
+provenance; an observed different target records a contradiction. Failed or
+cancelled skills must call `cancel_relation_transition(skill_id)`.
+
+`relation_memory()` retains the last observed relation when an entity becomes
+occluded, including action provenance and original after-evidence. It marks the
+entry `remembered_from_observation` and `currently_verifiable=false`; it is
+planning memory, not fresh completion evidence. `query()` returns current RTSM
+relations and retained relation memory in separate fields.
 
 World evidence records the legal input and validated reply together. Beliefs
 include label, location JSON, visibility, confidence and identity candidates.

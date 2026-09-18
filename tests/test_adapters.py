@@ -191,6 +191,15 @@ def test_pose_provenance_and_rigidity(mutation):
         LegalObservation.from_envelope(envelope)
 
 
+def test_pose_may_cite_previous_and_current_legal_frames():
+    envelope = observation(1).to_envelope()
+    envelope["estimated_pose"]["evidence_ids"] = ["frame-0", "frame-1"]
+    assert LegalObservation.from_envelope(envelope).estimated_pose["evidence_ids"] == [
+        "frame-0",
+        "frame-1",
+    ]
+
+
 def test_source_cannot_supply_pose_and_rejected_source_poisoned():
     source = Source()
     source.reset = lambda: observation().to_envelope()
@@ -371,6 +380,82 @@ def test_source_injection_copy_isolation_and_pending_limit(world):
     adapter.build_request(observation(1))
     with pytest.raises(ValueError):
         adapter.build_request(observation(2))
+
+
+def test_action_conditioned_containment_persists_as_noncurrent_memory(world):
+    clock = [0]
+    adapter = RTSMWorldAdapter(world, sim_clock=lambda: clock[0], max_age_s=5)
+    cabinet = obj("cabinet-1", 2)
+    cabinet["label"] = "cabinet"
+    ingest(adapter, 0, [obj(), cabinet])
+    prior_evidence = world.belief("candle-1", "visibility")["evidence_id"]
+    adapter.begin_relation_transition(
+        skill_id="place-1",
+        subject="candle-1",
+        predicate="IN",
+        object_value="cabinet-1",
+        before_evidence_ids=(prior_evidence,),
+    )
+    assert world.belief("candle-1", "IN") is None
+
+    relation = dict(subject="candle-1", predicate="IN", object="cabinet-1", confidence=0.97)
+    ingest(adapter, 1, [obj(), cabinet], [relation])
+    clock[0] = 1
+    current = adapter.relation_memory()[0]
+    assert current["expression"] == "IN(candle-1,cabinet-1)"
+    assert current["currently_verifiable"]
+    assert current["action_provenance"]["skill_id"] == "place-1"
+    assert current["action_provenance"]["outcome"] == "matched"
+    assert current["action_provenance"]["before_evidence_ids"] == [prior_evidence]
+
+    ingest(adapter, 2, [obj(), cabinet], [relation])
+    clock[0] = 2
+    assert adapter.relation_memory()[0]["action_provenance"]["skill_id"] == "place-1"
+
+    ingest(adapter, 3, [cabinet], [])
+    clock[0] = 3
+    retained = adapter.relation_memory()[0]
+    assert retained["subject_visibility"] == "not_observed"
+    assert retained["epistemic"] == "remembered_from_observation"
+    assert not retained["currently_verifiable"]
+    assert world.belief("candle-1", "IN")["object"] == "cabinet-1"
+    assert adapter.query({})["snapshot"]["relations"] == []
+    assert adapter.query({})["relation_memory"] == [retained]
+
+
+def test_unobserved_expected_relation_never_becomes_state(world):
+    adapter = RTSMWorldAdapter(world)
+    cabinet = obj("cabinet-1", 2)
+    ingest(adapter, 0, [obj(), cabinet])
+    adapter.begin_relation_transition(
+        skill_id="place-1",
+        subject="candle-1",
+        predicate="IN",
+        object_value="cabinet-1",
+    )
+    ingest(adapter, 1, [obj(), cabinet], [])
+    assert world.belief("candle-1", "IN") is None
+    assert adapter.relation_memory() == ()
+    assert adapter.cancel_relation_transition("place-1")
+    assert not adapter.cancel_relation_transition("place-1")
+
+
+def test_observed_relation_can_contradict_pending_action_effect(world):
+    adapter = RTSMWorldAdapter(world)
+    cabinet, shelf = obj("cabinet-1", 2), obj("shelf-1", 3)
+    ingest(adapter, 0, [obj(), cabinet, shelf])
+    adapter.begin_relation_transition(
+        skill_id="place-1",
+        subject="candle-1",
+        predicate="IN",
+        object_value="cabinet-1",
+    )
+    observed = dict(subject="candle-1", predicate="IN", object="shelf-1", confidence=0.9)
+    ingest(adapter, 1, [obj(), cabinet, shelf], [observed])
+    memory = adapter.relation_memory()[0]
+    assert memory["object"] == "shelf-1"
+    assert memory["action_provenance"]["outcome"] == "contradicted"
+    assert not adapter.cancel_relation_transition("place-1")
 
 
 def test_no_pickle_or_nonfinite_envelopes():

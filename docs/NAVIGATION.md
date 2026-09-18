@@ -5,6 +5,11 @@ or a deployment-qualified safety controller. No paid APIs or GPU services are
 used. Existing public request, receipt, place and edge dataclasses are unchanged.
 NetworkX (3.2 or newer, below 4) supplies both shortest-path implementations.
 
+The repository includes an optional Open3D `RGBDOdometry` implementation that
+can supply legal camera-to-local-map transforms. It is not yet qualified as the
+native navigator's localization source; this document's controller and mapping
+limitations still apply.
+
 ## Integration
 
 `MetricNavigation` implements `NavigationBackend.navigate(request)`. Construct

@@ -33,6 +33,8 @@ class RTSMWorldAdapter:
         self._entities: set[str] = set()
         self._predicate_confidence: dict[str, float] = {}
         self._support: dict[str, tuple[str, str, str, str]] = {}
+        self._pending_relations: dict[tuple[str, str], dict[str, Any]] = {}
+        self._relation_memory: dict[tuple[str, str], dict[str, Any]] = {}
         self._snapshot: dict[str, Any] = {}
 
     def build_request(self, observation: LegalObservation) -> dict[str, Any]:
@@ -57,6 +59,52 @@ class RTSMWorldAdapter:
         if self.source is None:
             raise ValueError("No RTSM source injected")
         return self.ingest_snapshot(self.source(self.build_request(observation)), now=now)
+
+    def begin_relation_transition(
+        self,
+        *,
+        skill_id: str,
+        subject: str,
+        predicate: str,
+        object_value: str,
+        before_evidence_ids: tuple[str, ...] = (),
+    ) -> None:
+        """Register an expected action effect without changing world state.
+
+        The transition becomes provenance only if a later legal snapshot
+        independently observes the exact relation. A command never establishes
+        a relation by itself.
+        """
+        skill_id, subject, object_value = text(skill_id), text(subject), text(object_value)
+        if predicate not in {"IN", "ON", "HELD_BY", "OPEN", "CLOSED", "NEXT_TO"}:
+            raise ValueError("Non-allowlisted expected relation")
+        relation = {"subject": subject, "predicate": predicate, "object": object_value}
+        _, belief_key, _ = self._relation(relation)
+        key = (subject, belief_key)
+        if key in self._pending_relations:
+            raise ValueError("Relation transition is already pending")
+        evidence = []
+        for identifier in before_evidence_ids:
+            identifier = text(identifier)
+            if self.world is None:
+                raise ValueError("Action provenance requires a bound world")
+            self.world._evidence(identifier)
+            evidence.append(identifier)
+        self._pending_relations[key] = {
+            "skill_id": skill_id,
+            "subject": subject,
+            "predicate": predicate,
+            "object": object_value,
+            "before_evidence_ids": evidence,
+        }
+
+    def cancel_relation_transition(self, skill_id: str) -> bool:
+        """Drop an unresolved expectation after a failed/cancelled skill."""
+        skill_id = text(skill_id)
+        keys = [key for key, value in self._pending_relations.items() if value["skill_id"] == skill_id]
+        for key in keys:
+            del self._pending_relations[key]
+        return bool(keys)
 
     @staticmethod
     def _relation(relation: dict[str, Any]) -> tuple[str, str, str]:
@@ -137,13 +185,29 @@ class RTSMWorldAdapter:
                 raise ValueError("Conflicting/duplicate single-valued relation")
             relation_keys.add((subject, belief_key))
             confidences[expression] = number(relation["confidence"], 0, 1)
+        matched_actions = []
+        for relation in value["relations"]:
+            expression, belief_key, _ = self._relation(relation)
+            pending = self._pending_relations.get((relation["subject"], belief_key))
+            if pending:
+                outcome = (
+                    "matched"
+                    if pending["predicate"] == relation["predicate"]
+                    and pending["object"] == relation["object"]
+                    else "contradicted"
+                )
+                matched_actions.append({**pending, "expression": expression, "outcome": outcome})
         evidence_id = "rtsm:" + hashlib.sha256(identifier.encode()).hexdigest()
         self.world.add_evidence(
             evidence_id,
             at,
             "perception",
             "observation:" + identifier,
-            {"observation": observation, "snapshot": value},
+            {
+                "observation": observation,
+                "snapshot": value,
+                "matched_action_transitions": matched_actions,
+            },
         )
         for obj in value["objects"]:
             beliefs = {
@@ -165,6 +229,35 @@ class RTSMWorldAdapter:
             expression, predicate, target = self._relation(relation)
             subject = relation["subject"]
             self.world.update(subject, predicate, target, evidence_id)
+            key = (subject, predicate)
+            pending = self._pending_relations.get(key)
+            previous_memory = self._relation_memory.get(key)
+            action = None
+            if pending:
+                action = {
+                    **pending,
+                    "outcome": (
+                        "matched"
+                        if pending["predicate"] == relation["predicate"]
+                        and pending["object"] == relation["object"]
+                        else "contradicted"
+                    ),
+                }
+                del self._pending_relations[key]
+            elif previous_memory and previous_memory["expression"] == expression:
+                action = previous_memory["action_provenance"]
+            self._relation_memory[key] = {
+                "expression": expression,
+                "subject": subject,
+                "predicate": relation["predicate"],
+                "belief_predicate": predicate,
+                "object": relation["object"],
+                "belief_object": target,
+                "confidence": relation["confidence"],
+                "last_observed_at": at,
+                "after_evidence_id": evidence_id,
+                "action_provenance": json_copy(action) if action else None,
+            }
             if subject not in ambiguous and relation["object"] not in ambiguous:
                 support[expression] = (subject, predicate, target, evidence_id)
         self._entities.update(ids)
@@ -230,6 +323,22 @@ class RTSMWorldAdapter:
             return None
         return self._predicate_confidence.get(predicate)
 
+    def relation_memory(self) -> tuple[dict[str, Any], ...]:
+        """Return retained relation beliefs, explicitly separated from fresh support."""
+        result = []
+        for memory in self._relation_memory.values():
+            value = json_copy(memory)
+            visibility = self.world.belief(value["subject"], "visibility") if self.world else None
+            value["subject_visibility"] = visibility["object"] if visibility else "unknown"
+            value["currently_verifiable"] = bool(self.predicate_evidence(value["expression"]))
+            value["epistemic"] = (
+                "observed_current"
+                if value["currently_verifiable"]
+                else "remembered_from_observation"
+            )
+            result.append(value)
+        return tuple(sorted(result, key=lambda item: item["expression"]))
+
     def query(self, query: Mapping[str, Any]) -> Mapping[str, Any]:
         fields(query, set(), {"entity_id"})
         result = json_copy(self._snapshot)
@@ -237,4 +346,11 @@ class RTSMWorldAdapter:
             entity = text(query["entity_id"])
             result["objects"] = [obj for obj in result["objects"] if obj["entity_id"] == entity]
             result["relations"] = [rel for rel in result["relations"] if rel["subject"] == entity]
-        return {"query": json_copy(query), "snapshot": result}
+        memories = list(self.relation_memory())
+        if "entity_id" in query:
+            memories = [item for item in memories if item["subject"] == query["entity_id"]]
+        return {
+            "query": json_copy(query),
+            "snapshot": result,
+            "relation_memory": memories,
+        }

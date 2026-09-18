@@ -25,8 +25,8 @@ execution, evidence, verification and task completion.
 | Executive | Sparse semantic tool loop, bounded context and call budget | Model transport and accounting |
 | World state | Episode-isolated beliefs, evidence, explicit task bindings, contradiction invalidation | Atomic sidecar snapshots and restart watermarks |
 | Motor | Chunk/prefix execution, cancellation, deadlines, resource ownership | Qualified policy and calibrated R1Pro controller |
-| Perception | Legal BEHAVIOR envelopes and RTSM translation | Live services and sensor calibration |
-| Navigation | Depth occupancy, NetworkX routes, frontiers, semantic gateways | Pose estimator and qualified N0 controller |
+| Perception | Legal BEHAVIOR envelopes, Open3D RGB-D odometry, RTSM translation and relation memory | Live artifact store, services and sensor calibration |
+| Navigation | Depth occupancy, NetworkX routes, frontiers, semantic gateways | Native odometry qualification and qualified N0 controller |
 | Verification | Evidence-bearing tier routing, GPT-6 role metadata and completion gates | Live GPT-6 transport and native evidence validator |
 | Recovery | Evidence-bound, one-use translation previews | Native IK, collision checks and control |
 
@@ -46,13 +46,19 @@ movement callback must enforce safety and shared resource ownership before
 concurrent deployment. Strong verifiers must supply the evidence validator:
 reference membership alone does not prove freshness or provenance.
 
+The optional RGB-D odometry backend is an implemented local-pose estimator, not
+a localization-accuracy claim. It rejects large jumps, low-information updates,
+frame gaps and cross-episode input, and latches loss rather than silently
+resetting the map origin. Install it with `pip install -e ".[localization]"`.
+
 Synthetic tests establish neither motor competence nor physical safety. No
 inspected general policy currently has a verified training-free BEHAVIOR/R1Pro
 path. G0.5 pairing is deferred, GR00T lacks a verified parallel-gripper R1Pro
 interface, and no guessed action slicing or scaling is used.
 
 See [adapter schemas](docs/ADAPTERS.md), [navigation assumptions](docs/NAVIGATION.md),
-the [native replay contract](docs/NATIVE_REPLAY.md), and the
+the [closed semantic boundary](docs/SEMANTIC_CYCLE.md), the
+[native replay contract](docs/NATIVE_REPLAY.md), and the
 [integration results](docs/LIVE_RADIO_FIXTURE.md).
 The [native recording bridge](docs/NATIVE_REPLAY.md) now validates the saved
 16-frame sensor sequence; it intentionally does not invent simulation timestamps.
@@ -61,6 +67,10 @@ action prefixes to receipts, telemetry memory, conservative verification and
 deterministic executive events. It is not a general-policy or GPT planning result.
 The radio-trained pi0.5 checkpoint is an integration fixture only; held-out
 generalization and general motor-policy selection are deferred.
+The runtime exposes closed-boundary hooks for fresh post-skill observation,
+verification, ledger update and event publication in that order. The native
+radio fixture still needs its live perception and GPT-6 transports wired into
+those hooks before it constitutes an autonomous semantic cycle.
 
 A deliberately small, benchmark/model-agnostic core for the first
 BEHAVIOR experiment.
@@ -71,6 +81,8 @@ It is **not** a complete robot stack. It provides:
 - the previously tested stale-reply/resource `JobManager`;
 - synchronous event routing;
 - tiered verification routing;
+- legal RGB-D odometry with explicit loss semantics;
+- action-conditioned relation provenance and occlusion-safe relation memory;
 - a minimal semantic topological map;
 - adapter boundaries for BEHAVIOR and RTSM;
 - a swappable `MotorBackend` protocol.
@@ -97,7 +109,7 @@ python -m pip install -e ".[dev]"
 pytest -q
 ```
 
-The current suite contains 161 offline tests. They validate contracts and
+The current suite contains 179 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 ## Repository scope
@@ -112,9 +124,9 @@ permission to copy, modify, or redistribute the code beyond applicable law.
 
 ## Native Integration Checklist
 
-1. Implement `BehaviorAdapter` using only legal RGB/depth/proprioception.
+1. Wire the implemented `BehaviorAdapter` and `RGBDOdometry` to native legal artifacts.
 2. Qualify a general motor backend with documented R1Pro action compatibility and training provenance.
-3. Run RTSM as a separate service and translate snapshots into `WorldState`.
+3. Run RTSM as a separate service and feed observed relations into `WorldState`.
 4. Add an online 2D metric occupancy map + local planner built from legal
    depth and odometry/SLAM estimates.
 5. Add a semantic place graph (rooms/doors/corridors) above the metric map.

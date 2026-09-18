@@ -66,8 +66,15 @@ def validate_pose(pose: Any, observation_id: str, cameras: set[str]) -> None:
         raise ValueError("Pose must be legally estimated, not simulator global pose")
     if pose["frame"] != "local_map" or pose["camera"] not in cameras:
         raise ValueError("Pose must map a calibrated camera to an arbitrary local map")
-    if pose["evidence_ids"] != [observation_id]:
-        raise ValueError("Pose provenance must reference this observation")
+    evidence_ids = pose["evidence_ids"]
+    if (
+        not isinstance(evidence_ids, list)
+        or not 1 <= len(evidence_ids) <= 2
+        or any(not isinstance(value, str) or not value.strip() for value in evidence_ids)
+        or len(set(evidence_ids)) != len(evidence_ids)
+        or evidence_ids[-1] != observation_id
+    ):
+        raise ValueError("Pose provenance must end with this observation")
     number(pose["confidence"], 0, 1)
     matrix = pose["transform"]
     if not isinstance(matrix, list) or len(matrix) != 4:

@@ -16,6 +16,7 @@ from .contracts import (
     VerificationResult,
     VerificationVerdict,
 )
+from .localization import LocalizationLost, RGBDOdometry
 from .runtime import HarnessRuntime
 
 __all__ = [
@@ -29,4 +30,6 @@ __all__ = [
     "NavigationRequest",
     "NavigationReceipt",
     "HarnessRuntime",
+    "RGBDOdometry",
+    "LocalizationLost",
 ]

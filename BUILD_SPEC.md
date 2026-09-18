@@ -622,9 +622,10 @@ Use the official radio-trained pi0.5 checkpoint only to validate the native
 bridge, action-prefix execution, receipts and fresh observations. General motor
 qualification is a separate deferred workstream.
 
-### Phase D — RTSM adapter (1–2 days)
-Feed RGB-D + legal pose estimate.
-Persist entities to WorldState.
+### Phase D — RTSM adapter (offline implementation complete; native service pending)
+Feed RGB-D + legal pose estimate. Persist entities and observed semantic
+relations to WorldState. Retain action-conditioned relation provenance and
+occlusion-safe memory without treating remembered state as fresh verification.
 
 Replay tests:
 - moving camera / stationary object;
@@ -633,16 +634,19 @@ Replay tests:
 - identical objects;
 - stale perception results.
 
-### Phase E — navigation (2–4 days)
+### Phase E — navigation (prototype complete; native qualification pending)
 Start simple:
 - depth → local occupancy;
-- odometry/localization;
+- implemented Open3D RGB-D odometry/localization;
 - A*;
 - target/entity goal;
 - frontier exploration;
 - semantic place/gateway graph.
 
 Borrow HomeRobot/Stretch AI algorithms aggressively.
+
+The odometry implementation rejects unsafe updates and never consumes simulator
+pose. Native calibration, accuracy and N0 control remain unqualified.
 
 ### Phase F — task ledger/context (1 day)
 Parse task once.
