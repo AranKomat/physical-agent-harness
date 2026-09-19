@@ -34,6 +34,7 @@ from .actors import FreshVisualVerifier, Goal, ModelCaptioner, ModelExecutive
 from .curation import VisualCurator, validated_coverage
 from .journal import Journal
 from .media import ImageResolver, image_geometry
+from .memory_routing import InformationNeed, MemoryTier, route_memory_tier
 from .native import NativeBindings, Observation
 from .snapshots import ExperimentContext
 from .validation import digest, dumps, fields, identifiers, integer, number, text
@@ -175,7 +176,8 @@ class EpisodeRunner:
             episode, self.executive, self._context,
             {"run_skill": self._skill_tool, "inspect": self._inspect,
              "request_verification": self._verify_tool, "finish": self._finish},
-            can_finish=self.can_finish, max_decisions=self.limits.max_decisions,
+            can_finish=self.can_finish, on_decision=self._route_shadow_memory,
+            max_decisions=self.limits.max_decisions,
             max_context_bytes=self.policy.max_metadata_bytes)
         self.journal.put("run", "manifest", {
             "episode": episode, "goal_text": goal_text, "native": native.name,
@@ -319,15 +321,55 @@ class EpisodeRunner:
         self.journal.put("decision", event.event_id, record)
         self.cutoffs.reserve(decision_id=event.event_id, event_id=event.event_id, cutoff=cutoff,
                              query="", entity_id=None, place_id=self.current.place_id, active=False)
-        if self.memory_ok:
-            try:
-                packet = self.selector.packet(cutoff, goal=self.goal_text[:1900],
-                                               focus_entities=focus, current_place=self.current.place_id)
-                self.journal.put("shadow_packet", event.event_id, packet)
-                self.cutoffs.finalize(event.event_id, tuple(c["card_id"] for c in packet["cards"]))
-            except Exception as exc:
-                self._memory_error("retrieval", exc)
         return context
+
+    def _route_shadow_memory(self, event, decision):
+        """Freeze need and retrieve the selected shadow tier after model work."""
+        if event.event_id != self._decision_id:
+            raise ValueError("Shadow route does not match the active decision")
+        try:
+            need = InformationNeed.from_dict(decision.get("information_need"))
+            route = route_memory_tier(need)
+            saved = self.cutoffs.get(event.event_id)
+            self.journal.put("shadow_route", event.event_id, {
+                "event_id": event.event_id,
+                "observed_through": saved.cutoff.observed_through,
+                "information_need": asdict(need),
+                "selected_tier": route.tier.value,
+                "reasons": list(route.reasons),
+                "active": False,
+                "declared_before_retrieval": True,
+            })
+            if route.tier == MemoryTier.CURRENT:
+                packet = {
+                    "schema_version": 1,
+                    "cutoff": asdict(saved.cutoff),
+                    "cards": [],
+                    "images": [],
+                    "selection_policy": "M0: no historical retrieval",
+                }
+            else:
+                focus = tuple(dict.fromkeys(t for g in self.goals.values() for t in g.targets))
+                packet = self.selector.packet(
+                    saved.cutoff,
+                    goal=self.goal_text[:1900],
+                    focus_entities=focus,
+                    current_place=self.current.place_id,
+                )
+                if route.tier == MemoryTier.EVENTS:
+                    policy = str(packet.get("selection_policy", ""))
+                    packet = dict(
+                        packet,
+                        images=[],
+                        selection_policy=(policy + "; M1 event/text-only shadow route").lstrip("; "),
+                    )
+            self.journal.put("shadow_packet", event.event_id, packet)
+            self.cutoffs.finalize(
+                event.event_id,
+                tuple(card["card_id"] for card in packet["cards"]),
+            )
+        except Exception as exc:
+            self._memory_error("prospective_routing", exc)
 
     def _arguments(self, arguments):
         fields(arguments, {"action_id", "goal_id", "reason"})

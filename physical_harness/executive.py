@@ -22,6 +22,7 @@ class ExecutiveLoop:
         handlers: Mapping[str, Callable[[Mapping[str, Any]], Any]],
         *,
         can_finish: Callable[[], bool],
+        on_decision: Callable[[RuntimeEvent, Mapping[str, Any]], None] | None = None,
         max_decisions: int = 20,
         max_context_bytes: int = 12000,
     ):
@@ -31,6 +32,7 @@ class ExecutiveLoop:
             raise ValueError("Positive executive budgets required")
         self.episode_id, self.executive = episode_id, executive
         self.context, self.handlers, self.can_finish = context, dict(handlers), can_finish
+        self.on_decision = on_decision
         self.max_decisions, self.max_bytes = max_decisions, max_context_bytes
         self.calls = 0
         self._seen: set[str] = set()
@@ -52,8 +54,10 @@ class ExecutiveLoop:
         self._seen.add(event.event_id)
         self.calls += 1
         decision = self.executive.decide(context)
-        if not isinstance(decision, Mapping) or set(decision) != {"tool", "arguments"}:
-            raise ValueError("Executive must return exactly tool and arguments")
+        if not isinstance(decision, Mapping) or not {"tool", "arguments"} <= set(decision):
+            raise ValueError("Executive must return tool and arguments")
+        if set(decision) - {"tool", "arguments", "information_need"}:
+            raise ValueError("Executive returned unsupported decision metadata")
         tool, arguments = decision["tool"], decision["arguments"]
         if not isinstance(tool, str) or tool not in self.handlers or tool not in SEMANTIC_TOOLS:
             raise ValueError("Unsupported semantic tool")
@@ -61,10 +65,15 @@ class ExecutiveLoop:
             raise ValueError("Tool arguments must be an object")
         if len(json.dumps(arguments, allow_nan=False).encode()) > 8192:
             raise ValueError("Tool arguments exceed limit")
+        if self.on_decision is not None:
+            self.on_decision(event, decision)
         if tool == "finish" and not self.can_finish():
             raise ValueError("Finish requires verified tasks and resolved execution")
         result = self.handlers[tool](arguments)
-        self.trace.append({"event_id": event.event_id, "tool": tool, "arguments": dict(arguments)})
+        trace = {"event_id": event.event_id, "tool": tool, "arguments": dict(arguments)}
+        if "information_need" in decision:
+            trace["information_need"] = dict(decision["information_need"])
+        self.trace.append(trace)
         if tool == "finish":
             self.finished = True
         return result

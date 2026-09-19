@@ -92,14 +92,13 @@ def test_terminal_receipt_preserves_tool_contract_error_message(tmp_path):
             context = loads(blocks[0]["text"])
             if all(g["status"] == "observed_complete" for g in context["task_ledger"]):
                 content = response["output"][0]["content"][0]
-                content["text"] = dumps({
-                    "tool": "finish",
-                    "arguments": {
-                        "action_id": None,
-                        "goal_id": "closed",
-                        "reason": "Invalid fixture finish binding",
-                    },
-                }).decode()
+                body = loads(content["text"])
+                body["arguments"] = {
+                    "action_id": None,
+                    "goal_id": "closed",
+                    "reason": "Invalid fixture finish binding",
+                }
+                content["text"] = dumps(body).decode()
             return response
 
     runner, native, transport, journal = build(tmp_path, transport=BadFinish())
@@ -181,8 +180,22 @@ def test_identity_candidates_block_task_verification(tmp_path):
 
 
 def test_shadow_failure_does_not_change_action_or_base_context(tmp_path):
+    class HistoricalNeed(FixtureTransport):
+        def post(self, path, payload):
+            response = super().post(path, payload)
+            schema = payload.get("text", {}).get("format", {}).get("schema", {}).get("properties", {})
+            if path == "/responses" and "tool" in schema:
+                content = response["output"][0]["content"][0]
+                body = loads(content["text"])
+                body["information_need"]["prior_event"] = True
+                content["text"] = dumps(body).decode()
+            return response
+
     runner, native, transport, journal = build(
-        tmp_path, policy=RichContextPolicy(memory_metadata_bytes=1))
+        tmp_path,
+        transport=HistoricalNeed(),
+        policy=RichContextPolicy(memory_metadata_bytes=1),
+    )
     try:
         report = runner.run()
         assert report['harness_finished'] and report['motion_calls'] == 1

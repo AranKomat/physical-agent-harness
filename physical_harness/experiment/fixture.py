@@ -31,7 +31,17 @@ class FixtureTransport:
             done = all(g["status"] == "observed_complete" for g in context["task_ledger"])
             answer = {"tool": "finish" if done else "run_skill", "arguments": {
                 "action_id": None if done else "close-cabinet", "goal_id": None if done else "closed",
-                "reason": "Deterministic fixture decision, not language-model reasoning"}}
+                "reason": "Deterministic fixture decision, not language-model reasoning"},
+                "information_need": {
+                    "prior_event": False,
+                    "prior_place": False,
+                    "failure_or_recovery_history": False,
+                    "revisit_comparison": False,
+                    "visual_identity_continuity": False,
+                    "visual_motion_comparison": False,
+                    "visual_appearance_comparison": False,
+                    "historical_geometry": False,
+                }}
         elif "verdict" in schema:
             images = [b for b in blocks if b["type"] == "input_image"]
             raw = base64.b64decode(images[-1]["image_url"].split(",", 1)[1])
