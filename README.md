@@ -69,6 +69,8 @@ For development and sparse simulator-paused experiments, the optional
 ChatGPT-authenticated
 [`codex exec` transport](docs/CODEX_EXEC_EXPERIMENT_TRANSPORT.md) provides a
 separate, schema-validated path without replacing the deployment API adapter.
+Its agent prefix is reduced but not eliminated, so it is not an API-equivalent
+baseline for model-quality comparisons.
 
 Commands are not observations of success. Native inputs must exclude simulator
 ground truth and scorer state. Synchronous callbacks must enforce their own

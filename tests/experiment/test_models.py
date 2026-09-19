@@ -248,6 +248,9 @@ def test_codex_exec_is_ephemeral_read_only_structured_and_subscription_accounted
         args, kwargs = fake.calls[-1]
         assert "--ephemeral" in args and args[args.index("--sandbox") + 1] == "read-only"
         assert "--ignore-user-config" in args and "--ignore-rules" in args
+        assert "--strict-config" in args and "shell_tool" in args
+        assert 'personality="none"' in args
+        assert any(value.startswith("model_instructions_file=") for value in args)
         assert Path(args[args.index("--cd") + 1]).name.startswith("physical-harness-codex-")
         assert args[args.index("--model") + 1] == "gpt-6-astra"
         assert kwargs["env"].get("OPENAI_API_KEY") is None

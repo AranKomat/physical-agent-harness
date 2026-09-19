@@ -23,6 +23,39 @@ class CommandRunner(Protocol):
     def __call__(self, args: list[str], **kwargs) -> subprocess.CompletedProcess[str]: ...
 
 
+_MINIMAL_CODEX_DISABLED_FEATURES = (
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "browser_use_full_cdp_access",
+    "code_mode_host",
+    "computer_use",
+    "goals",
+    "hooks",
+    "image_generation",
+    "in_app_browser",
+    "in_app_chat",
+    "in_app_dictation",
+    "in_app_local_automation",
+    "multi_agent",
+    "plugin_sharing",
+    "plugins",
+    "remote_plugin",
+    "shell_snapshot",
+    "shell_tool",
+    "skill_mcp_dependency_install",
+    "skill_search",
+    "sleep_tool",
+    "steer",
+    "tool_call_mcp_elicitation",
+    "unified_exec",
+    "unified_exec_tty",
+    "unavailable_dummy_tools",
+    "view_image",
+    "workspace_dependencies",
+)
+
+
 @dataclass(frozen=True)
 class Rates:
     # USD / million tokens numerically equals micro-USD / token.
@@ -94,6 +127,7 @@ class CodexExecSettings:
     max_pixels: int = 12_000_000
     codex_binary: str = "codex"
     require_chatgpt_auth: bool = True
+    minimal_agent_context: bool = True
 
     def __post_init__(self):
         text(self.model, "exact Codex model ID", 256)
@@ -114,8 +148,9 @@ class CodexExecSettings:
             raise ValueError("Unsupported Codex reasoning effort")
         for value in (self.timeout_s, self.max_output_bytes, self.max_images, self.max_pixels):
             integer(value, minimum=1)
-        if type(self.require_chatgpt_auth) is not bool:
-            raise ValueError("require_chatgpt_auth must be boolean")
+        for value in (self.require_chatgpt_auth, self.minimal_agent_context):
+            if type(value) is not bool:
+                raise ValueError("Codex execution switches must be boolean")
 
 
 class CodexExecJsonModel:
@@ -218,6 +253,7 @@ class CodexExecJsonModel:
             "wire_sha256": digest(packet),
             "ephemeral": True,
             "sandbox": "read-only",
+            "minimal_agent_context": s.minimal_agent_context,
         }
         # Zero is the API-dollar reservation. The journal still enforces call count.
         self.journal.reserve(call_id, role, manifest, 0)
@@ -228,6 +264,7 @@ class CodexExecJsonModel:
                 schema_path = root / "schema.json"
                 output_path = root / "result.json"
                 schema_path.write_bytes(dumps(schema))
+                instructions_path = root / "minimal-instructions.md"
                 image_paths = []
                 for index, image in enumerate(images):
                     suffix = ".png" if image.uri.endswith(".png") else ".jpg"
@@ -243,6 +280,7 @@ class CodexExecJsonModel:
                     "--skip-git-repo-check",
                     "--ignore-user-config",
                     "--ignore-rules",
+                    "--strict-config",
                     "--cd",
                     str(root),
                     "--model",
@@ -250,6 +288,19 @@ class CodexExecJsonModel:
                 ]
                 if s.reasoning_effort:
                     command += ["-c", f'model_reasoning_effort="{s.reasoning_effort}"']
+                if s.minimal_agent_context:
+                    instructions_path.write_text(
+                        "Answer the supplied task directly. Do not use tools. "
+                        "Return only the requested structured output.\n"
+                    )
+                    command += [
+                        "-c",
+                        'personality="none"',
+                        "-c",
+                        "model_instructions_file=" + dumps(str(instructions_path)).decode(),
+                    ]
+                    for feature in _MINIMAL_CODEX_DISABLED_FEATURES:
+                        command += ["--disable", feature]
                 for path in image_paths:
                     command += ["--image", str(path)]
                 command += [
