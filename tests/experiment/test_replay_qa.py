@@ -96,3 +96,36 @@ def test_qa_uses_saved_context_and_never_sends_evaluation_labels(tmp_path):
         assert contexts[0]['task_ledger'][0]['status'] == 'planned'
     finally:
         journal.close()
+
+
+def test_qa_can_record_transport_errors_and_continue(tmp_path):
+    run = tmp_path / 'run'
+    run_demo(run)
+    exports = tmp_path / 'exports'
+    export_replay(run, exports)
+    labels = tmp_path / 'labels.json'
+    labels.write_bytes(dumps([{'question_id':'q', 'decision_file':'decision-0000.json',
+        'question':'Is the state observable?', 'expected_evidence_ids':[], 'must_abstain':True}]))
+
+    class FailingModel:
+        def call(self, *args, **kwargs):
+            raise TimeoutError
+
+    journal = Journal(tmp_path / 'qa.sqlite', 'fixture-episode', max_microusd=0, max_calls=4)
+    try:
+        result = evaluate_qa(
+            export_dir=exports,
+            labels_file=labels,
+            model=FailingModel(),
+            journal=journal,
+            continue_on_model_error=True,
+        )
+        assert len(result['answers']) == 4
+        assert all(row['model_error'] == 'TimeoutError' for row in result['answers'])
+        assert all(row['answer'] is None for row in result['answers'])
+        assert all(
+            row['semantic_correctness'] == 'not_scored_transport_incomplete'
+            for row in result['answers']
+        )
+    finally:
+        journal.close()
