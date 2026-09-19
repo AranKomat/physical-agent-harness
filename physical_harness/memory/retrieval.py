@@ -13,7 +13,7 @@ from .store import MemoryStore
 
 
 def words(value: str) -> list[str]:
-    return re.findall(r'\w+', value.casefold(), flags=re.UNICODE)
+    return re.findall(r'\w+', value.casefold().replace('_', ' '), flags=re.UNICODE)
 
 
 @dataclass(frozen=True)
@@ -55,7 +55,8 @@ class Retriever:
                  and (place_id is None or place_id in c.place_ids)
                  and (not kinds or c.kind in kinds)]
         annotations = [self.store.annotation(c.card_id, cutoff) for c in cards]
-        texts = [c.summary + ' ' + c.event_type + ' ' + ' '.join(c.entity_ids + c.place_ids)
+        texts = [c.summary + ' ' + c.event_type + ' ' + c.source_event_id + ' '
+                 + ' '.join(c.entity_ids + c.place_ids)
                  + (' ' + a['draft']['text'] if a else '')
                  for c, a in zip(cards, annotations)]
         tokens = [Counter(words(t)) for t in texts]
@@ -100,9 +101,8 @@ class Retriever:
         }
         if len(encoded(packet)) > budget.max_bytes:
             raise ValueError('Memory metadata budget too small even for empty packet')
-        media_seen = set()
-        pixels = 0
         seen_cards = set()
+        card_media = {}
         for hit in hits:
             # Re-read from the store; caller cannot forge a Hit's summary/annotation.
             card = self.store.card(hit.card.card_id, cutoff)
@@ -121,34 +121,51 @@ class Retriever:
             # Do not pull old clips wholesale into context. A handle is enough until
             # the model explicitly requests the original clip / storyboard.
             item['asset_handles'] = []
-            next_images = []
-            next_pixels = pixels
-            next_seen = set(media_seen)
+            media = []
             for identifier in card.asset_ids:
                 a = self.store.asset(identifier, cutoff)
                 item['asset_handles'].append({'asset_id': identifier, 'kind': a.kind,
                                               'observed_at': a.observed_end,
                                               'parent_id': a.parent_id})
-                if (include_images and a.kind in {'image', 'crop'} and a.sha256 not in next_seen
-                        and len(packet['images'])+len(next_images) < budget.max_images
-                        and next_pixels+a.width*a.height <= budget.max_pixels):
-                    next_images.append(payload(a))
-                    next_pixels += a.width*a.height
-                    next_seen.add(a.sha256)
-            candidate = dict(packet, cards=packet['cards']+[item],
-                             images=packet['images']+next_images)
+                if a.kind in {'image', 'crop'}:
+                    media.append(a)
+            candidate = dict(packet, cards=packet['cards']+[item])
             if len(encoded(candidate)) > budget.max_bytes:
                 packet['omitted_cards'] += 1
                 continue
             packet = candidate
-            media_seen, pixels = next_seen, next_pixels
+            card_media[card.card_id] = media
         # omission count growth can add digits after the final accepted card.
         while len(encoded(packet)) > budget.max_bytes and packet['cards']:
-            packet['cards'].pop()
-            packet['images'] = []
+            removed = packet['cards'].pop()
+            card_media.pop(removed['card_id'], None)
             packet['omitted_cards'] += 1
         if len(encoded(packet)) > budget.max_bytes:
             raise ValueError('Memory budget too small for omission metadata')
+        # Allocate historical pixels across event boundaries before taking a
+        # second camera from any one event. EventRecorder orders same-time views
+        # by camera, so a head view is naturally considered before wrist views.
+        if include_images:
+            media_seen = set()
+            pixels = 0
+            rounds = max((len(items) for items in card_media.values()), default=0)
+            for index in range(rounds):
+                for card_item in packet['cards']:
+                    items = card_media[card_item['card_id']]
+                    if index >= len(items) or len(packet['images']) >= budget.max_images:
+                        continue
+                    asset = items[index]
+                    if asset.sha256 in media_seen:
+                        continue
+                    next_pixels = pixels + asset.width * asset.height
+                    if next_pixels > budget.max_pixels:
+                        continue
+                    candidate = dict(packet, images=packet['images']+[payload(asset)])
+                    if len(encoded(candidate)) > budget.max_bytes:
+                        continue
+                    packet = candidate
+                    pixels = next_pixels
+                    media_seen.add(asset.sha256)
         return packet
 
 

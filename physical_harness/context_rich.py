@@ -474,6 +474,7 @@ class BroadMemorySelector:
     ) -> dict[str, Any]:
         chosen: dict[str, Hit] = {}
         reasons: dict[str, list[str]] = {}
+        query_rank: dict[str, int] = {}
 
         def add(hits: Iterable[Hit], reason: str) -> None:
             for hit in hits:
@@ -495,12 +496,16 @@ class BroadMemorySelector:
                 f"current_place:{current_place}",
             )
         if goal.strip():
+            query_hits = self.retriever.search(
+                cutoff, query=goal, limit=self.policy.memory_query_cards
+            )
             add(
-                self.retriever.search(
-                    cutoff, query=goal, limit=self.policy.memory_query_cards
-                ),
+                query_hits,
                 "goal_query",
             )
+            query_rank = {
+                hit.card.card_id: index for index, hit in enumerate(query_hits)
+            }
         add(
             self.retriever.search(
                 cutoff, query="", limit=self.policy.memory_recent_cards
@@ -508,7 +513,14 @@ class BroadMemorySelector:
             "recent_history",
         )
 
-        hits = list(chosen.values())
+        hits = sorted(
+            chosen.values(),
+            key=lambda hit: (
+                query_rank.get(hit.card.card_id, len(query_rank)),
+                -hit.card.observed_end,
+                hit.card.card_id,
+            ),
+        )
         if len(hits) > self.policy.memory_max_cards:
             # Quotas above are deliberately generous; if they exceed the explicit
             # experiment cap, fail instead of silently deciding which evidence GPT
@@ -533,7 +545,8 @@ class BroadMemorySelector:
         }
         packet["selection_policy"] = (
             "union of focus-entity history, current-place history, goal query, "
-            "and recent history; no learned relevance model"
+            "and recent history; lexical query matches first, then event-diverse images; "
+            "no learned relevance model"
         )
         if packet.get("omitted_cards"):
             raise ContextBudgetExceeded(

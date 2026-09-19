@@ -208,6 +208,7 @@ def test_broad_memory_selector_unions_entity_place_goal_and_recent(tmp_path):
     )
     ids = {c["card_id"] for c in packet["cards"]}
     assert {"c1","c2","c3","c4"} <= ids
+    assert packet["cards"][0]["card_id"] == "c3"
     assert "focus_entity:ball_1" in packet["selection_reasons"]["c1"]
     assert "current_place:kitchen" in packet["selection_reasons"]["c2"]
     store.close()

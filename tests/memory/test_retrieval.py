@@ -2,7 +2,7 @@ from dataclasses import replace
 
 import pytest
 
-from physical_harness.memory import Draft, PacketBudget, Retriever, attach_memory
+from physical_harness.memory import Card, Draft, PacketBudget, Retriever, attach_memory
 from physical_harness.memory.retrieval import Hit
 from physical_harness.memory.schemas import encoded
 
@@ -48,6 +48,18 @@ def test_lexical_query_and_no_sql_injection(memory):
     assert len(store.cards(store.cutoff(2))) == 2
 
 
+def test_query_matches_event_source_words_separated_by_punctuation(memory):
+    store, blobs = memory
+    asset = blobs.frame(store, 'move-head', 1)
+    store.add_card(Card(
+        'move', 'ep', 'event', 'scripted:scripted-displacement', 'motion_observed',
+        1, 1, (asset.asset_id,), ('target',), ('place-a',), 'Runtime boundary',
+    ))
+    assert Retriever(store).search(
+        store.cutoff(2), query='scripted displacement'
+    )[0].card.card_id == 'move'
+
+
 def test_annotation_unavailable_to_old_cutoff_retrieval(memory):
     store, blobs = memory
     c = card(store, blobs)
@@ -69,6 +81,33 @@ def test_byte_image_pixel_budgets(memory):
     assert len(packet['cards']) <= 3 and len(packet['images']) <= 1
     assert len(encoded(packet)) <= 3000
     assert packet['omitted_cards'] > 0
+
+
+def test_image_budget_round_robins_across_event_cards(memory):
+    store, blobs = memory
+    first_assets = tuple(
+        blobs.frame(store, f'first-{camera}', 1, camera, color).asset_id
+        for camera, color in [('head', 'red'), ('left_wrist', 'green'), ('right_wrist', 'blue')]
+    )
+    second_assets = tuple(
+        blobs.frame(store, f'second-{camera}', 2, camera, color).asset_id
+        for camera, color in [('head', 'orange'), ('left_wrist', 'purple'), ('right_wrist', 'yellow')]
+    )
+    first = Card('first', 'ep', 'event', 'event-first', 'object_sighting', 1, 1,
+                 first_assets, ('target',), ('place-a',), 'first event')
+    second = Card('second', 'ep', 'event', 'event-second', 'motion_observed', 2, 2,
+                  second_assets, ('target',), ('place-a',), 'second event')
+    store.add_card(first)
+    store.add_card(second)
+    packet = Retriever(store).packet(
+        [Hit(first, None, 0), Hit(second, None, 0)],
+        store.cutoff(2),
+        PacketBudget(max_cards=2, max_images=2, max_pixels=10_000, max_bytes=10_000),
+    )
+    assert [image['asset_id'] for image in packet['images']] == [
+        'first-head',
+        'second-head',
+    ]
 
 
 def test_same_pixels_deduped_but_events_not_erased(memory):
