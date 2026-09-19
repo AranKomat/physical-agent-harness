@@ -1,0 +1,223 @@
+{
+  "episode": "halloween-demo",
+  "goal": "Put away the Halloween decorations",
+  "task_ledger": [
+    {
+      "id": "c1",
+      "goal": "IN(candle_1,cabinet_A)",
+      "status": "observed_complete",
+      "evidence_id": "img-169",
+      "dependencies": [],
+      "evidence": [
+        "img-169"
+      ]
+    },
+    {
+      "id": "c2",
+      "goal": "IN(candle_2,cabinet_A)",
+      "status": "planned",
+      "evidence_id": null,
+      "dependencies": [],
+      "evidence": []
+    },
+    {
+      "id": "p1",
+      "goal": "IN(pumpkin_1,cabinet_A)",
+      "status": "planned",
+      "evidence_id": null,
+      "dependencies": [],
+      "evidence": []
+    }
+  ],
+  "current_images": [
+    {
+      "id": "img-current-head",
+      "uri": "img-current-head.png",
+      "sim_time": 70.0
+    }
+  ],
+  "current_focus": {
+    "candle_2": {
+      "label": {
+        "value": "tall orange candle with black stripe",
+        "observed_at": 63.0,
+        "evidence_id": "crop-2",
+        "epistemic": "observed"
+      },
+      "location": {
+        "value": {
+          "place": "living_room",
+          "support": "coffee_table"
+        },
+        "observed_at": 63.0,
+        "evidence_id": "img-254",
+        "epistemic": "observed"
+      },
+      "visibility": {
+        "value": "visible",
+        "observed_at": 70.0,
+        "evidence_id": "img-272",
+        "epistemic": "observed"
+      }
+    },
+    "cabinet_A": {
+      "open_state": {
+        "value": "open",
+        "observed_at": 12.0,
+        "evidence_id": "img-047",
+        "epistemic": "observed"
+      }
+    }
+  },
+  "entity_roster": [
+    {
+      "id": "candle_2",
+      "last_update": 70.0,
+      "label": "tall orange candle with black stripe",
+      "location": {
+        "place": "living_room",
+        "support": "coffee_table"
+      },
+      "visibility": "visible"
+    },
+    {
+      "id": "cabinet_A",
+      "last_update": 12.0,
+      "relations": {
+        "open_state": "open"
+      }
+    },
+    {
+      "id": "robot",
+      "last_update": 70.0,
+      "relations": {
+        "place": "living_room"
+      }
+    },
+    {
+      "id": "candle_1",
+      "last_update": 41.0,
+      "label": "orange candle with bat pattern",
+      "visibility": "not_observed",
+      "relations": {
+        "IN": "cabinet_A"
+      },
+      "inferred_fields": [
+        "visibility"
+      ]
+    },
+    {
+      "id": "pumpkin_1",
+      "last_update": 3.4,
+      "label": "small plastic jack-o-lantern",
+      "location": {
+        "place": "living_room",
+        "support": "side_table"
+      }
+    },
+    {
+      "id": "coffee_table",
+      "last_update": 3.4,
+      "label": "glass coffee table"
+    }
+  ],
+  "entity_history": {
+    "candle_2": [
+      {
+        "predicate": "location",
+        "value": {
+          "place": "living_room",
+          "support": "coffee_table"
+        },
+        "observed_at": 3.4,
+        "valid_until": 63.0,
+        "evidence_id": "img-014",
+        "epistemic": "observed"
+      },
+      {
+        "predicate": "visibility",
+        "value": "not_observed",
+        "observed_at": 63.0,
+        "valid_until": null,
+        "evidence_id": "img-254",
+        "epistemic": "inferred"
+      }
+    ],
+    "cabinet_A": []
+  },
+  "navigation": {},
+  "topology": {
+    "current_place": "living_room",
+    "places": [
+      {
+        "id": "hallway",
+        "label": "East hallway",
+        "kind": "corridor",
+        "metadata": {
+          "description": "blue sofa on left"
+        }
+      },
+      {
+        "id": "living_room",
+        "label": "Living room",
+        "kind": "room",
+        "metadata": {}
+      }
+    ],
+    "connections": [
+      {
+        "a": "living_room",
+        "b": "hallway",
+        "cost": 1.0,
+        "gateway_entity": "door_04",
+        "gateway_state": "open",
+        "traversable": true
+      }
+    ]
+  },
+  "observation_coverage": [
+    {
+      "scope_id": "coffee_table_surface",
+      "observed_at": 70.0,
+      "coverage": "high",
+      "result": "seen",
+      "evidence_ids": [
+        "img-current-head"
+      ],
+      "note": "candle_2 visible; no need to search another room"
+    }
+  ],
+  "executors": {},
+  "runtime_events": [
+    {
+      "event_id": "evt-34",
+      "type": "skill_failed",
+      "sim_time": 63.0,
+      "details": {
+        "skill_id": "pick-candle-2",
+        "reason": "possible bowl obstruction"
+      }
+    },
+    {
+      "event_id": "evt-35",
+      "type": "decision_required",
+      "sim_time": 70.0,
+      "details": {}
+    }
+  ],
+  "state_recent_events": [
+    {
+      "seq": 98,
+      "sim_time": 63.0,
+      "type": "belief_updated"
+    }
+  ],
+  "context_notice": "Broad context by design. Beliefs and histories are fallible; identity ambiguity and not-observed state must not be converted into certainty. The harness organizes evidence but leaves semantic judgment to the executive.",
+  "context_profile": {
+    "roster_entities": 6,
+    "focus_entities": 2,
+    "detailed_histories": 2,
+    "runtime_events": 2,
+    "current_images": 1
+  }
+}

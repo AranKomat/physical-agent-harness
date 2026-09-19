@@ -4,12 +4,12 @@ An experimental, model-agnostic runtime for connecting a sparse reasoning layer
 to robot perception, world state, motor policies, verification, navigation, and
 bounded recovery. The first integration target is BEHAVIOR with R1Pro.
 
-## v0.8 implementation status
+## v0.9 implementation status
 
 The offline core is implemented and tested. This is **not yet a qualified
 BEHAVIOR robot runtime**. The original component overview below is retained
-as architectural context; its implementation checklist is now a native
-integration checklist.
+as architectural context; its implementation checklist is now a set of native
+qualification and integration gates.
 
 ```bash
 python -m physical_harness demo --output runs/demo-new
@@ -30,6 +30,13 @@ execution, evidence, verification and task completion.
 | Verification | Evidence-bearing tier routing, GPT-6 role metadata and completion gates | Live GPT-6 transport and native evidence validator |
 | Historical memory | Episode-local cards/media, causal cutoffs, logger/event-bus sidecar and shadow decision packets | Multi-object held-out M0/M1/M2 replay evaluation before active use |
 | Recovery | Evidence-bound, one-use translation previews | Native IK, collision checks and control |
+
+The opt-in [rich current-context profile](docs/RICH_CONTEXT_V09.md) preserves the
+full task ledger, a broad entity roster, detailed focus history, semantic events,
+spatial context, and measured negative evidence for the next GPT experiment. It
+does not replace the conservative projector or enable historical memory in live
+decisions. `BroadMemorySelector` and `attach_rich_memory` support causal M1/M2
+replay after the shadow trace has been recorded.
 
 ### Limits
 
@@ -125,7 +132,13 @@ Run the synthetic shadow wiring example with:
 python examples/memory_shadow_integration.py --output /tmp/memory-shadow-new
 ```
 
-The current suite contains 256 offline tests. They validate contracts and
+Render the synthetic rich current context with:
+
+```bash
+python examples/rich_context_example.py
+```
+
+The current suite contains 266 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install

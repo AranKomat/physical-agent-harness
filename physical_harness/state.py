@@ -261,6 +261,20 @@ class WorldState:
         )
         return [dict(row) for row in rows]
 
+    def subjects(self) -> tuple[str, ...]:
+        """Return subjects with at least one current belief in this episode.
+
+        This is a read-only roster helper for broad executive context. It does
+        not rank relevance, infer identity, or expose historical-only subjects
+        whose beliefs have all been superseded.
+        """
+        rows = self.db.execute(
+            """SELECT DISTINCT subject FROM beliefs
+               WHERE episode=? AND valid_until IS NULL ORDER BY subject""",
+            (self.episode,),
+        )
+        return tuple(row[0] for row in rows)
+
     def add_task(
         self,
         identifier: str,
