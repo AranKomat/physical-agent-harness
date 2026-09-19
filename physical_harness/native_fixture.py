@@ -4,6 +4,7 @@ import math
 from dataclasses import asdict
 
 from .contracts import EventType, RuntimeEvent, SkillRequest
+from .events import EventBus
 from .executive import ExecutiveLoop
 from .ledger import TaskLedger, TaskPredicate
 from .runtime import HarnessRuntime
@@ -28,6 +29,8 @@ class NativeFixtureBridge:
         verifier=None,
         after_observer=None,
         on_verified=None,
+        memory_sidecar=None,
+        current_place_id=None,
     ):
         self.state = state
         self.ledger = TaskLedger(state)
@@ -35,9 +38,14 @@ class NativeFixtureBridge:
         self.verifier = verifier or VerificationRouter(UnknownRadioWorld())
         self.after_observer = after_observer
         self.on_verified = on_verified
+        self.memory_sidecar = memory_sidecar
+        self.current_place_id = current_place_id
+        if memory_sidecar is not None and memory_sidecar.episode_id != state.episode:
+            raise ValueError("Memory sidecar belongs to another episode")
         self.last_end = 0.0
         self.seen = set()
         self.records = []
+        self.memory_shadow = []
 
     def execute(self, skill_id, start, callback, *, before_evidence_ids=()):
         if skill_id in self.seen or start != self.last_end:
@@ -63,10 +71,20 @@ class NativeFixtureBridge:
                 }
 
         bridge = self
+        event_bus = EventBus()
+        if self.memory_sidecar is not None:
+            places = (self.current_place_id,) if self.current_place_id else ()
+            self.memory_sidecar.bind_skill(
+                skill_id,
+                entity_ids=("radio",),
+                place_ids=places,
+            )
+            event_bus.subscribe(self.memory_sidecar.record_event)
         runtime = HarnessRuntime(
             state.episode,
             Motor(),
             self.verifier,
+            events=event_bus,
             after_observer=self.after_observer,
             on_verified=self.on_verified,
         )
@@ -98,14 +116,39 @@ class NativeFixtureBridge:
             result.append((receipt, verification))
             return receipt
 
-        loop = ExecutiveLoop(
-            state.episode,
-            Executive(),
-            lambda event: {
+        def build_context(event):
+            base = {
                 **state.project("Turn on radio (integration only)", ["robot", "radio"], []),
                 "boundary": boundary,
                 "trigger": event.type.value,
-            },
+            }
+            if self.memory_sidecar is None:
+                return base
+            context, decision, packet = self.memory_sidecar.prepare_decision(
+                decision_id=f"memory:{event.event_id}",
+                event_id=event.event_id,
+                observed_through=event.sim_time,
+                base_context=base,
+                query=base["goal"],
+                entity_id="radio",
+                place_id=self.current_place_id,
+                active=False,
+            )
+            if context != base or "episodic_memory" in context:
+                raise RuntimeError("Shadow memory altered executive context")
+            self.memory_shadow.append(
+                {
+                    "decision": asdict(decision),
+                    "packet": packet,
+                    "active": False,
+                }
+            )
+            return context
+
+        loop = ExecutiveLoop(
+            state.episode,
+            Executive(),
+            build_context,
             {
                 "run_skill": run_skill,
                 "inspect": lambda args: {"status": "semantic_detector_required", "retry": False},
@@ -114,7 +157,16 @@ class NativeFixtureBridge:
             can_finish=lambda: not self.ledger.pending(),
             max_decisions=2,
         )
-        loop.on_event(RuntimeEvent(EventType.DECISION_REQUIRED, state.episode, start))
+        initial_event = RuntimeEvent(EventType.DECISION_REQUIRED, state.episode, start)
+        if self.memory_sidecar is not None:
+            places = (self.current_place_id,) if self.current_place_id else ()
+            self.memory_sidecar.record_event(
+                initial_event,
+                entity_ids=("radio",),
+                place_ids=places,
+            )
+        shadow_start = len(self.memory_shadow)
+        loop.on_event(initial_event)
         boundary = "after"
         event = runtime.events.recent()[-1]
         loop.on_event(event)
@@ -127,6 +179,7 @@ class NativeFixtureBridge:
             "executive_calls": loop.calls,
             "finished": loop.finished,
             "task_status": self.ledger.get("radio").status,
+            "memory_shadow": self.memory_shadow[shadow_start:],
         }
         self.records.append(record)
         return record

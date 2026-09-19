@@ -5,6 +5,8 @@ from physical_harness.contracts import (
     VerificationResult,
     VerificationVerdict,
 )
+from physical_harness.evidence import EvidenceStore
+from physical_harness.memory import DecisionCutoffLog, MemorySidecar, MemoryStore
 from physical_harness.native_fixture import NativeFixtureBridge, UnknownRadioWorld
 from physical_harness.state import WorldState
 from physical_harness.verification import VerificationRouter
@@ -127,6 +129,80 @@ def test_injected_observer_requires_fresh_evidence_ids(tmp_path):
                     0.5,
                 ),
             )
+
+
+def test_radio_fixture_records_memory_shadow_without_changing_decisions(tmp_path):
+    blobs = EvidenceStore(tmp_path / "evidence")
+    first = blobs.put(b"first legal image", ".jpg")
+    second = blobs.put(b"second legal image", ".jpg")
+    memory = MemoryStore(tmp_path / "episodic.sqlite", "episode", blobs.read)
+    decisions = DecisionCutoffLog(tmp_path / "memory-decisions.sqlite", "episode")
+    sidecar = MemorySidecar(
+        episode_id="episode",
+        store=memory,
+        decisions=decisions,
+        resolve_rgb_ref=lambda ref: ref,
+    )
+
+    def envelope(observation_id, sim_time, ref):
+        return {
+            "schema_version": 1,
+            "episode_id": "episode",
+            "observation_id": observation_id,
+            "sim_time": sim_time,
+            "rgb_refs": {"head": ref},
+            "depth_refs": {"head": "depth"},
+            "proprioception": {"joint_positions": [0.0]},
+            "camera_intrinsics": {
+                "head": {
+                    "width": 16,
+                    "height": 12,
+                    "fx": 10.0,
+                    "fy": 10.0,
+                    "cx": 8.0,
+                    "cy": 6.0,
+                    "depth_scale_m": 0.001,
+                }
+            },
+            "camera_frames": {"head": "head_optical"},
+        }
+
+    sidecar.ingest_observation(envelope("before", 0.0, first))
+    with WorldState(tmp_path / "world.sqlite", "episode") as state:
+        bridge = NativeFixtureBridge(
+            state,
+            memory_sidecar=sidecar,
+            current_place_id="radio-room",
+        )
+
+        def execute(request):
+            sidecar.ingest_observation(envelope("after", 0.5, second))
+            return SkillReceipt(
+                request.skill_id,
+                "fixture",
+                "completed",
+                0,
+                0.5,
+                evidence_ids=("after",),
+            )
+
+        result = bridge.execute("chunk-0", 0, execute)
+
+    assert result["event"]["type"] == "verifier_uncertain"
+    assert result["task_status"] == "needs_verification"
+    assert not result["finished"]
+    assert len(result["memory_shadow"]) == 2
+    assert all(not item["active"] for item in result["memory_shadow"])
+    assert [decisions.status(item["decision"]["decision_id"]) for item in result["memory_shadow"]] == [
+        "finalized",
+        "finalized",
+    ]
+    cards = memory.cards(memory.cutoff(0.5))
+    assert [card.event_type for card in cards] == ["decision_required", "verifier_uncertain"]
+    assert all(card.entity_ids == ("radio",) for card in cards)
+    assert all(card.place_ids == ("radio-room",) for card in cards)
+    decisions.close()
+    memory.close()
 
 
 @pytest.mark.parametrize("end", [float("nan"), float("inf"), 0, -1])

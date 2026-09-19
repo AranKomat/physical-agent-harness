@@ -10,7 +10,9 @@ from .store import MemoryStore
 BOUNDARIES = frozenset({'skill_verified', 'skill_failed', 'skill_stalled', 'target_lost',
                         'state_contradiction', 'arrived', 'door_blocked', 'world_changed',
                         'execution_timeout', 'decision_required', 'place_entered',
-                        'object_sighting', 'motion_observed', 'heartbeat'})
+                        'object_sighting', 'motion_observed', 'heartbeat',
+                        'verifier_uncertain', 'precondition_violated',
+                        'plan_exhausted', 'path_blocked'})
 
 
 @dataclass(frozen=True)
@@ -110,7 +112,11 @@ class EventRecorder:
             kind = 'coverage_gap'
         outcome = {'skill_verified': 'verifier_reported_supported',
                    'skill_failed': 'failed', 'skill_stalled': 'uncertain',
-                   'execution_timeout': 'uncertain'}.get(boundary.event_type, 'not_assessed')
+                   'execution_timeout': 'uncertain',
+                   'verifier_uncertain': 'uncertain',
+                   'precondition_violated': 'uncertain',
+                   'plan_exhausted': 'uncertain',
+                   'path_blocked': 'uncertain'}.get(boundary.event_type, 'not_assessed')
         card = Card(
             card_id, boundary.episode_id, kind, boundary.event_id, boundary.event_type,
             min((a.observed_start for a in assets), default=boundary.sim_time), boundary.sim_time,

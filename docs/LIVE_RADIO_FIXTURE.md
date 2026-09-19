@@ -1,5 +1,25 @@
 # Live radio fixture bridge
 
+## Recorded native memory shadow replay, 2026-09-19
+
+The retained one-boundary native radio trace was replayed through the v0.8
+memory sidecar without executing another robot action or making a model/API
+call. Six genuine source camera images (three before and three after) were
+registered, and the initial `decision_required` plus terminal
+`verifier_uncertain` events produced two historical cards. Both cards retained
+the trusted `radio` entity and `radio-room` place bindings.
+
+The two decision cutoffs finalized successfully while returning the executive's
+base context unchanged. Replaying the first cutoff reproduced its packet exactly
+and did not expose the later terminal card. This validates native artifact,
+event, binding and causal-cutoff wiring; it does not show that memory improves
+decisions. The source run executed 16 task-trained fixture actions, reported
+native success false, and made no task-success claim.
+
+The private live pilot now has an opt-in memory-shadow path for future runs. The
+next evidence milestone is a held-out multi-object, multi-place trace and an
+equal-budget M0/M1/M2 comparison, not activation of memory in live context.
+
 ## Bounded pilot closeout
 
 Follow-up `radio-harness-bounded-003` completed **600 native actions across 38
