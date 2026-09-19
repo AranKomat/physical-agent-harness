@@ -225,6 +225,7 @@ def evaluate_qa(*, export_dir: Path, labels_file: Path, model, journal) -> dict:
             available = {image.id for image in images}
             # Structured source handles can be cited without pixel inclusion in M1.
             for card in context.get("episodic_memory", {}).get("cards", []):
+                available.add(card["card_id"])
                 available.update(card.get("asset_ids", []))
             available.update(
                 entry["rgb_asset_id"]

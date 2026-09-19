@@ -76,10 +76,13 @@ def test_qa_uses_saved_context_and_never_sends_evaluation_labels(tmp_path):
             context = loads(payload['input'][0]['content'][0]['text'])
             contexts.append(context)
             assert 'expected_evidence_ids' not in context and 'must_abstain' not in context
+            cards = context.get('episodic_memory', {}).get('cards', [])
+            citations = [cards[0]['card_id']] if cards else []
             return {'id':'qa', 'status':'completed', 'service_tier':'default',
                     'usage':{'input_tokens':100,'output_tokens':30},
                     'output':[{'type':'message','role':'assistant','content':[
-                        {'type':'output_text','text':'{"answer":"unknown","uncertain":true,"evidence_ids":[]}'}]}]}
+                        {'type':'output_text','text':dumps({'answer':'unknown','uncertain':True,
+                                                          'evidence_ids':citations}).decode()}]}]}
     journal = Journal(tmp_path / 'qa.sqlite', 'fixture-episode', max_microusd=0, max_calls=4)
     try:
         model = JsonModel(ModelSettings('test-only', paid=False), QA(), journal,
@@ -88,6 +91,7 @@ def test_qa_uses_saved_context_and_never_sends_evaluation_labels(tmp_path):
         assert len(result['answers']) == 4
         assert [r['variant'] for r in result['answers']] == ['M0','M1','M2','M2_spatial']
         assert all(r['semantic_correctness'] == 'requires_independent_review' for r in result['answers'])
+        assert all(r['unknown_citation_ids'] == [] for r in result['answers'])
         assert 'episodic_memory' not in contexts[0]
         assert contexts[0]['task_ledger'][0]['status'] == 'planned'
     finally:
