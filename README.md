@@ -4,7 +4,7 @@ An experimental, model-agnostic runtime for connecting a sparse reasoning layer
 to robot perception, world state, motor policies, verification, navigation, and
 bounded recovery. The first integration target is BEHAVIOR with R1Pro.
 
-## v0.6 implementation status
+## v0.7 implementation status
 
 The offline core is implemented and tested. This is **not yet a qualified
 BEHAVIOR robot runtime**. The original component overview below is retained
@@ -28,6 +28,7 @@ execution, evidence, verification and task completion.
 | Perception | Legal BEHAVIOR envelopes, Open3D RGB-D odometry, RTSM translation and relation memory | Live artifact store, services and sensor calibration |
 | Navigation | Depth occupancy, NetworkX routes, frontiers, semantic gateways | Native odometry qualification and qualified N0 controller |
 | Verification | Evidence-bearing tier routing, GPT-6 role metadata and completion gates | Live GPT-6 transport and native evidence validator |
+| Historical memory | Episode-local event cards, source images/crops, causal cutoffs, bounded retrieval and optional asynchronous narration | Shadow-mode native capture and held-out replay evaluation |
 | Recovery | Evidence-bound, one-use translation previews | Native IK, collision checks and control |
 
 ### Limits
@@ -67,6 +68,12 @@ action prefixes to receipts, telemetry memory, conservative verification and
 deterministic executive events. It is not a general-policy or GPT planning result.
 The radio-trained pi0.5 checkpoint is an integration fixture only; held-out
 generalization and general motor-policy selection are deferred.
+The additive [multimodal memory prototype](docs/MULTIMODAL_MEMORY_V07.md) is
+disabled until explicitly wired. It records historical evidence separately from
+current `WorldState`, and its optional narration cannot verify outcomes or
+complete tasks. The first integration is shadow-mode capture and replay, not
+live action influence. See the [research ledger](docs/MEMORY_RESEARCH_LEDGER.md)
+for the external systems reviewed and the limits of those comparisons.
 The runtime exposes closed-boundary hooks for fresh post-skill observation,
 verification, ledger update and event publication in that order. The native
 radio fixture still needs its live perception and GPT-6 transports wired into
@@ -83,6 +90,7 @@ It is **not** a complete robot stack. It provides:
 - tiered verification routing;
 - legal RGB-D odometry with explicit loss semantics;
 - action-conditioned relation provenance and occlusion-safe relation memory;
+- source-backed historical event, entity, place and motion memory;
 - a minimal semantic topological map;
 - adapter boundaries for BEHAVIOR and RTSM;
 - a swappable `MotorBackend` protocol.
@@ -109,8 +117,12 @@ python -m pip install -e ".[dev]"
 pytest -q
 ```
 
-The current suite contains 179 offline tests. They validate contracts and
+The current suite contains 246 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
+
+The core historical store and retriever use only the standard library. Install
+`.[memory]` when creating source-preserving image crops or running the memory
+replay example; `.[dev]` includes that image dependency for the complete suite.
 
 ## Repository scope
 
