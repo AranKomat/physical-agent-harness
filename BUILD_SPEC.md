@@ -1,4 +1,4 @@
-# Physical Agent Harness — Build Specification v0.9
+# Physical Agent Harness — Build Specification v0.10
 ## Handoff for the coding/research agent
 
 Date: 2026-09-19
@@ -16,15 +16,20 @@ a verified parallel-gripper R1Pro interface, and the official radio-trained
 pi0.5 checkpoint is an integration fixture only. The held-out generalization
 experiment remains deferred; no training is authorized.
 
-v0.9 status: the offline contracts and prototypes below are implemented. The
+v0.10 status: the offline contracts and prototypes below are implemented. The
 radio fixture has closed one live semantic verification boundary with fresh
 legal evidence, while its executive remains deterministic. Episodic memory is
 wired into legal observations, runtime events, and decision cutoffs in shadow
 mode; a retained native trace passed causal replay. Remaining work is live
 service integration and empirical qualification, not another architecture pass.
-An opt-in rich current-context profile is available for the GPT experiment;
-historical memory remains excluded from live executive decisions until M0/M1/M2
-replay is complete.
+The executable experiment runner now connects image-bearing model transports,
+predeclared semantic actions, fresh visual verification, durable accounting, a
+bounded simulator subprocess bridge, shadow memory, and frozen M0/M1/M2 export.
+Its synthetic demo is an integration check, not a benchmark result. An opt-in
+rich current-context profile is available for the GPT experiment; historical
+memory remains excluded from live executive decisions until M0/M1/M2 replay is
+complete. See `docs/EXPERIMENT_RUNNER_V010.md` for configuration and acceptance
+gates.
 
 This is the robotics analogue of the environment around a coding agent:
 

@@ -1,0 +1,27 @@
+{
+  "settings": {
+    "model": "REPLACE_WITH_EXACT_LOCAL_VLM_MODEL_ID",
+    "dialect": "chat",
+    "paid": false,
+    "use_input_token_endpoint": false,
+    "max_input_tokens": 16000,
+    "max_output_tokens": 512,
+    "max_images": 6,
+    "max_pixels": 6000000,
+    "detail": "high"
+  },
+  "transport": {
+    "base_url": "http://127.0.0.1:8000/v1",
+    "api_key_env": null,
+    "allow_local_http": true,
+    "timeout_s": 30
+  },
+  "rates": {
+    "default": {
+      "input": "0",
+      "cached_input": "0",
+      "output": "0",
+      "reference": "self-hosted local endpoint; zero API tariff, GPU cost excluded"
+    }
+  }
+}

@@ -4,16 +4,19 @@ An experimental, model-agnostic runtime for connecting a sparse reasoning layer
 to robot perception, world state, motor policies, verification, navigation, and
 bounded recovery. The first integration target is BEHAVIOR with R1Pro.
 
-## v0.9 implementation status
+## v0.10 implementation status
 
-The offline core is implemented and tested. This is **not yet a qualified
-BEHAVIOR robot runtime**. The original component overview below is retained
-as architectural context; its implementation checklist is now a set of native
-qualification and integration gates.
+The offline core and bounded experiment runner are implemented and tested. This
+is **not yet a qualified BEHAVIOR robot runtime**. The original component
+overview below is retained as architectural context; its implementation
+checklist is now a set of native qualification and integration gates.
 
 ```bash
 python -m physical_harness demo --output runs/demo-new
 python -m physical_harness doctor
+python -m physical_harness.experiment demo --output /tmp/physical-demo-new
+python -m physical_harness.experiment doctor \
+  --config configs/experiment_v010/doctor.fixture.json
 ```
 
 Use a fresh demo output directory. The demo uses deterministic fixtures, not
@@ -22,13 +25,13 @@ execution, evidence, verification and task completion.
 
 | Component | Implemented | Remaining integration |
 | --- | --- | --- |
-| Executive | Sparse semantic tool loop, bounded context and call budget | Model transport and accounting |
+| Executive | Sparse semantic tool loop, bounded context/call budget, image-bearing model transports and durable accounting | Real model IDs, rates, endpoint qualification and approved budget |
 | World state | Episode-isolated beliefs, evidence, explicit task bindings, contradiction invalidation | Atomic sidecar snapshots and restart watermarks |
-| Motor | Chunk/prefix execution, cancellation, deadlines, resource ownership | Qualified policy and calibrated R1Pro controller |
+| Motor | Chunk/prefix execution, cancellation, deadlines, resource ownership and bounded simulator subprocess IPC | Qualified policy, native driver wiring and calibrated R1Pro controller |
 | Perception | Legal BEHAVIOR envelopes, Open3D RGB-D odometry, RTSM translation and relation memory | Live artifact store, services and sensor calibration |
 | Navigation | Depth occupancy, NetworkX routes, frontiers, semantic gateways | Native odometry qualification and qualified N0 controller |
-| Verification | Evidence-bearing tier routing, GPT-6 role metadata and completion gates | Live GPT-6 transport and native evidence validator |
-| Historical memory | Episode-local cards/media, causal cutoffs, logger/event-bus sidecar and shadow decision packets | Multi-object held-out M0/M1/M2 replay evaluation before active use |
+| Verification | Evidence-bearing tier routing, image-bearing semantic verifier transport and completion gates | Live GPT-6 qualification and native evidence validator |
+| Historical memory | Episode-local cards/media, causal cutoffs, shadow decision packets and frozen M0/M1/M2 export | Multi-object held-out replay evaluation before active use |
 | Recovery | Evidence-bound, one-use translation previews | Native IK, collision checks and control |
 
 The opt-in [rich current-context profile](docs/RICH_CONTEXT_V09.md) preserves the
@@ -38,10 +41,17 @@ does not replace the conservative projector or enable historical memory in live
 decisions. `BroadMemorySelector` and `attach_rich_memory` support causal M1/M2
 replay after the shadow trace has been recorded.
 
+The [v0.10 experiment runner](docs/EXPERIMENT_RUNNER_V010.md) connects legal
+image observations, rich current context, predeclared semantic actions, fresh
+verification, task-ledger updates, shadow memory, conservative cost accounting,
+and frozen replay export. Network access, paid calls, and simulated motion each
+require a separate command-line opt-in. The shipped fixture remains synthetic.
+
 ### Limits
 
-No paid API transport is enabled. Future GPT integrations should prefer Flex
-when available and preserve approved budget limits. No training or held-out
+No paid API transport is enabled by default. Live transport requires explicit
+network and payment opt-ins. Future GPT integrations should prefer Flex when
+available and preserve approved budget limits. No training or held-out
 evaluation is launched by this package.
 
 Commands are not observations of success. Native inputs must exclude simulator
@@ -138,7 +148,7 @@ Render the synthetic rich current context with:
 python examples/rich_context_example.py
 ```
 
-The current suite contains 266 offline tests. They validate contracts and
+The current suite contains 311 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install
@@ -157,7 +167,8 @@ permission to copy, modify, or redistribute the code beyond applicable law.
 
 ## Qualification And Integration Gates
 
-1. Close one live radio-fixture cycle from legal perception through GPT-6
+1. Wire the reviewed native BEHAVIOR driver into the v0.10 subprocess bridge,
+   then close one live radio-fixture cycle from legal perception through GPT-6
    verification and ledger update into a real GPT-6 executive turn.
 2. Exercise episodic memory concurrently in live shadow mode and verify timing,
    source lineage, backpressure, and causal cutoffs without changing actions.

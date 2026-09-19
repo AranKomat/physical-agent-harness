@@ -10,9 +10,10 @@ requires-python = ">=3.11"
 dependencies = ["networkx>=3.2,<4"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.8", "numpy>=1.26,<3", "Pillow>=10,<13"]
+dev = ["pytest>=8", "ruff>=0.8", "numpy>=1.26,<3", "Pillow>=10,<13", "jsonschema>=4.22,<5"]
 localization = ["numpy>=1.26,<3", "open3d>=0.18,<0.20"]
 memory = ["Pillow>=10,<13"]
+experiment = ["Pillow>=10,<13", "jsonschema>=4.22,<5"]
 
 [project.urls]
 Repository = "https://github.com/AranKomat/physical-agent-harness"

@@ -1,0 +1,148 @@
+{
+  "episode": "radio-integration-001",
+  "goal_text": "Integration diagnostic only: inspect the radio, optionally execute one reviewed radio-policy prefix, and assess visible evidence. The original radio power task is not RGB-verifiable. Do not equate radio visibility with power-on or benchmark success.",
+  "goals": [
+    {
+      "id": "radio_visible",
+      "expression": "VISIBLE(radio)",
+      "binding": [
+        "radio",
+        "visibility",
+        "visible"
+      ],
+      "visual_criteria": "The intended radio is actually visible in the supplied current image. This certifies neither power-on, sound, nor successful button operation.",
+      "targets": [
+        "radio"
+      ],
+      "observable_from_rgb": true,
+      "verifier_qualification": null,
+      "verifier_cameras": []
+    },
+    {
+      "id": "radio_power",
+      "expression": "ON(radio)",
+      "binding": [
+        "radio",
+        "power",
+        "on"
+      ],
+      "visual_criteria": "Do not infer electrical power or sound from appearance alone.",
+      "targets": [
+        "radio"
+      ],
+      "observable_from_rgb": false,
+      "verifier_qualification": null
+    }
+  ],
+  "actions": [
+    {
+      "id": "radio-prefix",
+      "instruction": "Execute one already-reviewed bounded prefix from the official task-trained radio policy. Do not change action units or normalization.",
+      "targets": [
+        "radio"
+      ],
+      "goal_id": "radio_visible",
+      "skill_type": "radio_fixture_prefix",
+      "max_wall_s": 30,
+      "max_policy_chunks": 1,
+      "max_action_steps": 16
+    }
+  ],
+  "models": {
+    "executive": {
+      "settings": {
+        "model": "REPLACE_WITH_ACCESSIBLE_PROVIDER_MODEL_ID",
+        "dialect": "responses",
+        "service_tier": "flex",
+        "reasoning_effort": "medium",
+        "max_input_tokens": 32768,
+        "max_output_tokens": 2048,
+        "max_images": 8,
+        "max_pixels": 12000000,
+        "detail": "high",
+        "paid": true,
+        "use_input_token_endpoint": true
+      },
+      "transport": {
+        "base_url": "https://api.openai.com/v1",
+        "api_key_env": "OPENAI_API_KEY",
+        "timeout_s": 240,
+        "max_response_bytes": 4000000
+      },
+      "rates": {
+        "flex": {
+          "input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "cached_input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "output": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "reference": "REPLACE_WITH_EXACT_MODEL_TIER_RATE_SOURCE_AND_DATE"
+        },
+        "default": {
+          "input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "cached_input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "output": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "reference": "REPLACE_WITH_EXACT_MODEL_TIER_RATE_SOURCE_AND_DATE"
+        }
+      }
+    },
+    "verifier": {
+      "settings": {
+        "model": "REPLACE_WITH_ACCESSIBLE_PROVIDER_MODEL_ID",
+        "dialect": "responses",
+        "service_tier": "flex",
+        "reasoning_effort": "medium",
+        "max_input_tokens": 12000,
+        "max_output_tokens": 1000,
+        "max_images": 6,
+        "max_pixels": 12000000,
+        "detail": "high",
+        "paid": true,
+        "use_input_token_endpoint": true
+      },
+      "transport": {
+        "base_url": "https://api.openai.com/v1",
+        "api_key_env": "OPENAI_API_KEY",
+        "timeout_s": 240,
+        "max_response_bytes": 4000000
+      },
+      "rates": {
+        "flex": {
+          "input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "cached_input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "output": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "reference": "REPLACE_WITH_EXACT_MODEL_TIER_RATE_SOURCE_AND_DATE"
+        },
+        "default": {
+          "input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "cached_input": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "output": "REPLACE_WITH_USD_PER_MILLION_TOKENS",
+          "reference": "REPLACE_WITH_EXACT_MODEL_TIER_RATE_SOURCE_AND_DATE"
+        }
+      }
+    }
+  },
+  "native_command": [
+    "/REPLACE/WITH/NATIVE/PYTHON",
+    "-m",
+    "physical_harness.experiment",
+    "serve-native",
+    "--factory",
+    "physical_harness.experiment.existing_bridge:driver_factory",
+    "--episode",
+    "{episode}"
+  ],
+  "limits": {
+    "max_decisions": 4,
+    "max_motion_calls": 1,
+    "max_sim_s": 10,
+    "max_wall_s": 600,
+    "max_unchanged_inspections": 1,
+    "max_repeated_action": 1
+  },
+  "max_api_microusd": 5000000,
+  "max_model_calls": 8,
+  "context_policy": {
+    "max_metadata_bytes": 64000,
+    "max_combined_bytes": 96000,
+    "max_history_rows_per_entity": 64
+  }
+}
