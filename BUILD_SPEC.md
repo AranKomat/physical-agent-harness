@@ -1,7 +1,7 @@
-# Physical Agent Harness — Build Specification v0.6
+# Physical Agent Harness — Build Specification v0.8
 ## Handoff for the coding/research agent
 
-Date: 2026-09-18
+Date: 2026-09-19
 
 ## 1. Goal
 
@@ -10,11 +10,18 @@ executive model (initially GPT-6) solve one difficult BEHAVIOR task using a
 swappable learned motor policy, persistent world state, conventional navigation,
 tiered verification, and bounded direct control for recovery.
 
-Current implementation decision (2026-09-18): no inspected general policy has a
+Current implementation decision (2026-09-19): no inspected general policy has a
 verified training-free BEHAVIOR/R1Pro path. G0.5 pairing is deferred, GR00T lacks
 a verified parallel-gripper R1Pro interface, and the official radio-trained
 pi0.5 checkpoint is an integration fixture only. The held-out generalization
 experiment remains deferred; no training is authorized.
+
+v0.8 status: the offline contracts and prototypes below are implemented. The
+radio fixture has closed one live semantic verification boundary with fresh
+legal evidence, while its executive remains deterministic. Episodic memory is
+wired into legal observations, runtime events, and decision cutoffs in shadow
+mode; a retained native trace passed causal replay. Remaining work is live
+service integration and empirical qualification, not another architecture pass.
 
 This is the robotics analogue of the environment around a coding agent:
 
@@ -601,13 +608,13 @@ boundaries.
 
 ## 15. Build order
 
-### Phase A — freeze contracts (0.5 day)
-Use the scaffold package in this artifact.
+### Phase A — contracts (offline complete)
+The typed contracts and failure invariants are implemented and tested.
 
 Do not let individual integrations leak their native types into the executive.
 
-### Phase B — legal BEHAVIOR observation adapter (1 day)
-Implement:
+### Phase B — legal BEHAVIOR observation adapter (implemented; native qualification pending)
+Implemented:
 - reset/step;
 - RGB/depth refs;
 - proprio;
@@ -648,24 +655,22 @@ Borrow HomeRobot/Stretch AI algorithms aggressively.
 The odometry implementation rejects unsafe updates and never consumes simulator
 pose. Native calibration, accuracy and N0 control remain unqualified.
 
-### Phase F — task ledger/context (1 day)
-Parse task once.
-Store predicates.
-Select task-relevant state.
-Bound context.
+### Phase F — task ledger/context (offline complete)
+The evidence-gated task ledger and bounded current-context projector are
+implemented. Historical memory remains shadow-only until replay qualification.
 
-### Phase G — verification (1–2 days)
-World predicates first.
-Then sparse GPT-6 semantic verification. Do not enable a cheap tier-2 verifier
-until it passes an independent qualification set.
+### Phase G — verification (one live boundary complete; broader qualification pending)
+World predicates run before sparse GPT-6 semantic verification. One retained
+radio cycle used GPT-6 medium Flex and correctly remained uncertain. Do not
+enable a cheap tier-2 verifier until it passes an independent qualification set.
 
-### Phase H — L3 recovery (2–3 days)
-EEF pose preview/execute.
-Keep strict bounds and evidence.
+### Phase H — L3 recovery (contracts complete; native backend pending)
+Preview/execute contracts enforce strict bounds and evidence. Native EEF/IK,
+trajectory, and collision implementations remain unqualified.
 
-### Phase I — one full task
-Run only one difficult BEHAVIOR task.
-Instrument everything.
+### Phase I — live integration and one full task
+First close a real GPT-6 executive cycle and run memory live in shadow mode.
+Then run one difficult BEHAVIOR task with complete instrumentation.
 
 ---
 
@@ -673,20 +678,18 @@ Instrument everything.
 
 Do not serialize the whole project on the motor backend.
 
-Agent A:
-- BEHAVIOR observation/action adapter.
+P0 workstreams:
+- live perception/world update + GPT-6 verifier + GPT-6 executive cycle;
+- live memory shadow capture and causal replay checks;
+- multi-object/multi-place trace collection and M0/M1/M2 evaluation.
 
-Agent B:
-- radio pi0.5 fixture integration; general policy selection deferred.
+P1 workstreams:
+- native RTSM relation/identity qualification;
+- native odometry, N0 navigation, and place/gateway qualification;
+- bounded native L3 recovery.
 
-Agent C:
-- RTSM + relation/event adapter.
-
-Agent D:
-- navigation/map prototype.
-
-Agent E:
-- verifier + context/task ledger.
+General motor-policy qualification remains separate and must not block proving
+the harness with the known radio fixture.
 
 The stable contracts allow these to merge.
 
@@ -719,9 +722,10 @@ Motor:
 - policy backend can be swapped with no executive changes.
 
 Verification:
-- high-confidence world predicate avoids VLM call;
-- cheap verifier handles ambiguous visual result;
-- GPT escalation occurs only when required.
+- high-confidence world predicate avoids a model call;
+- GPT escalation occurs only when required and cites fresh evidence;
+- unobservable outcomes remain uncertain;
+- tier 2 remains disabled until independently qualified.
 
 ---
 
@@ -788,9 +792,9 @@ The goal is one strong, inspectable BEHAVIOR run and a reusable architecture.
 
 ---
 
-## 20. First implementation decision
+## 20. Current implementation decision
 
-Build the thin harness **now**, while motor qualification continues in parallel.
+Keep the thin harness stable while live qualification proceeds.
 
 The immediate code path should be:
 
@@ -805,4 +809,6 @@ BEHAVIOR legal obs
 → GPT-6
 ```
 
-Use G0.5 or GR00T whichever qualifies first. The harness must not care which.
+Use the task-trained radio pi0.5 checkpoint only as an integration fixture. Do
+not choose G0.5, GR00T, or another general policy until its R1Pro interface and
+training provenance are verified. The harness must remain backend-agnostic.

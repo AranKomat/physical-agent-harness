@@ -142,16 +142,22 @@ credentials, billing ledgers, and private evaluation artifacts.
 No software license has been selected yet. Public visibility does not grant
 permission to copy, modify, or redistribute the code beyond applicable law.
 
-## Native Integration Checklist
+## Qualification And Integration Gates
 
-1. Wire the implemented `BehaviorAdapter` and `RGBDOdometry` to native legal artifacts.
-2. Qualify a general motor backend with documented R1Pro action compatibility and training provenance.
-3. Run RTSM as a separate service and feed observed relations into `WorldState`.
-4. Add an online 2D metric occupancy map + local planner built from legal
-   depth and odometry/SLAM estimates.
-5. Add a semantic place graph (rooms/doors/corridors) above the metric map.
-6. Wire the tier-3 GPT-6 semantic verifier at sparse semantic boundaries; tier 2 remains disabled.
-7. Add bounded EEF/IK direct-control backend.
-8. Wire GPT-6 tool calling to these contracts at semantic event boundaries.
+1. Close one live radio-fixture cycle from legal perception through GPT-6
+   verification and ledger update into a real GPT-6 executive turn.
+2. Exercise episodic memory concurrently in live shadow mode and verify timing,
+   source lineage, backpressure, and causal cutoffs without changing actions.
+3. Collect a multi-object, multi-place development trace and compare M0/M1/M2
+   under equal context budgets before enabling historical context.
+4. Launch and qualify the RTSM/perception service against native artifacts,
+   including identity, relation, and object-permanence errors.
+5. Qualify RGB-D odometry, occupancy planning, place/gateway resolution, and
+   the N0 base controller on native sequences.
+6. Qualify bounded native IK, trajectory, and collision recovery before enabling L3.
+7. Qualify a general motor backend with documented R1Pro interfaces and training
+   provenance; the radio-trained pi0.5 checkpoint remains a fixture only.
+8. Add supervised IPC, hard service timeouts, restart watermarks, and end-to-end
+   accounting before longer autonomous episodes.
 
 See `BUILD_SPEC.md` for the detailed handoff.
