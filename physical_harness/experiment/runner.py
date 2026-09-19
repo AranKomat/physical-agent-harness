@@ -160,6 +160,7 @@ class EpisodeRunner:
         self.started = time.monotonic()
         self.initial_sim_time = None
         self.action_repeats = {}
+        self.verification_attempts = set()
         self.inspections_unchanged = 0
         self._decision_id = ""
         self._last_capture_hash = None
@@ -175,7 +176,8 @@ class EpisodeRunner:
         self.loop = ExecutiveLoop(
             episode, self.executive, self._context,
             {"run_skill": self._skill_tool, "inspect": self._inspect,
-             "request_verification": self._verify_tool, "finish": self._finish},
+             "request_verification": self._verify_tool, "finish": self._finish,
+             "stop": self._stop},
             can_finish=self.can_finish, on_decision=self._route_shadow_memory,
             max_decisions=self.limits.max_decisions,
             max_context_bytes=self.policy.max_metadata_bytes)
@@ -313,6 +315,7 @@ class EpisodeRunner:
                                      for g in self.goals.values()]
         context["limits_remaining"] = {"motion_calls": self.limits.max_motion_calls - self.motion_calls,
                                       "decisions": self.limits.max_decisions - self.loop.calls}
+        context["available_tools"] = self._available_tools()
         # Immutable M0 is captured now. Offline replay must NEVER rebuild from final WorldState.
         cutoff = self.memory.cutoff(self.now())
         record = {"base_context": context, "memory_cutoff": asdict(cutoff),
@@ -322,6 +325,27 @@ class EpisodeRunner:
         self.cutoffs.reserve(decision_id=event.event_id, event_id=event.event_id, cutoff=cutoff,
                              query="", entity_id=None, place_id=self.current.place_id, active=False)
         return context
+
+    def _available_tools(self):
+        tools = []
+        if (
+            self.limits.allow_motion
+            and not self.pending_motion
+            and self.motion_calls < self.limits.max_motion_calls
+        ):
+            tools.append("run_skill")
+        if self.limits.max_decisions - self.loop.calls > 1:
+            tools.append("inspect")
+        if (
+            self.current is not None
+            and self.current.id not in self.verification_attempts
+            and any(goal.observable_from_rgb for goal in self.goals.values())
+        ):
+            tools.append("request_verification")
+        if self.can_finish():
+            tools.append("finish")
+        tools.append("stop")
+        return tools
 
     def _route_shadow_memory(self, event, decision):
         """Freeze need and retrieve the selected shadow tier after model work."""
@@ -410,6 +434,8 @@ class EpisodeRunner:
                 self._memory_error("bind_skill", exc)
         before = tuple(self.current_ids.values())
         receipt, verification = self.runtime.execute_skill(request, before_evidence_ids=before)
+        if verification is not None:
+            self.verification_attempts.add(self.current.id)
         if goal and self.ledger.get(goal.id).status != "observed_complete":
             self.ledger.set_status(goal.id, "needs_verification")
         self.journal.put("skill_result", request.skill_id, {
@@ -490,10 +516,13 @@ class EpisodeRunner:
         goal = self.goals.get(arguments["goal_id"])
         if arguments["action_id"] is not None or goal is None:
             raise ValueError("Verification requires one known goal")
+        if self.current.id in self.verification_attempts:
+            raise RuntimeError("Current observation was already verified")
         request = VerificationRequest("manual:" + self._decision_id, "inspect", (goal.expression,),
                                       after_evidence_ids=tuple(self.current_ids.values()),
                                       relevant_entities=goal.targets)
         result = self.verifier.verify(request)
+        self.verification_attempts.add(self.current.id)
         if result.verdict == VerificationVerdict.VERIFIED:
             self._completed(SkillRequest("inspect", "inspect", "inspect",
                                         expected_predicates=(goal.expression,)), None, result)
@@ -511,6 +540,12 @@ class EpisodeRunner:
         if arguments["goal_id"] is not None or arguments["action_id"] is not None:
             raise ValueError("Finish takes no action or goal ID")
         return {"harness_goals_complete": True, "benchmark_success": "not_claimed"}
+
+    def _stop(self, arguments):
+        self._arguments(arguments)
+        if arguments["goal_id"] is not None or arguments["action_id"] is not None:
+            raise ValueError("Stop takes no action or goal ID")
+        return {"harness_goals_complete": False, "benchmark_success": "not_claimed"}
 
     def run(self) -> dict:
         error = None

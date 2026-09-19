@@ -66,7 +66,7 @@ def test_motion_requires_opt_in_and_still_stops(tmp_path):
     runner, native, transport, journal = build(tmp_path, motion=False)
     try:
         report = runner.run()
-        assert report['error'] == 'PermissionError'
+        assert report['error'] == 'ValidationError'
         assert native.t == 0 and native.stops == 1
         assert not report['harness_finished']
     finally:
@@ -77,6 +77,64 @@ def test_motion_requires_opt_in_and_still_stops(tmp_path):
 def test_executive_prompt_spells_out_null_tool_bindings():
     assert "finish: action_id and goal_id must both be null" in EXECUTIVE_PROMPT
     assert "request_verification: action_id must be null" in EXECUTIVE_PROMPT
+    assert "stop: action_id and goal_id must both be null" in EXECUTIVE_PROMPT
+
+
+def test_bounded_run_can_stop_cleanly_with_an_unresolved_goal(tmp_path):
+    class StopWhenOnlyTerminalToolRemains(FixtureTransport):
+        def post(self, path, payload):
+            response = super().post(path, payload)
+            schema = payload.get("text", {}).get("format", {}).get("schema", {})
+            properties = schema.get("properties", {})
+            if path != "/responses" or "tool" not in properties:
+                return response
+            available = properties["tool"]["enum"]
+            if "run_skill" in available:
+                return response
+            content = response["output"][0]["content"][0]
+            body = loads(content["text"])
+            body["tool"] = "stop"
+            body["arguments"] = {
+                "action_id": None,
+                "goal_id": None,
+                "reason": "The bounded run cannot resolve the remaining goal.",
+            }
+            content["text"] = dumps(body).decode()
+            return response
+
+    runner, native, transport, journal = build(
+        tmp_path, transport=StopWhenOnlyTerminalToolRemains()
+    )
+    runner.limits = RunLimits(
+        allow_motion=True,
+        max_decisions=2,
+        max_motion_calls=1,
+    )
+    runner.loop.max_decisions = 2
+    native.closed = False
+
+    original = native.run_skill
+
+    def unsuccessful(request):
+        receipt = original(request)
+        native.closed = False
+        return receipt
+
+    runner.native = replace(runner.native, run_skill=unsuccessful)
+    runner.runtime.executor = runner
+    try:
+        report = runner.run()
+        assert report["harness_finished"]
+        assert report["pending_goals"] == ["closed"]
+        assert report["stop_acknowledged"]
+        assert report["executive_calls"] == 2
+        assert report["motion_calls"] == 1
+        assert runner.loop.trace[-1]["tool"] == "stop"
+        decisions = saved_decisions(tmp_path)
+        assert decisions[-1]["base_context"]["available_tools"] == ["stop"]
+    finally:
+        runner.close()
+        journal.close()
 
 
 def test_terminal_receipt_preserves_tool_contract_error_message(tmp_path):

@@ -9,7 +9,15 @@ from .backends.base import ExecutiveBackend
 from .contracts import RuntimeEvent
 
 SEMANTIC_TOOLS = frozenset(
-    {"inspect", "navigate_to", "run_skill", "execute_l3", "request_verification", "finish"}
+    {
+        "inspect",
+        "navigate_to",
+        "run_skill",
+        "execute_l3",
+        "request_verification",
+        "finish",
+        "stop",
+    }
 )
 
 
@@ -74,6 +82,6 @@ class ExecutiveLoop:
         if "information_need" in decision:
             trace["information_need"] = dict(decision["information_need"])
         self.trace.append(trace)
-        if tool == "finish":
+        if tool in {"finish", "stop"}:
             self.finished = True
         return result
