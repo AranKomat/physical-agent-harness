@@ -472,6 +472,7 @@ class EpisodeRunner:
 
     def run(self) -> dict:
         error = None
+        error_message = None
         stop_ack = False
         try:
             self.capture()
@@ -482,7 +483,10 @@ class EpisodeRunner:
                 self.loop.on_event(event)
         except Exception as exc:
             error = type(exc).__name__
-            self.journal.put("run_error", "terminal", {"error": error, "at": self.now()})
+            error_message = str(exc)
+            self.journal.put("run_error", "terminal", {
+                "error": error, "message": error_message, "at": self.now(),
+            })
         finally:
             # A stop acknowledgement is not inferred from elapsed time or process death.
             try:
@@ -494,7 +498,8 @@ class EpisodeRunner:
         result = {"episode": self.episode, "simulated": self.native.simulated,
                   "narrator_stopped": narrator_stopped,
                   "harness_finished": self.loop.finished, "benchmark_success": "not_claimed",
-                  "error": error, "stop_acknowledged": stop_ack,
+                  "error": error, "error_message": error_message,
+                  "stop_acknowledged": stop_ack,
                   "sim_time": self.now(), "executive_calls": self.loop.calls,
                   "motion_calls": self.motion_calls, "memory_shadow_ok": self.memory_ok,
                   "spatial_keyframes": len(self.spatial_views.keyframes),

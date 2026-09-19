@@ -6,14 +6,14 @@ from dataclasses import replace
 import pytest
 
 from physical_harness.context_rich import RichContextPolicy
-from physical_harness.experiment.actors import Goal
+from physical_harness.experiment.actors import EXECUTIVE_PROMPT, Goal
 from physical_harness.experiment.fixture import FixtureNative, FixtureTransport, run_demo
 from physical_harness.experiment.journal import Journal
 from physical_harness.experiment.models import JsonModel, ModelSettings, Rates
 from physical_harness.experiment.native import ObjectBox
 from physical_harness.experiment.replay import export_replay, saved_decisions
 from physical_harness.experiment.runner import Action, EpisodeRunner, RunLimits
-from physical_harness.experiment.validation import loads
+from physical_harness.experiment.validation import dumps, loads
 
 
 def build(tmp_path, *, native=None, transport=None, motion=True, observable=True,
@@ -69,6 +69,47 @@ def test_motion_requires_opt_in_and_still_stops(tmp_path):
         assert report['error'] == 'PermissionError'
         assert native.t == 0 and native.stops == 1
         assert not report['harness_finished']
+    finally:
+        runner.close()
+        journal.close()
+
+
+def test_executive_prompt_spells_out_null_tool_bindings():
+    assert "finish: action_id and goal_id must both be null" in EXECUTIVE_PROMPT
+    assert "request_verification: action_id must be null" in EXECUTIVE_PROMPT
+
+
+def test_terminal_receipt_preserves_tool_contract_error_message(tmp_path):
+    class BadFinish(FixtureTransport):
+        def post(self, path, payload):
+            response = super().post(path, payload)
+            if path != "/responses":
+                return response
+            schema = payload["text"]["format"]["schema"]["properties"]
+            if "tool" not in schema:
+                return response
+            blocks = payload["input"][0]["content"]
+            context = loads(blocks[0]["text"])
+            if all(g["status"] == "observed_complete" for g in context["task_ledger"]):
+                content = response["output"][0]["content"][0]
+                content["text"] = dumps({
+                    "tool": "finish",
+                    "arguments": {
+                        "action_id": None,
+                        "goal_id": "closed",
+                        "reason": "Invalid fixture finish binding",
+                    },
+                }).decode()
+            return response
+
+    runner, native, transport, journal = build(tmp_path, transport=BadFinish())
+    try:
+        report = runner.run()
+        assert report["error"] == "ValueError"
+        assert report["error_message"] == "Finish takes no action or goal ID"
+        assert not report["harness_finished"]
+        assert report["pending_goals"] == []
+        assert native.stops == 1
     finally:
         runner.close()
         journal.close()
