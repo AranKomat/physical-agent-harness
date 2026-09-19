@@ -25,7 +25,7 @@ The public repository and its license are unchanged until you apply the overlay.
 | Memory | Source observations, semantic events, cards, optional asynchronous narration, and bounded retrieval in shadow mode |
 | Context | Per-field freshness and unresolved conflicts, in addition to existing broad context |
 | Cost | Explicit rate cards, provider input counting, durable reservations, usage reconciliation, role-specific reports |
-| Replay | Frozen M0 decision snapshots plus causal M1/M2 exports; optional image-bearing memory QA |
+| Replay | Frozen M0 decision snapshots plus causal M1/M2/M2-spatial exports; optional image-bearing memory QA |
 
 "Implemented" means executable code and the stated tests, not real-world qualification.
 
@@ -243,9 +243,19 @@ For each decision the export contains:
 
 - **M0:** the already-stateful rich context, including short entity histories;
 - **M1:** that same M0 plus causal historical cards/text;
-- **M2:** M1 plus selected original historical images/crops.
+- **M2:** M1 plus selected original historical images/crops;
+- **M2_spatial:** M1 plus selected historical RGB keyframes whose validated
+  camera poses remain attached as metadata.
 
-Thus this tests the incremental value of episodic retrieval, **not memory versus no memory**. M1/M2 use the same cards and the same recorded observation-time/knowledge watermark. An annotation that finished later while simulation time was paused remains unavailable to an earlier decision. The variants share declared maximum budgets; do not pad fake tokens to pretend actual usage is equal. Report the actual cost/latency of each.
+`M2_spatial` is an alternative to M2 rather than an additional image tier: it
+starts from M1, excludes the decision's current images, and replaces ordinary
+retrieved images with sparse posed keyframes under the same combined image and
+metadata ceilings. A keyframe is available only when its source RGB asset is
+available at the decision's recorded observation-time and knowledge watermark.
+The snapshot's depth handle remains a native reference and is not assumed to be
+a durable replay artifact.
+
+Thus this tests the incremental value of episodic retrieval, **not memory versus no memory**. M1/M2/M2_spatial use the same cards and the same recorded observation-time/knowledge watermark. An annotation that finished later while simulation time was paused remains unavailable to an earlier decision. The variants share declared maximum budgets; do not pad fake tokens to pretend actual usage is equal. Report the actual cost/latency of each.
 
 Optional `evaluate_qa` in `experiment/replay.py` sends these actual pixels to a configured `JsonModel`. Its separate labels file has:
 

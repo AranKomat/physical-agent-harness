@@ -165,7 +165,7 @@ Exercise sparse posed-view selection with:
 python examples/spatial_memory_v011_demo.py
 ```
 
-The current suite contains 331 offline tests. They validate contracts and
+The current suite contains 332 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install

@@ -149,6 +149,19 @@ validated `estimated_pose`, the observation is retained normally but no posed
 keyframe is invented. The snapshot is for offline replay and is not attached to
 the live executive context.
 
+`python -m physical_harness.experiment export-replay` consumes that snapshot as
+the optional `M2_spatial` condition. For each frozen decision it starts from M1
+(current context plus text/event memory), selects only keyframes whose source
+RGB asset was available at the decision cutoff, excludes current-image
+duplicates, and attaches pose metadata with the selected historical pixels.
+It does not stack these views on top of M2's ordinary historical images. This
+keeps the condition within the existing combined context and image ceilings.
+
+The exported pose and RGB evidence are replayable from the run directory. The
+depth field is still a native reference; do not claim restart-safe RGB-D scene
+reconstruction until the native depth is copied into durable storage or a
+qualified resolver is available.
+
 Do this only on selected event boundaries / useful periodic fallback, not every camera frame.
 
 Recommended initial boundary set:

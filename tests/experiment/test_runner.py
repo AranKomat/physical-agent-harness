@@ -56,6 +56,7 @@ def test_full_real_core_loop_and_frozen_replay(tmp_path):
     assert first['contexts']['M0'] == decisions[0]['base_context']
     assert first['contexts']['M1']['episodic_memory']['images'] == []
     assert first['contexts']['M2']['episodic_memory']['images']
+    assert first['contexts']['M2_spatial']['spatial_memory']['keyframes'] == []
     assert first['contexts']['M1']['episodic_memory']['cards'] == first['contexts']['M2']['episodic_memory']['cards']
     assert all(card['observed_end'] == 0 for card in first['contexts']['M2']['episodic_memory']['cards'])
     assert any(card['observed_end'] == 1 for card in last['contexts']['M2']['episodic_memory']['cards'])
