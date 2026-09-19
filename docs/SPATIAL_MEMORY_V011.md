@@ -33,6 +33,18 @@ SpatialViewIndex = historical evidence we can inspect/reconstruct from
 
 A keyframe never updates an object's current location by itself.
 
+### v0.11.1 selection refinements
+
+Ordinary historical retrieval keeps broad OR semantics across entity, place,
+and tag filters. Local scene-building requests use conjunction across every
+filter group supplied by the caller, so an old target view from another room
+cannot satisfy a request for current local geometry.
+
+The diversity pass uses metric camera translation as well as camera/place
+identity. Views from the same moving head camera are therefore retained when
+their positions are sufficiently separated. Entity tags are bounded at 256 per
+keyframe; this metadata is not copied wholesale into executive context.
+
 ### Why record only the pose camera initially?
 
 `LegalObservation.estimated_pose` currently names one camera and provides one camera-to-local-map transform. v0.11 deliberately records only that camera. It does **not** invent extrinsics for other synchronized cameras. If calibration later supplies rigid transforms for wrist/head cameras, the BEHAVIOR adapter can compose those upstream and create additional posed views.
@@ -52,6 +64,15 @@ The repo already distinguishes disappearance from a new location claim. v0.11 ma
 > target not observed in this region under this observation
 
 It does **not** infer where the target went.
+
+The experiment runner's existing canonical path remains:
+
+```text
+CoverageScan -> validated_coverage -> CoverageNote -> executive context
+```
+
+`CoverageObservation` is not wired as a second writer in v0.11.1. It remains a
+prototype record type rather than a competing source of negative evidence.
 
 ## On-demand 3D scene artifacts
 
@@ -80,6 +101,11 @@ The overlay does **not** implement a scene builder. That is intentional. The nex
 - WetRobo-style SAM-first object completion may help thin/contact tasks;
 - DynaMem/RoboStream update ideas may help moved/disappeared objects;
 - a heavier SLAM/4D system should wait until experiments show the sparse memory is inadequate.
+
+RGB is durable in the content-addressed evidence store, while keyframes retain
+depth as the native `depth_ref`. Before offline or restart-safe scene building,
+either materialize depth into the run artifact store or qualify a durable native
+resolver and record its provenance.
 
 ## Why no Jev/reactive-language layer in this overlay
 

@@ -95,6 +95,10 @@ def _matrix(values: Iterable[float]) -> tuple[float, ...]:
     return tuple(float(v) for v in result)
 
 
+def _distance_xyz(a: tuple[float, float, float], b: tuple[float, float, float]) -> float:
+    return math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
+
+
 @dataclass(frozen=True)
 class PosedRGBDKeyframe:
     """Sparse historical view, not a current-world-state assertion."""
@@ -138,7 +142,9 @@ class PosedRGBDKeyframe:
             raise ValueError("Pose provenance must end with this observation")
         if self.reason not in KEYFRAME_REASONS:
             raise ValueError("Unknown keyframe reason")
-        _ids(self.entity_ids, "entity_ids")
+        # This metadata is not an executive-context payload. Keep the bound
+        # finite, but tolerate busy household observations in shadow memory.
+        _ids(self.entity_ids, "entity_ids", 256)
         _ids(self.place_ids, "place_ids")
         _ids(self.tags, "tags")
         _finite(self.quality, "quality", 0, 1)
@@ -248,11 +254,16 @@ class SpatialViewIndex:
         tags: tuple[str, ...] = (),
         limit: int = 4,
         max_age_s: float | None = None,
+        require_all_filters: bool = False,
+        min_separation_m: float = 0.25,
     ) -> tuple[PosedRGBDKeyframe, ...]:
         now = _finite(now, "now")
-        entity_ids = _ids(entity_ids, "entity_ids")
+        entity_ids = _ids(entity_ids, "entity_ids", 256)
         place_ids = _ids(place_ids, "place_ids")
         tags = _ids(tags, "tags")
+        if type(require_all_filters) is not bool:
+            raise ValueError("require_all_filters must be bool")
+        min_separation_m = _finite(min_separation_m, "min_separation_m")
         if type(limit) is not int or limit < 0 or limit > 32:
             raise ValueError("limit outside allowed range")
         if max_age_s is not None:
@@ -272,8 +283,18 @@ class SpatialViewIndex:
             e = len(entity_set.intersection(item.entity_ids))
             p = len(place_set.intersection(item.place_ids))
             t = len(tag_set.intersection(item.tags))
-            if query_has_filters and not (e or p or t):
-                continue
+            if query_has_filters:
+                matches = []
+                if entity_set:
+                    matches.append(e > 0)
+                if place_set:
+                    matches.append(p > 0)
+                if tag_set:
+                    matches.append(t > 0)
+                if require_all_filters and not all(matches):
+                    continue
+                if not require_all_filters and not any(matches):
+                    continue
             # Entity match dominates place/tags. Quality and pose confidence only
             # break ties; recency has a bounded effect so older exact evidence is
             # not discarded in favor of an unrelated recent view.
@@ -284,19 +305,36 @@ class SpatialViewIndex:
             candidates.append((score, item))
 
         candidates.sort(key=lambda pair: (-pair[0], -pair[1].sim_time, pair[1].keyframe_id))
-        selected: list[PosedRGBDKeyframe] = []
-        cameras: set[str] = set()
-        places: set[str] = set()
-        # First pass favors viewpoint diversity.
-        for _, item in candidates:
-            item_places = set(item.place_ids)
-            if item.camera in cameras and (not item_places or item_places <= places):
-                continue
-            selected.append(item)
-            cameras.add(item.camera)
-            places.update(item_places)
-            if len(selected) == limit:
-                return tuple(selected)
+        if not candidates:
+            return ()
+        selected = [candidates[0][1]]
+        cameras = {selected[0].camera}
+        places = set(selected[0].place_ids)
+        remaining = candidates[1:]
+
+        # Greedily preserve camera/place novelty, then maximize metric baseline.
+        # Candidate ordering remains the deterministic score/recency tie-breaker.
+        while remaining and len(selected) < limit:
+            diverse: list[tuple[tuple[int, int, float], int]] = []
+            for index, (_, item) in enumerate(remaining):
+                item_places = set(item.place_ids)
+                structural_novelty = item.camera not in cameras or bool(item_places - places)
+                separation = min(_distance_xyz(item.xyz, chosen.xyz) for chosen in selected)
+                metric_novelty = separation >= min_separation_m
+                if structural_novelty or metric_novelty:
+                    diverse.append(
+                        ((int(structural_novelty), int(metric_novelty), separation), index)
+                    )
+            if not diverse:
+                break
+            best_rank = max(rank for rank, _ in diverse)
+            chosen_index = next(index for rank, index in diverse if rank == best_rank)
+            _, chosen = remaining.pop(chosen_index)
+            selected.append(chosen)
+            cameras.add(chosen.camera)
+            places.update(chosen.place_ids)
+        if len(selected) == limit:
+            return tuple(selected)
         # Second pass fills remaining slots by score.
         for _, item in candidates:
             if item not in selected:

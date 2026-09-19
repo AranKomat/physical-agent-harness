@@ -4,7 +4,7 @@ An experimental, model-agnostic runtime for connecting a sparse reasoning layer
 to robot perception, world state, motor policies, verification, navigation, and
 bounded recovery. The first integration target is BEHAVIOR with R1Pro.
 
-## v0.11 implementation status
+## v0.11.1 implementation status
 
 The offline core, bounded experiment runner, and sparse posed-view memory
 contracts are implemented and tested. This is **not yet a qualified BEHAVIOR
@@ -54,6 +54,9 @@ RGB-D keyframes, explicit coverage/negative-evidence records, and on-demand
 local-scene contracts. Recording is opt-in at the legal-envelope sidecar and
 remains outside live executive context. It does not add a permanent dense map,
 scene builder, or motion authority from visual plausibility.
+v0.11.1 keeps broad OR matching for ordinary history but requires entity/place
+conjunction for local-scene requests, preserves metric viewpoint diversity from
+the same moving camera, and allows up to 256 entity tags per shadow keyframe.
 
 ### Limits
 
@@ -162,7 +165,7 @@ Exercise sparse posed-view selection with:
 python examples/spatial_memory_v011_demo.py
 ```
 
-The current suite contains 327 offline tests. They validate contracts and
+The current suite contains 331 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install

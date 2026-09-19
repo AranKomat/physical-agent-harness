@@ -153,6 +153,9 @@ def request_from_spatial_memory(
         place_ids=place_ids,
         limit=limit,
         max_age_s=max_age_s,
+        # Geometry needs the requested entities at the requested locality.
+        # General historical retrieval intentionally retains broad OR matching.
+        require_all_filters=True,
     )
     if not views:
         raise ValueError("No relevant posed keyframes available for local scene build")

@@ -1,4 +1,4 @@
-# Physical Agent Harness — Build Specification v0.11
+# Physical Agent Harness — Build Specification v0.11.1
 ## Handoff for the coding/research agent
 
 Date: 2026-09-19
@@ -16,7 +16,7 @@ a verified parallel-gripper R1Pro interface, and the official radio-trained
 pi0.5 checkpoint is an integration fixture only. The held-out generalization
 experiment remains deferred; no training is authorized.
 
-v0.11 status: the offline contracts and prototypes below are implemented. The
+v0.11.1 status: the offline contracts and prototypes below are implemented. The
 radio fixture has closed one live semantic verification boundary with fresh
 legal evidence, while its executive remains deterministic. Episodic memory is
 wired into legal observations, runtime events, and decision cutoffs in shadow
@@ -37,6 +37,13 @@ evidence and never update `WorldState` or live executive input. An on-demand
 scene-artifact contract separates display, collision, and motion authority;
 there is deliberately no scene builder or permanent dense reconstruction yet.
 See `docs/SPATIAL_MEMORY_V011.md`.
+
+Local scene requests now require all supplied entity/place/tag filter groups,
+while ordinary historical retrieval keeps broad matching. Sparse-view selection
+also recognizes metric pose separation from the same camera. The existing
+`CoverageScan` path remains canonical; the additional spatial coverage record is
+not wired. Depth remains a native reference until a durable resolver or
+content-addressed depth artifact is qualified.
 
 This is the robotics analogue of the environment around a coding agent:
 
