@@ -43,6 +43,7 @@ def test_full_real_core_loop_and_frozen_replay(tmp_path):
     assert report['harness_finished'] and report['http_requests'] == 0
     assert report['executive_calls'] == 2 and report['motion_calls'] == 1
     assert report['benchmark_success'] == 'not_claimed'
+    assert report['spatial_keyframes'] == 0
     decisions = saved_decisions(run)
     assert decisions[0]['base_context']['task_ledger'][0]['status'] == 'planned'
     assert decisions[-1]['base_context']['task_ledger'][0]['status'] == 'observed_complete'
@@ -164,6 +165,88 @@ def test_shadow_bind_failure_does_not_block_motion_or_enter_context(tmp_path, mo
         assert not report['memory_shadow_ok']
         for row in saved_decisions(tmp_path):
             assert 'episodic_memory' not in row['base_context']
+    finally:
+        runner.close()
+        journal.close()
+
+
+def test_legal_posed_observations_record_spatial_shadow_without_changing_actions(tmp_path):
+    class Posed(FixtureNative):
+        def observe(self):
+            observation = super().observe()
+            legal = {
+                'schema_version': 1,
+                'episode_id': self.episode,
+                'observation_id': observation.id,
+                'sim_time': observation.sim_time,
+                'rgb_refs': {'head': 'native-rgb'},
+                'depth_refs': {'head': f'native-depth-{self.t}'},
+                'proprioception': {'joint_positions': [0.0]},
+                'camera_intrinsics': {'head': {
+                    'width': 64, 'height': 48, 'fx': 50, 'fy': 50,
+                    'cx': 32, 'cy': 24, 'depth_scale_m': .001,
+                }},
+                'camera_frames': {'head': 'head_optical'},
+                'estimated_pose': {
+                    'method': 'rgbd_odometry', 'frame': 'local_map', 'camera': 'head',
+                    'transform': [[1, 0, 0, self.t], [0, 1, 0, 0],
+                                  [0, 0, 1, 1], [0, 0, 0, 1]],
+                    'evidence_ids': [observation.id], 'confidence': .9,
+                },
+            }
+            return replace(observation, legal_envelope=legal)
+
+    runner, native, transport, journal = build(tmp_path, native=Posed('ep'))
+    try:
+        report = runner.run()
+        assert report['harness_finished'] and report['motion_calls'] == 1
+        assert report['spatial_keyframes'] == 2
+        snapshot = loads((tmp_path / 'spatial-memory.json').read_bytes())
+        assert len(snapshot['keyframes']) == 2
+        for row in saved_decisions(tmp_path):
+            assert 'spatial_memory' not in row['base_context']
+    finally:
+        runner.close()
+        journal.close()
+
+
+def test_reused_observation_id_cannot_change_legal_pose(tmp_path):
+    class ChangedPose(FixtureNative):
+        def __init__(self, episode):
+            super().__init__(episode)
+            self.observations = 0
+
+        def observe(self):
+            observation = super().observe()
+            x = self.observations
+            self.observations += 1
+            legal = {
+                'schema_version': 1,
+                'episode_id': self.episode,
+                'observation_id': observation.id,
+                'sim_time': observation.sim_time,
+                'rgb_refs': {'head': 'native-rgb'},
+                'depth_refs': {'head': 'native-depth'},
+                'proprioception': {'joint_positions': [0.0]},
+                'camera_intrinsics': {'head': {
+                    'width': 64, 'height': 48, 'fx': 50, 'fy': 50,
+                    'cx': 32, 'cy': 24, 'depth_scale_m': .001,
+                }},
+                'camera_frames': {'head': 'head_optical'},
+                'estimated_pose': {
+                    'method': 'rgbd_odometry', 'frame': 'local_map', 'camera': 'head',
+                    'transform': [[1, 0, 0, x], [0, 1, 0, 0],
+                                  [0, 0, 1, 1], [0, 0, 0, 1]],
+                    'evidence_ids': [observation.id], 'confidence': .9,
+                },
+            }
+            return replace(observation, legal_envelope=legal)
+
+    runner, native, transport, journal = build(tmp_path, native=ChangedPose('ep'))
+    try:
+        assert runner.capture()
+        with pytest.raises(ValueError, match='changed its content'):
+            runner.capture()
     finally:
         runner.close()
         journal.close()

@@ -8,6 +8,7 @@ import pytest
 from physical_harness.evidence import EvidenceStore
 from physical_harness.memory.integration import DecisionCutoffLog, MemorySidecar
 from physical_harness.memory.schemas import Draft, PacketBudget
+from physical_harness.memory.spatial_views import SpatialViewIndex
 from physical_harness.memory.store import MemoryStore
 
 
@@ -41,6 +42,24 @@ def envelope(ep, obs, t, ref):
         },
         "camera_frames": {"head": "head_optical"},
     }
+
+
+def posed_envelope(ep, obs, t, ref):
+    value = envelope(ep, obs, t, ref)
+    value["estimated_pose"] = {
+        "method": "rgbd_odometry",
+        "frame": "local_map",
+        "camera": "head",
+        "transform": [
+            [1, 0, 0, 1],
+            [0, 1, 0, 2],
+            [0, 0, 1, 1],
+            [0, 0, 0, 1],
+        ],
+        "evidence_ids": [obs],
+        "confidence": 0.9,
+    }
+    return value
 
 
 def setup(tmp_path):
@@ -98,6 +117,67 @@ def test_active_context_attaches_same_packet(tmp_path):
         max_total_bytes=8000,
     )
     assert json.loads(json.dumps(result["episodic_memory"])) == json.loads(json.dumps(packet))
+    memory.close()
+    decisions.close()
+
+
+def test_opt_in_spatial_keyframe_is_shadow_only_and_serializable(tmp_path):
+    blobs = EvidenceStore(tmp_path / "evidence")
+    memory = MemoryStore(tmp_path / "episodic.sqlite", "ep", blobs.read)
+    decisions = DecisionCutoffLog(tmp_path / "decisions.sqlite", "ep")
+    spatial = SpatialViewIndex("ep")
+    sidecar = MemorySidecar(
+        episode_id="ep",
+        store=memory,
+        decisions=decisions,
+        resolve_rgb_ref=lambda ref: ref,
+        spatial_index=spatial,
+    )
+    ref = image(blobs, b"posed-frame")
+    sidecar.ingest_observation(
+        posed_envelope("ep", "o1", 1.0, ref),
+        keyframe_reason="decision_required",
+        keyframe_entity_ids=("cup",),
+        keyframe_place_ids=("kitchen",),
+    )
+    snapshot_path = tmp_path / "spatial-memory.json"
+    sidecar.write_spatial_snapshot(snapshot_path)
+    restored = SpatialViewIndex.from_snapshot(json.loads(snapshot_path.read_text()))
+    assert restored.snapshot() == spatial.snapshot()
+    assert tuple(spatial.keyframes) == ("posed:o1:head",)
+
+    base = {"episode": "ep", "goal": "find cup", "images": []}
+    unchanged, _, _ = sidecar.prepare_decision(
+        decision_id="d-spatial",
+        event_id="e-spatial",
+        observed_through=1.0,
+        base_context=base,
+        active=False,
+    )
+    assert unchanged == base
+    assert "spatial_memory" not in unchanged
+    memory.close()
+    decisions.close()
+
+
+def test_opt_in_spatial_memory_does_not_invent_pose(tmp_path):
+    blobs = EvidenceStore(tmp_path / "evidence")
+    memory = MemoryStore(tmp_path / "episodic.sqlite", "ep", blobs.read)
+    decisions = DecisionCutoffLog(tmp_path / "decisions.sqlite", "ep")
+    spatial = SpatialViewIndex("ep")
+    sidecar = MemorySidecar(
+        episode_id="ep",
+        store=memory,
+        decisions=decisions,
+        resolve_rgb_ref=lambda ref: ref,
+        spatial_index=spatial,
+    )
+    ref = image(blobs, b"unposed-frame")
+    assets = sidecar.ingest_observation(
+        envelope("ep", "o1", 1.0, ref), keyframe_reason="decision_required"
+    )
+    assert len(assets) == 1
+    assert spatial.keyframes == {}
     memory.close()
     decisions.close()
 

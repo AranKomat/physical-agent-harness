@@ -21,6 +21,7 @@ from typing import Any, Callable, Mapping
 from .retrieval import Retriever, attach_memory
 from .schemas import Asset, Cutoff, PacketBudget, finite, stable_id, text
 from .selection import EventRecorder, RecentBuffer, boundary_from_runtime
+from .spatial_views import SpatialViewIndex, keyframes_from_legal_envelope
 from .store import MemoryStore
 
 
@@ -212,6 +213,7 @@ class MemorySidecar:
         recorder: EventRecorder | None = None,
         annotator: Any | None = None,
         current_place: Callable[[], str | None] | None = None,
+        spatial_index: SpatialViewIndex | None = None,
     ):
         self.episode_id = text(episode_id)
         if store.episode_id != self.episode_id or decisions.episode_id != self.episode_id:
@@ -225,6 +227,9 @@ class MemorySidecar:
         self.recorder = recorder or EventRecorder(self.store, self.recent)
         self.annotator = annotator
         self.current_place = current_place or (lambda: None)
+        if spatial_index is not None and spatial_index.episode_id != self.episode_id:
+            raise ValueError("Spatial memory must share the episode")
+        self.spatial_index = spatial_index
         self.retriever = Retriever(self.store)
         self._skill_entities: dict[str, tuple[str, ...]] = {}
         self._skill_places: dict[str, tuple[str, ...]] = {}
@@ -239,12 +244,25 @@ class MemorySidecar:
             raise ValueError("Resolved RGB artifact must use its SHA256 filename")
         return digest
 
-    def ingest_observation(self, envelope: Mapping[str, Any]) -> tuple[Asset, ...]:
+    def ingest_observation(
+        self,
+        envelope: Mapping[str, Any],
+        *,
+        keyframe_reason: str | None = None,
+        keyframe_entity_ids: tuple[str, ...] = (),
+        keyframe_place_ids: tuple[str, ...] = (),
+        keyframe_tags: tuple[str, ...] = (),
+        quality_by_camera: Mapping[str, float] | None = None,
+    ) -> tuple[Asset, ...]:
         """Register RGB source images from an already-validated legal envelope.
 
         The caller must resolve opaque native references to names in the existing
         content-addressed EvidenceStore. Dimensions come from the legal camera
         calibration. Depth is deliberately not copied into the visual diary.
+
+        Posed keyframes are opt-in per observation. They require both an attached
+        ``SpatialViewIndex`` and a legally estimated pose; an unposed observation
+        remains valid ordinary memory and produces no spatial keyframe.
         """
         value = json.loads(json.dumps(dict(envelope), allow_nan=False))
         required = {
@@ -256,6 +274,8 @@ class MemorySidecar:
         observed = finite(value["sim_time"])
         if observed <= self._last_observed:
             raise ValueError("Stale observation cannot enter memory")
+        if keyframe_reason is not None and self.spatial_index is None:
+            raise ValueError("Posed keyframe recording requires a SpatialViewIndex")
         rgb_refs = value["rgb_refs"]
         intrinsics = value["camera_intrinsics"]
         if not isinstance(rgb_refs, dict) or set(rgb_refs) != set(intrinsics):
@@ -284,11 +304,42 @@ class MemorySidecar:
                 width=width,
                 height=height,
             )
+            assets.append(asset)
+        keyframes = ()
+        if keyframe_reason is not None and value.get("estimated_pose") is not None:
+            keyframes = keyframes_from_legal_envelope(
+                value,
+                rgb_asset_ids={asset.camera: asset.asset_id for asset in assets},
+                reason=keyframe_reason,
+                entity_ids=keyframe_entity_ids,
+                place_ids=keyframe_place_ids,
+                tags=keyframe_tags,
+                quality_by_camera=quality_by_camera,
+            )
+        for asset in assets:
             self.store.add_asset(asset)
             self.recent.add(asset)
-            assets.append(asset)
+        for keyframe in keyframes:
+            self.spatial_index.add_keyframe(keyframe)
         self._last_observed = observed
         return tuple(assets)
+
+    def write_spatial_snapshot(self, path: str | Path) -> None:
+        """Atomically persist the opt-in shadow index for offline replay."""
+        if self.spatial_index is None:
+            raise ValueError("No spatial memory is attached")
+        destination = Path(path)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        temporary = destination.with_name(destination.name + ".tmp")
+        payload = json.dumps(
+            self.spatial_index.snapshot(),
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+        temporary.write_text(payload + "\n", encoding="utf-8")
+        temporary.replace(destination)
 
     def bind_skill(
         self,

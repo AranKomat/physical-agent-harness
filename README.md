@@ -4,12 +4,13 @@ An experimental, model-agnostic runtime for connecting a sparse reasoning layer
 to robot perception, world state, motor policies, verification, navigation, and
 bounded recovery. The first integration target is BEHAVIOR with R1Pro.
 
-## v0.10 implementation status
+## v0.11 implementation status
 
-The offline core and bounded experiment runner are implemented and tested. This
-is **not yet a qualified BEHAVIOR robot runtime**. The original component
-overview below is retained as architectural context; its implementation
-checklist is now a set of native qualification and integration gates.
+The offline core, bounded experiment runner, and sparse posed-view memory
+contracts are implemented and tested. This is **not yet a qualified BEHAVIOR
+robot runtime**. The original component overview below is retained as
+architectural context; its implementation checklist is now a set of native
+qualification and integration gates.
 
 ```bash
 python -m physical_harness demo --output runs/demo-new
@@ -31,7 +32,8 @@ execution, evidence, verification and task completion.
 | Perception | Legal BEHAVIOR envelopes, Open3D RGB-D odometry, RTSM translation and relation memory | Live artifact store, services and sensor calibration |
 | Navigation | Depth occupancy, NetworkX routes, frontiers, semantic gateways | Native odometry qualification and qualified N0 controller |
 | Verification | Evidence-bearing tier routing, image-bearing semantic verifier transport and completion gates | Live GPT-6 qualification and native evidence validator |
-| Historical memory | Episode-local cards/media, causal cutoffs, shadow decision packets and frozen M0/M1/M2 export | Multi-object held-out replay evaluation before active use |
+| Historical memory | Episode-local cards/media, causal cutoffs, shadow decision packets, frozen replay, and opt-in posed RGB-D keyframes | Native posed-view capture and multi-object held-out replay before active use |
+| Local scene | Bounded scene-build requests with separate display, collision, and motion authority | Select and qualify a builder only after a real geometry failure |
 | Recovery | Evidence-bound, one-use translation previews | Native IK, collision checks and control |
 
 The opt-in [rich current-context profile](docs/RICH_CONTEXT_V09.md) preserves the
@@ -46,6 +48,12 @@ image observations, rich current context, predeclared semantic actions, fresh
 verification, task-ledger updates, shadow memory, conservative cost accounting,
 and frozen replay export. Network access, paid calls, and simulated motion each
 require a separate command-line opt-in. The shipped fixture remains synthetic.
+
+The [v0.11 spatial-memory layer](docs/SPATIAL_MEMORY_V011.md) adds sparse posed
+RGB-D keyframes, explicit coverage/negative-evidence records, and on-demand
+local-scene contracts. Recording is opt-in at the legal-envelope sidecar and
+remains outside live executive context. It does not add a permanent dense map,
+scene builder, or motion authority from visual plausibility.
 
 ### Limits
 
@@ -148,7 +156,13 @@ Render the synthetic rich current context with:
 python examples/rich_context_example.py
 ```
 
-The current suite contains 311 offline tests. They validate contracts and
+Exercise sparse posed-view selection with:
+
+```bash
+python examples/spatial_memory_v011_demo.py
+```
+
+The current suite contains 327 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install
@@ -172,8 +186,9 @@ permission to copy, modify, or redistribute the code beyond applicable law.
    verification and ledger update into a real GPT-6 executive turn.
 2. Exercise episodic memory concurrently in live shadow mode and verify timing,
    source lineage, backpressure, and causal cutoffs without changing actions.
-3. Collect a multi-object, multi-place development trace and compare M0/M1/M2
-   under equal context budgets before enabling historical context.
+3. Collect a multi-object, multi-place development trace and compare current,
+   episodic, and posed-keyframe conditions under equal context budgets before
+   enabling historical context.
 4. Launch and qualify the RTSM/perception service against native artifacts,
    including identity, relation, and object-permanence errors.
 5. Qualify RGB-D odometry, occupancy planning, place/gateway resolution, and

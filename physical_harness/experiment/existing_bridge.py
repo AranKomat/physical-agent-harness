@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from ..adapters.behavior import LegalObservation
 from .media import image_geometry
 from .native import CameraCapture, NativeBindings, Observation
 from .validation import fields, integer
@@ -24,6 +25,7 @@ def from_existing_driver(*, name: str, episode: str, capture_legal: Callable,
         fields(env, {"schema_version", "episode_id", "observation_id", "sim_time", "rgb_refs",
                      "depth_refs", "proprioception", "camera_intrinsics", "camera_frames"},
                {"estimated_pose"})
+        env = LegalObservation.from_envelope(env).to_envelope()
         if env["episode_id"] != episode or integer(env["schema_version"]) != 1:
             raise ValueError("Unsupported legal observation envelope")
         captures = []
@@ -38,7 +40,7 @@ def from_existing_driver(*, name: str, episode: str, capture_legal: Callable,
         return Observation(episode, env["observation_id"], env["sim_time"], tuple(captures),
                            tuple(estimates(env)) if estimates else (),
                            tuple(boxes(env)) if boxes else (), location[0], location[1],
-                           tuple(coverage(env)) if coverage else ())
+                           tuple(coverage(env)) if coverage else (), env)
 
     return NativeBindings(name, observe, run_skill, stop, simulated=True,
                           qualification_id=qualification_id)

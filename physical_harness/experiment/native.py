@@ -1,8 +1,9 @@
 """Native callback contract. No weights, simulator GT, action-codec guesses, or torques."""
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Callable
+from typing import Any, Callable
 
 from ..contracts import SkillReceipt, SkillRequest
 from .media import image_geometry
@@ -87,6 +88,7 @@ class Observation:
     place_id: str | None = None
     place_description: str | None = None
     coverage: tuple[CoverageScan, ...] = ()
+    legal_envelope: Mapping[str, Any] | None = None
 
     def __post_init__(self):
         text(self.episode, maximum=256)
@@ -114,6 +116,18 @@ class Observation:
         for scan in self.coverage:
             if not set(scan.cameras) <= set(names):
                 raise ValueError("Coverage references an unavailable camera")
+        if self.legal_envelope is not None:
+            from ..adapters.behavior import LegalObservation
+
+            legal = LegalObservation.from_envelope(self.legal_envelope).to_envelope()
+            if (
+                legal["episode_id"] != self.episode
+                or legal["observation_id"] != self.id
+                or legal["sim_time"] != self.sim_time
+                or set(legal["rgb_refs"]) != set(names)
+            ):
+                raise ValueError("Legal envelope does not match the observation")
+            object.__setattr__(self, "legal_envelope", legal)
 
 
 @dataclass

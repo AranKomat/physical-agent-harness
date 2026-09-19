@@ -24,6 +24,7 @@ from ..evidence import EvidenceStore
 from ..executive import ExecutiveLoop
 from ..ledger import TaskLedger, TaskPredicate
 from ..memory.integration import DecisionCutoffLog, MemorySidecar
+from ..memory.spatial_views import SpatialViewIndex
 from ..memory.store import MemoryStore
 from ..memory.writer import AsyncAnnotator
 from ..runtime import HarnessRuntime
@@ -117,9 +118,11 @@ class EpisodeRunner:
             self.ledger.add(TaskPredicate(g.id, g.expression, bindings=(g.binding,)))
         self.memory = MemoryStore(self.root / "episodic.sqlite", episode, self.blobs.read)
         self.cutoffs = DecisionCutoffLog(self.root / "memory-decisions.sqlite", episode)
+        self.spatial_views = SpatialViewIndex(episode)
         self.sidecar = MemorySidecar(episode_id=episode, store=self.memory, decisions=self.cutoffs,
                                     resolve_rgb_ref=lambda ref: ref,
-                                    current_place=lambda: self.current.place_id if self.current else None)
+                                    current_place=lambda: self.current.place_id if self.current else None,
+                                    spatial_index=self.spatial_views)
         self.caption_stop = threading.Event()
         self.annotator = None
         self.caption_timeout_s = 5
@@ -179,7 +182,8 @@ class EpisodeRunner:
             "native_qualification": native.qualification_id, "simulated": native.simulated,
             "goals": [asdict(g) for g in goals], "actions": [asdict(a) for a in actions],
             "limits": asdict(self.limits), "context_policy": asdict(self.policy),
-            "memory_mode": "shadow", "narrator_enabled": narrator_model is not None,
+            "memory_mode": "shadow", "spatial_memory_mode": "shadow",
+            "narrator_enabled": narrator_model is not None,
             "benchmark_success": "not_available_to_agent"})
 
     @property
@@ -221,7 +225,8 @@ class EpisodeRunner:
                       "estimates": [asdict(e) for e in observation.estimates],
                       "boxes": [asdict(b) for b in observation.boxes],
                       "place": observation.place_id, "description": observation.place_description,
-                      "coverage": [asdict(c) for c in observation.coverage]}
+                      "coverage": [asdict(c) for c in observation.coverage],
+                      "legal_envelope": observation.legal_envelope}
         hashed = digest(descriptor)
         if self.current and observation.id == self.current.id:
             if hashed != self._last_capture_hash:
@@ -231,6 +236,7 @@ class EpisodeRunner:
             raise ValueError("New native observations require increasing simulation time")
         if self.initial_sim_time is None:
             self.initial_sim_time = observation.sim_time
+        initial_observation = self.current is None
         self.current, self._last_capture_hash = observation, hashed
         self.current_ids = {}
         refs, intrinsics = {}, {}
@@ -255,9 +261,28 @@ class EpisodeRunner:
         self.coverage = validated_coverage(observation, self.current_ids, self.world)
         if self.memory_ok:
             try:
-                assets = self.sidecar.ingest_observation({
+                memory_envelope = {
                     "episode_id": self.episode, "observation_id": observation.id,
-                    "sim_time": observation.sim_time, "rgb_refs": refs, "camera_intrinsics": intrinsics})
+                    "sim_time": observation.sim_time, "rgb_refs": refs,
+                    "camera_intrinsics": intrinsics,
+                }
+                keyframe_reason = None
+                if observation.legal_envelope is not None:
+                    memory_envelope = dict(observation.legal_envelope)
+                    memory_envelope["rgb_refs"] = refs
+                    keyframe_reason = "initial" if initial_observation else "decision_required"
+                entity_ids = tuple(dict.fromkeys(
+                    [box.entity for box in observation.boxes]
+                    + [estimate.entity for estimate in observation.estimates]
+                ))
+                place_ids = (observation.place_id,) if observation.place_id else ()
+                assets = self.sidecar.ingest_observation(
+                    memory_envelope,
+                    keyframe_reason=keyframe_reason,
+                    keyframe_entity_ids=entity_ids,
+                    keyframe_place_ids=place_ids,
+                )
+                self.sidecar.write_spatial_snapshot(self.root / "spatial-memory.json")
                 cards = self.curator.ingest(observation, {a.camera: a for a in assets})
                 self.journal.put("curation", observation.id, {"cards": cards})
                 if self.annotator is not None:
@@ -472,6 +497,7 @@ class EpisodeRunner:
                   "error": error, "stop_acknowledged": stop_ack,
                   "sim_time": self.now(), "executive_calls": self.loop.calls,
                   "motion_calls": self.motion_calls, "memory_shadow_ok": self.memory_ok,
+                  "spatial_keyframes": len(self.spatial_views.keyframes),
                   "pending_goals": [g.id for g in self.ledger.pending()],
                   "accounting": self.journal.report()}
         (self.root / "report.json").write_bytes(dumps(result))

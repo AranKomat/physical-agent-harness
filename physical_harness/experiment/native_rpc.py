@@ -46,7 +46,7 @@ def encode_observation(obs):
 
 def decode_observation(value):
     fields(value, {"episode", "id", "sim_time", "cameras", "estimates", "boxes", "place_id",
-                   "place_description", "coverage"})
+                   "place_description", "coverage"}, {"legal_envelope"})
     cameras = []
     for c in value["cameras"]:
         fields(c, {"camera", "data_b64"})
@@ -57,7 +57,8 @@ def decode_observation(value):
              for s in value["coverage"]]
     return Observation(value["episode"], value["id"], value["sim_time"], tuple(cameras),
                        tuple(BeliefEstimate(**e) for e in value["estimates"]), tuple(boxes),
-                       value["place_id"], value["place_description"], tuple(scans))
+                       value["place_id"], value["place_description"], tuple(scans),
+                       value.get("legal_envelope"))
 
 
 class ProcessNative:

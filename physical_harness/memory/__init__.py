@@ -6,10 +6,12 @@ from .integration import DecisionCutoffLog, MemoryDecision, MemorySidecar
 from .retrieval import Retriever, attach_memory
 from .schemas import Asset, Card, Cutoff, Draft, PacketBudget
 from .selection import Boundary, EventRecorder, RecentBuffer, boundary_from_runtime
+from .spatial_views import CoverageObservation, PosedRGBDKeyframe, SpatialViewIndex
 from .store import MemoryStore
 from .writer import AsyncAnnotator, parse_draft
 
 __all__ = ['Asset', 'Card', 'Cutoff', 'Draft', 'PacketBudget', 'MemoryStore',
            'Boundary', 'EventRecorder', 'RecentBuffer', 'boundary_from_runtime',
            'Retriever', 'attach_memory', 'AsyncAnnotator', 'parse_draft',
-           'DecisionCutoffLog', 'MemoryDecision', 'MemorySidecar']
+           'DecisionCutoffLog', 'MemoryDecision', 'MemorySidecar',
+           'CoverageObservation', 'PosedRGBDKeyframe', 'SpatialViewIndex']

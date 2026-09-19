@@ -206,6 +206,7 @@ journal.sqlite             immutable requests, decisions, receipts, events, acco
 world.sqlite               current beliefs and task ledger
 memory-decisions.sqlite    decision-time historical cutoffs
 episodic.sqlite            event/entity/place cards and optional annotations
+spatial-memory.json        shadow-only posed RGB-D keyframes and coverage records
 evidence/                  content-addressed original images and crops
 report.json                result and per-role accounting
 ```
