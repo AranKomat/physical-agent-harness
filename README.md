@@ -65,6 +65,10 @@ network and payment opt-ins. Future GPT integrations should prefer Flex when
 available and preserve approved budget limits. No training or held-out
 evaluation is launched by this package.
 
+For offline development only, the optional ChatGPT-authenticated
+[`codex exec` transport](docs/CODEX_EXEC_EXPERIMENT_TRANSPORT.md) provides a
+separate, schema-validated path without replacing the deployment API adapter.
+
 Commands are not observations of success. Native inputs must exclude simulator
 ground truth and scorer state. Synchronous callbacks must enforce their own
 hard deadlines: post-call checks cannot preempt a hung service. Ambiguous motor

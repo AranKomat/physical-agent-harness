@@ -1,9 +1,13 @@
 """Real Responses/Chat adapters, explicit rates, actual image inputs, local validation."""
 from __future__ import annotations
 
+import os
+import subprocess
+import tempfile
 import time
 from dataclasses import dataclass
 from decimal import ROUND_CEILING, Decimal
+from pathlib import Path
 from typing import Any, Protocol
 
 from .journal import Journal
@@ -13,6 +17,10 @@ from .validation import digest, dumps, integer, loads, text, validate_schema
 
 class Poster(Protocol):
     def post(self, path: str, payload: dict) -> dict: ...
+
+
+class CommandRunner(Protocol):
+    def __call__(self, args: list[str], **kwargs) -> subprocess.CompletedProcess[str]: ...
 
 
 @dataclass(frozen=True)
@@ -72,6 +80,212 @@ class ModelSettings:
         for v in (self.paid, self.allow_paid, self.use_input_token_endpoint):
             if type(v) is not bool:
                 raise ValueError("Provider permissions must be booleans")
+
+
+@dataclass(frozen=True)
+class CodexExecSettings:
+    """Experimental ChatGPT-authenticated Codex transport settings."""
+
+    model: str
+    reasoning_effort: str | None = None
+    timeout_s: int = 300
+    max_output_bytes: int = 1_000_000
+    max_images: int = 14
+    max_pixels: int = 12_000_000
+    codex_binary: str = "codex"
+    require_chatgpt_auth: bool = True
+
+    def __post_init__(self):
+        text(self.model, "exact Codex model ID", 256)
+        if "REPLACE" in self.model or self.model.lower() in {"unspecified", "todo"}:
+            raise ValueError("Configure an actual accessible Codex model ID")
+        text(self.codex_binary, "Codex executable", 1024)
+        if self.reasoning_effort not in {
+            None,
+            "none",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra",
+        }:
+            raise ValueError("Unsupported Codex reasoning effort")
+        for value in (self.timeout_s, self.max_output_bytes, self.max_images, self.max_pixels):
+            integer(value, minimum=1)
+        if type(self.require_chatgpt_auth) is not bool:
+            raise ValueError("require_chatgpt_auth must be boolean")
+
+
+class CodexExecJsonModel:
+    """Stateless, schema-validated experimental calls through ``codex exec``.
+
+    This consumes the signed-in user's Codex allowance. It records zero API
+    dollars while preserving call counts, token usage, timing, and failures.
+    """
+
+    def __init__(self, settings: CodexExecSettings, journal: Journal, *, runner=None):
+        self.settings = settings
+        self.journal = journal
+        self.runner: CommandRunner = runner or subprocess.run
+        self.name = settings.model
+
+    def _environment(self) -> dict[str, str]:
+        env = dict(os.environ)
+        # Do not accidentally select an API-billed or injected workload credential.
+        for key in ("OPENAI_API_KEY", "CODEX_API_KEY", "CODEX_ACCESS_TOKEN"):
+            env.pop(key, None)
+        return env
+
+    def _run(self, args: list[str], *, input_text: str = "", timeout: int | None = None):
+        return self.runner(
+            args,
+            input=input_text,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=timeout or self.settings.timeout_s,
+            env=self._environment(),
+        )
+
+    def _check_auth(self) -> None:
+        if not self.settings.require_chatgpt_auth:
+            return
+        result = self._run(
+            [self.settings.codex_binary, "login", "status"],
+            timeout=min(self.settings.timeout_s, 30),
+        )
+        status = (result.stdout or "") + "\n" + (result.stderr or "")
+        if result.returncode != 0 or "Logged in using ChatGPT" not in status:
+            raise PermissionError("Codex CLI must be signed in with ChatGPT for this transport")
+
+    @staticmethod
+    def _usage(events: str) -> dict[str, int]:
+        completed = []
+        for line in events.splitlines():
+            if not line.strip():
+                continue
+            event = loads(line)
+            if not isinstance(event, dict):
+                raise ValueError("Codex emitted a non-object event")
+            if event.get("type") == "turn.completed":
+                completed.append(event)
+        if len(completed) != 1 or not isinstance(completed[0].get("usage"), dict):
+            raise ValueError("Codex did not emit exactly one completed turn with usage")
+        usage = completed[0]["usage"]
+        result = {}
+        for key in (
+            "input_tokens",
+            "cached_input_tokens",
+            "output_tokens",
+            "reasoning_output_tokens",
+        ):
+            if key in usage:
+                result[key] = integer(usage[key])
+        if "input_tokens" not in result or "output_tokens" not in result:
+            raise ValueError("Codex usage omitted required token counts")
+        return result
+
+    def call(self, call_id: str, role: str, instruction: str, context: dict,
+             images: list[ImageInput], schema: dict) -> dict[str, Any]:
+        s = self.settings
+        if context.get("episode") != self.journal.episode:
+            raise ValueError("Model context belongs to another episode")
+        validate_images(images, self.journal.episode,
+                        max_images=s.max_images, max_pixels=s.max_pixels)
+        text(instruction, "system instruction", 32000)
+        if len(dumps(context)) > 256_000:
+            raise ValueError("Context metadata too large")
+        self._check_auth()
+        packet = {
+            "instruction": instruction,
+            "context": context,
+            "images": [dict(ordinal=n, **image.metadata()) for n, image in enumerate(images)],
+            "response_contract": "Return only one JSON value matching the supplied schema.",
+        }
+        manifest = {
+            "model": s.model,
+            "transport": "codex_exec",
+            "billing_route": "chatgpt_subscription",
+            "usd_cost_accounting": "unavailable_not_zero_compute",
+            "instruction": instruction,
+            "context": context,
+            "images": [image.metadata() for image in images],
+            "schema": schema,
+            "reasoning_effort": s.reasoning_effort,
+            "timeout_s": s.timeout_s,
+            "wire_sha256": digest(packet),
+            "ephemeral": True,
+            "sandbox": "read-only",
+        }
+        # Zero is the API-dollar reservation. The journal still enforces call count.
+        self.journal.reserve(call_id, role, manifest, 0)
+        start = time.monotonic()
+        try:
+            with tempfile.TemporaryDirectory(prefix="physical-harness-codex-") as directory:
+                root = Path(directory)
+                schema_path = root / "schema.json"
+                output_path = root / "result.json"
+                schema_path.write_bytes(dumps(schema))
+                image_paths = []
+                for index, image in enumerate(images):
+                    suffix = ".png" if image.uri.endswith(".png") else ".jpg"
+                    path = root / f"image-{index:02d}{suffix}"
+                    path.write_bytes(image.data)
+                    image_paths.append(path)
+                command = [
+                    s.codex_binary,
+                    "exec",
+                    "--ephemeral",
+                    "--sandbox",
+                    "read-only",
+                    "--skip-git-repo-check",
+                    "--ignore-user-config",
+                    "--ignore-rules",
+                    "--cd",
+                    str(root),
+                    "--model",
+                    s.model,
+                ]
+                if s.reasoning_effort:
+                    command += ["-c", f'model_reasoning_effort="{s.reasoning_effort}"']
+                for path in image_paths:
+                    command += ["--image", str(path)]
+                command += [
+                    "--output-schema",
+                    str(schema_path),
+                    "--output-last-message",
+                    str(output_path),
+                    "--json",
+                    "-",
+                ]
+                result = self._run(command, input_text=dumps(packet).decode())
+                seconds = time.monotonic() - start
+                if result.returncode != 0:
+                    raise RuntimeError("codex exec failed")
+                if len(result.stdout.encode()) > s.max_output_bytes:
+                    raise ValueError("Codex event stream exceeds its byte bound")
+                if not output_path.is_file() or output_path.stat().st_size > s.max_output_bytes:
+                    raise ValueError("Codex final output is missing or exceeds its byte bound")
+                usage = self._usage(result.stdout)
+                value = loads(output_path.read_bytes())
+                validate_schema(value, schema)
+            self.journal.complete(
+                call_id,
+                {
+                    "billing_route": "chatgpt_subscription",
+                    "api_microusd": 0,
+                    "usage": usage,
+                    "seconds": seconds,
+                    "completed": True,
+                },
+                0,
+            )
+            return value
+        except Exception as exc:
+            self.journal.fail(call_id, type(exc).__name__)
+            raise
 
 
 class JsonModel:
