@@ -31,6 +31,14 @@ and control-duty accounting. See the [integration validation](docs/ACTION_COMPIL
 for actual-checkout tests and merge corrections. It does not enable native
 motion, install GraspGenX weights, or replace the current experiment controller.
 
+The [2026-09-22 online grounding experiment](docs/ONLINE_TARGET_GROUNDING_20260922.md)
+completed three fresh radio shadow runs (39 captures): three correct target
+detections, one missed edge view, no accepted false targets in inspected frames.
+The [retained compiler replay](docs/ACTION_COMPILER_REPLAY_20260922.md) processed
+78 RGB-D views but produced no qualified contact action. See the updated
+[15-stage queue](docs/HYBRID_EXPERIMENT_SEQUENCE.md); motion remains gated on
+stopping feedback, localization and clearance, not on adding more architecture.
+
 ```bash
 python -m physical_harness demo --output runs/demo-new
 python -m physical_harness doctor

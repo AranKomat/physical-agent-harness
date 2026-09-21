@@ -6,6 +6,7 @@ from experiments.behavior.hybrid_short import (
     admit_perturbation_handoff,
     capture_record,
     execute_policy,
+    main,
 )
 
 
@@ -36,7 +37,8 @@ def test_every_capture_retains_same_boundary_calibration(monkeypatch, track):
 
 
 @pytest.mark.parametrize("offset", [0, 25])
-def test_equal_policy_exposure_keeps_native_provenance_and_prefix(offset):
+@pytest.mark.parametrize("budget", [384, 768])
+def test_equal_policy_exposure_keeps_native_provenance_and_prefix(offset, budget):
     report = {"native_actions": offset, "policy_actions": 0, "policy_chunks": []}
     stamps = []
 
@@ -58,10 +60,33 @@ def test_equal_policy_exposure_keeps_native_provenance_and_prefix(offset):
         report["native_actions"] += 1
         return False
 
-    execute_policy(Transport(), capture(), None, step, capture, report, lambda: None, lambda _: "checked")
-    assert stamps == list(range(offset, offset+384, 32))
-    assert report["policy_actions"] == 384 and report["native_actions"] == offset+384
+    execute_policy(Transport(), capture(), None, step, capture, report, lambda: None,
+                   lambda _: "checked", action_budget=budget)
+    assert stamps == list(range(offset, offset+budget, 32))
+    assert report["policy_actions"] == budget and report["native_actions"] == offset+budget
     assert report["preprocessing_proof"] == "checked"
+
+
+def test_unbounded_acquisition_refused_before_policy_use():
+    with pytest.raises(ValueError, match="budgets"):
+        execute_policy(None, None, None, None, None, {}, None, None, action_budget=769)
+
+
+@pytest.mark.parametrize("flags", [
+    ["--extended-grounding-acquisition"],
+    ["--feedback-hold-diagnostic", "--grounding-port", "8021"],
+    ["--feedback-hold-diagnostic", "--assisted-target-probe"],
+    ["--grounding-port", "8021", "--assisted-target-probe"],
+])
+def test_diagnostic_scopes_cannot_be_silently_combined(monkeypatch, tmp_path, flags):
+    monkeypatch.setattr("sys.argv", ["hybrid-short", "--source", str(tmp_path),
+        "--output", str(tmp_path / "out"), "--policy-load-receipt", str(tmp_path / "receipt"),
+        "--condition", "A", "--allow-simulator", "--allow-unknown-clearance-exploration",
+        "--licenses-accepted", *flags])
+    with pytest.raises(SystemExit) as exc:
+        main()
+    assert exc.value.code == 2
+    assert not (tmp_path / "out").exists()
 
 
 def test_handoff_refuses_failed_stop_missing_shadow_or_drift():

@@ -38,12 +38,15 @@ def capture_record(evaluator, observation, shadow=None):
     return row
 
 
-def execute_policy(transport, observation, store, step, capture, report, save, preprocessing):
+def execute_policy(transport, observation, store, step, capture, report, save, preprocessing,
+                   *, action_budget=POLICY_ACTIONS):
+    if action_budget not in (384, 768):
+        raise ValueError("Only fixed short or separately labeled acquisition budgets are supported")
     stamp = observation.stamp.model_dump()
     if transport.reset(stamp)["stamp"] != stamp:
         raise ValueError("Policy reset acknowledgement mismatch")
     started = time.monotonic()
-    while report["policy_actions"] < POLICY_ACTIONS:
+    while report["policy_actions"] < action_budget:
         if time.monotonic() - started > 900:
             raise TimeoutError("Short policy exposure exceeded wall budget")
         stamp = observation.stamp.model_dump()
@@ -51,7 +54,7 @@ def execute_policy(transport, observation, store, step, capture, report, save, p
         reply = transport.infer({"stamp": stamp, "instruction": INSTRUCTION,
             "proprio": observation.proprio,
             "rgb": {camera: store.read(ref) for camera, ref in observation.rgb.items()}})
-        actions = selected_prefix(reply, stamp, POLICY_ACTIONS - report["policy_actions"], 32)
+        actions = selected_prefix(reply, stamp, min(32, action_budget - report["policy_actions"]), 32)
         if not report["policy_chunks"]:
             report["preprocessing_proof"] = preprocessing(actions)
         report["policy_chunks"].append({"observation": observation.model_dump(),
@@ -94,11 +97,25 @@ def main():
     parser.add_argument("--condition", choices=("A", "B"), required=True)
     parser.add_argument("--policy-load-receipt", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8011)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--grounding-port", type=int,
+                        help="Optional synchronous target-grounding shadow, never motion authority")
+    parser.add_argument("--extended-grounding-acquisition", action="store_true",
+                        help="Separate 768-action policy-only acquisition, not A-short")
+    parser.add_argument("--feedback-hold-diagnostic", action="store_true",
+                        help="Separate robot-only substep feedback during 60 zero-base holds")
     parser.add_argument("--assisted-target-probe", action="store_true",
                         help="Separate paused-world single-yaw diagnostic after policy exposure")
     for flag in ("allow-simulator", "allow-unknown-clearance-exploration", "licenses-accepted"):
         parser.add_argument("--" + flag, action="store_true", required=True)
     args = parser.parse_args()
+    if args.grounding_port and (args.condition != "A" or args.assisted_target_probe):
+        parser.error("Grounding shadow is isolated to policy-only A captures")
+    if args.extended_grounding_acquisition and not args.grounding_port:
+        parser.error("Extended acquisition requires synchronous grounding shadow")
+    if args.feedback_hold_diagnostic and (
+            args.condition != "A" or args.grounding_port or args.assisted_target_probe):
+        parser.error("Feedback hold requires isolated A exposure without grounding or assisted probe")
     source, output = args.source.resolve(), args.output.resolve()
     check_source(source, BEHAVIOR_COMMIT)
     if os.environ.get("CUDA_VISIBLE_DEVICES") != "0":
@@ -117,6 +134,14 @@ def main():
               "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "policy_load_receipt": receipt,
               "policy_receipt_sha256": hashlib.sha256(args.policy_load_receipt.read_bytes()).hexdigest()}
+    report["seed"] = args.seed
+    if args.grounding_port:
+        report["scope"] = "online_target_grounding_shadow_during_frozen_policy_approach"
+    if args.extended_grounding_acquisition:
+        report["scope"] = "extended_online_target_acquisition_not_a_short_comparison"
+    if args.feedback_hold_diagnostic:
+        report["scope"] = "policy_approach_then_zero_base_feedback_not_handoff_qualification"
+    report["policy_action_budget"] = 768 if args.extended_grounding_acquisition else POLICY_ACTIONS
 
     def save():
         (output / "hybrid_short.json").write_text(json.dumps(report, indent=2) + "\n")
@@ -136,7 +161,7 @@ def main():
         if source not in Path(og.__file__).resolve().parents:
             raise ValueError("Imported simulator source mismatch")
         gm.HEADLESS = True
-        seed_everything(0)
+        seed_everything(args.seed)
         cfg = native_config(source)
         cfg["robot"] = OmegaConf.load(cfg.pop("robot_config_path"))
         native_id = resolve_instance_ids("turning_on_radio", [0], mode="public_test")[0]
@@ -173,6 +198,13 @@ def main():
                 row = capture_record(evaluator, observation, shadow if track else None)
                 report["captures"].append(row)
                 save()
+                if args.grounding_port:
+                    from .target_grounding import ground_capture
+
+                    row["target_grounding"] = ground_capture(
+                        row, store, HttpPolicyTransport(args.grounding_port, timeout_s=30),
+                        output / "grounding_masks")
+                    save()
                 return observation
 
             def step(action):
@@ -205,7 +237,22 @@ def main():
                 "checkpoint_revision": HF_REVISION, "policy_reset_sequence": observation.stamp.sequence}
             save()
             final = execute_policy(HttpPolicyTransport(args.port), observation, store, step, capture,
-                report, save, lambda actions: verify_native_preprocessing(evaluator.robot, actions))
+                report, save, lambda actions: verify_native_preprocessing(evaluator.robot, actions),
+                action_budget=report["policy_action_budget"])
+            if args.feedback_hold_diagnostic:
+                from .feedback_diagnostic import run_feedback_hold
+
+                def save_feedback(packet):
+                    (output / "feedback.json").write_text(json.dumps(packet, indent=2) + "\n")
+                    report["feedback_hold"] = packet["report"]
+                    save()
+
+                final, feedback_report = run_feedback_hold(
+                    sim=og.sim, robot=evaluator.robot, initial=final,
+                    gripper_ranges=report["codec"]["gripper_ranges"], step=step,
+                    capture=capture, save_feedback=save_feedback, source_revision=BEHAVIOR_COMMIT)
+                if not feedback_report["feedback_complete"]:
+                    raise RuntimeError("Substep feedback diagnostic incomplete: " + str(feedback_report["error"]))
             if args.assisted_target_probe:
                 from .assisted_probe import run_assisted_probe
 

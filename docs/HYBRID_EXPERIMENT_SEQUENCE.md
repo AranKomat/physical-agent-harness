@@ -1,6 +1,6 @@
 # Hybrid Experiment Sequence
 
-Updated 2026-09-21 after Hybrid V0.1 integration. This sequence supersedes doing
+Updated 2026-09-22 after Action Compiler V1 integration. This sequence supersedes doing
 more GPT-supervised full-radio trials before the motor handoff is interpretable.
 It does not authorize new spend, training, license acceptance or weakening gates.
 
@@ -50,20 +50,39 @@ completed. One ended without the target in view; the other supports an assisted
 offline RGB-D measurement about 1.72 m horizontally from the base. This exposes
 the remaining target-acquisition/transit gap, not a completed staging proposal.
 
+## Current Parallel Results
+
+The [compiler replay](ACTION_COMPILER_REPLAY_20260922.md) processed 78 legal
+RGB-D views and produced zero qualified contact actions. The
+[GraspGenX readiness audit](GRASPGENX_READINESS_20260922.md) identifies actual
+R1Pro gripper/TCP and closure-geometry gaps; inference is not enabled.
+The [online grounding report](ONLINE_TARGET_GROUNDING_20260922.md) records the
+fresh shadow experiment, not navigation authority. The
+[post-policy stop diagnosis](POST_POLICY_STOP_ANALYSIS_20260922.md) preserves
+the failed stop gate while investigating feedback at physics-substep boundaries.
+
 ## Ordered Gates
+
+These are the updated 15 stages. Older experiment reports retain their original
+stage numbers; use names rather than equating those historical numbers.
 
 | Stage | Experiment | Status / Prerequisite |
 | --- | --- | --- |
-| 1 | Native base control, no GPT or VLA | Partial: codec and stationary settling passed; online local pose, full-body swept clearance and measured moving-base stop still required |
-| 2 | Legal sensors to target point to staging proposal, no motion | Same-boundary calibration and assisted retained-frame deprojection exercised; autonomous selection, multi-view localization and admitted staging still pending |
-| 3 | Behavior-Skill A-short versus B-short, no GPT | Tiny-perturbation diagnostic completed; target-directed comparison still gated on 1 and 2 |
-| 4 | Behavior-Skill A versus B radio, no GPT | After interpretable short handoff; 3,224 total robot-action ceilings, one exploratory pair then replication |
-| 5 | Arm/torso staging and return, no object interaction | Only after B; named-joint/FK/IK, full-body swept clearance and measured endpoint checks |
-| 6 | C-short, then A/B/C radio | After staging qualification; preserve an empirically supported handoff envelope |
-| 7 | Bounded classical contact diagnostic, conditional | Only if geometry/staging are qualified but policy contact still fails; not implemented by this overlay |
-| 8 | Screen 2-3 visually verifiable tasks with the same frozen policy | Seek controllable pick/carry/place progress, not another large checkpoint search |
-| 9 | H0 fixed hybrid versus H1 same motor with GPT executive | Only after useful hybrid motor competence; retain separate fresh verification |
-| 10 | H1 versus H2 with causal episodic/visual memory | Only on a genuinely memory-sensitive online task; no further memory architecture first |
+| 1 | Integrate Action Compiler V1, software only | Complete at `48695a0`; no native compiler motion |
+| 2 | Retained legal RGB-D geometry/catalog replay | First replay complete; zero qualified contact candidates; actual-gripper inference blocked |
+| 3 | Online target acquisition | Three fresh shadow resets complete; positive detection and failure cases retained; metric/multi-view qualification incomplete |
+| 4 | Bounded target-directed base transit | Blocked on stop feedback, moving localization and swept clearance; no metre-scale move |
+| 5 | Target-directed A-short/B-short, no GPT | After 3/4; prior tiny perturbation is not this experiment |
+| 6 | Equal-total-action A/B radio | After interpretable target-directed short handoff; 3,224 actions each |
+| 7 | Arm/torso free-space staging and return | After B; qualified FK/IK, clearance and measured endpoint |
+| 8 | C-short, then A/B/C radio | After staging; unchanged frozen policy and explicit handoff envelope |
+| 9 | Compiler candidate quality and execution, no GPT | Offline contract checks started; native positive execution still gated |
+| 10 | Bounded classical contact/press | After grounded part semantics, contact normal and qualified staging |
+| 11 | Screen 2-3 other tasks | Same frozen policy/compiler; no checkpoint search or task-specific switching |
+| 12 | GPT selects compiled action IDs | Only after useful deterministic motor competence; no invented joint targets |
+| 13 | Event-driven GPT recovery | After 12; target loss, failed primitives, ambiguity and changed state |
+| 14 | Current state versus causal memory | Only on a genuinely memory-sensitive online task |
+| 15 | Neural duty-cycle optimization | After success; action/DOF time shares are not measured energy |
 
 Async execution, monitoring and energy optimization follow demonstrated
 competence; policy-action time share is not measured energy efficiency.
@@ -76,14 +95,14 @@ It is separate from the strict qualification sequence below. Passing response
 and stopping checks in this lane does not establish swept clearance or authorize
 a strict hybrid handoff. No GPT or VLA calls are needed for these diagnostics.
 
-Stage 1 uses ordinary resets and tiny forward/backward/lateral/yaw commands, tens
+Stage 4 uses ordinary resets and bounded local commands after tiny response tests, tens
 of ticks rather than hundreds. Pass only with legal finite full native actions,
 bounded arm/torso/gripper drift, consistent legal local pose, fresh per-tick
 observations, established swept clearance, measured stops and exact action/time
 accounting. Include blocked/unknown corridors and failed-stop tests. Do not use
 the fixture's always-true geometry callbacks on BEHAVIOR.
 
-Stage 2 validates detector-selected pixels, actual measured depth and legally
+Stage 3 validates detector-selected pixels, actual measured depth and legally
 estimated camera-to-local-map transforms across several views. RTSM labels are
 not sufficient alone given the prior false positives. Visual confirmation may
 complement a detector. Any simulator-ground-truth analysis is strictly
@@ -91,7 +110,7 @@ out-of-band and unavailable to control, target selection, prompts or retrieval.
 Measure error distributions relative to workspace and contact tolerances rather
 than inventing a favorable cutoff after seeing outcomes.
 
-For stage 3, use one frozen Behavior-Skill checkpoint and its exact image/state
+For stage 5, use one frozen Behavior-Skill checkpoint and its exact image/state
 normalization, full action interface and 32-action prefix. A-short receives 384
 policy actions from ordinary reset; B-short adds qualified classical transit,
 measured stop, fresh capture and real queue/history/in-flight drain before the
@@ -106,7 +125,7 @@ reversal/backtracking, failures and every rejected handoff. The V0.1 telemetry
 callback provides the structured boundary record; native traces must still
 supply actual first-action/progress measurements. No template invents them.
 
-For stage 4, rerun A through the same current wrapper as B rather than substituting
+For stage 6, rerun A through the same current wrapper as B rather than substituting
 an old baseline. Hold starts, task, instructions and checkpoint fixed. Classical
 and settling actions consume the shared 3,224-action ceiling. Track Q/success
 out-of-band plus visible progress, displacement, contacts, policy/classical
@@ -115,9 +134,9 @@ exploratory, not a reliable effect estimate.
 
 ## Later Boundaries
 
-Stage 5's direct joint interpolation must reject blocked or unknown swept space.
+Stage 7's direct joint interpolation must reject blocked or unknown swept space.
 A qualified external planner may replace it behind the existing interface; do
-not weaken the gate. Stage 6 should leave ordinary visual-servo/contact work to
+not weaken the gate. Stage 8 should leave ordinary visual-servo/contact work to
 the VLA rather than staging the EEF onto the button. Permitted demonstrations
 may inform the envelope without retraining, but record their task/episode
 provenance and call such a setup demonstration-informed, not zero-shot target-task
