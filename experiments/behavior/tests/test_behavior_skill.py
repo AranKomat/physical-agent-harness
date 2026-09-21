@@ -86,3 +86,15 @@ def test_errors_never_return_previous_actions():
     with pytest.raises(ValueError, match="finite"):
         backend.infer(packet(1))
     assert len(backend.calls) == 1
+
+
+def test_matched_noise_is_relative_to_handoff_reset_not_classical_exposure():
+    policies = [FakePolicy(), FakePolicy()]
+    for policy, offset in zip(policies, (0, 25), strict=True):
+        backend = BehaviorSkillBackend(policy, lambda image, h, w: image)
+        backend.reset(packet(offset)["stamp"])
+        backend.infer(packet(offset))
+        backend.infer(packet(offset + 32))
+        assert [c["noise_index_since_reset"] for c in backend.calls] == [0, 32]
+    for index in (0, 1):
+        np.testing.assert_array_equal(policies[0].calls[index][1], policies[1].calls[index][1])

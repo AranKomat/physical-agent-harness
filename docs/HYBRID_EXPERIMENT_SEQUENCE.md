@@ -8,8 +8,11 @@ It does not authorize new spend, training, license acceptance or weakening gates
 
 The [native hold-codec and stationary-settling diagnostics](HYBRID_NATIVE_QUALIFICATION_20260921.md)
 passed. Hold commands match the pinned native convention; a five-tick stationary
-diagnostic achieved five measured settled captures. No nonzero commanded base
-move, moving-base braking test or classical-to-policy handoff has been qualified.
+diagnostic achieved five measured settled captures. Subsequent labeled
+[native exploratory pulses](HYBRID_NATIVE_EXPLORATION_20260921.md) passed forward
+response and measured braking at one start, but reverse and yaw tracking failed.
+Moving localization, collision clearance and classical-to-policy handoff remain
+unqualified. Same-start reproducibility is not general motion qualification.
 The V0.1 resolver and telemetry are offline-tested utilities, not implementations
 of the missing perception/collision/native callbacks.
 
@@ -26,7 +29,15 @@ The [empty-scene response experiment](HYBRID_EMPTY_BASE_DIAGNOSTIC_20260921.md)
 did not qualify tracking or stopping. Its failed baseline and cross-axis motion
 must be resolved separately from the learned policy; do not promote it to B-short.
 The sustained native radio hold passed 60 zero-base ticks. This does not repair
-the empty-fixture discrepancy or establish a moving-base stop.
+the empty-fixture discrepancy. The subsequent native pulses provide the bounded
+moving-base stop evidence; they do not validate the empty fixture.
+
+The [motion-measurement diagnosis](HYBRID_MOTION_MEASUREMENT_DIAGNOSIS_20260921.md)
+subsequently isolated inaccurate per-tick odometry and misleading instantaneous
+velocity interpretation. Fixed-reference head-depth registration passed forward
+and yaw replay checks and a live forward shadow run. This supports a separate,
+explicitly labeled tiny-perturbation handoff diagnostic; it does not complete
+target localization or certify a navigation corridor.
 
 ## Ordered Gates
 

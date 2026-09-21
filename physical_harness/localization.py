@@ -19,6 +19,9 @@ class RGBDOdometry:
     a legal observation. An optional motion estimator supports deterministic
     testing and alternate legal RGB-D implementations. It must return
     ``(success, source_to_target_transform, 6x6_information_matrix)``.
+    ``reference_mode="first"`` keeps a fixed reference for bounded diagnostics;
+    freshness is still checked between consecutive current observations. It
+    does not reset the map or turn registration quality into motion authority.
     """
 
     def __init__(
@@ -31,6 +34,7 @@ class RGBDOdometry:
         max_rotation_deg: float = 35.0,
         max_frame_gap_s: float = 2.0,
         min_information: float = 10.0,
+        reference_mode: str = "previous",
     ):
         if not callable(load_artifact) or not isinstance(camera, str) or not camera.strip():
             raise ValueError("Artifact loader and camera are required")
@@ -39,6 +43,9 @@ class RGBDOdometry:
             raise ValueError("Odometry bounds must be finite numbers")
         if min(values) <= 0:
             raise ValueError("Odometry bounds must be positive")
+        if reference_mode not in ("previous", "first"):
+            raise ValueError("Unknown odometry reference mode")
+        self.reference_mode = reference_mode
         self.load_artifact = load_artifact
         self.camera = camera
         self.motion_estimator = motion_estimator
@@ -48,6 +55,7 @@ class RGBDOdometry:
         self.min_information = float(min_information)
         self.previous: tuple[Any, Any, str] | None = None
         self.previous_observation: LegalObservation | None = None
+        self.reference_observation: LegalObservation | None = None
         self.transform: Any = None
         self.lost = False
 
@@ -142,6 +150,10 @@ class RGBDOdometry:
                 raise LocalizationLost("RGB-D frame gap exceeds odometry bound")
 
         calibration = observation.camera_intrinsics[self.camera]
+        if (self.reference_observation is not None
+                and calibration != self.reference_observation.camera_intrinsics[self.camera]):
+            self.lost = True
+            raise LocalizationLost("Camera calibration changed within the local map")
         rgb, depth = self._validate_images(
             self.load_artifact(observation.rgb_refs[self.camera]),
             self.load_artifact(observation.depth_refs[self.camera]),
@@ -177,11 +189,15 @@ class RGBDOdometry:
             except (TypeError, ValueError, np.linalg.LinAlgError) as error:
                 self.lost = True
                 raise LocalizationLost(str(error)) from error
-            self.transform = self._rigid(self.transform @ np.linalg.inv(delta))
+            self.transform = self._rigid(
+                np.linalg.inv(delta) if self.reference_mode == "first"
+                else self.transform @ np.linalg.inv(delta))
             confidence = min(1.0, float(np.min(diagonal)) / (self.min_information * 2))
-            evidence_ids = [previous.observation_id, observation.observation_id]
+            evidence_ids = [self.reference_observation.observation_id, observation.observation_id]
 
-        self.previous = (rgb, depth, observation.observation_id)
+        if self.previous is None or self.reference_mode == "previous":
+            self.previous = (rgb, depth, observation.observation_id)
+            self.reference_observation = observation
         self.previous_observation = observation
         return {
             "method": "rgbd_odometry",

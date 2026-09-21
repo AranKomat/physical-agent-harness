@@ -94,7 +94,8 @@ class BehaviorSkillBackend:
             raise ValueError("Stale or uninitialized policy request")
         inputs = sensor_inputs(packet, self.resize)
         # Explicit per-observation noise makes later paired comparisons possible.
-        noise = np.random.default_rng(20260920 + stamp.sequence).standard_normal(
+        noise_index = stamp.sequence - self.stamp.sequence
+        noise = np.random.default_rng(20260920 + noise_index).standard_normal(
             (32, 32), dtype=np.float32
         )
         start = time.monotonic()
@@ -105,6 +106,7 @@ class BehaviorSkillBackend:
         actions = actions[:, :23]  # Upstream B1kOutputs removes only model padding.
         self.last_sequence = stamp.sequence
         self.calls.append({"stamp": stamp.model_dump(), "instruction": inputs["prompt"],
+                           "noise_index_since_reset": noise_index,
                            "inference_s": time.monotonic() - start,
                            "action_shape": list(actions.shape)})
         if self.receipt:

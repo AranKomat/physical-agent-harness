@@ -271,3 +271,33 @@ python -m experiments.behavior.native_base_exploration \
 Use the same GPU-0 environment and external watchdog as other native diagnostics.
 Clearance remains unknown even if response and braking pass. Inspect `audit.json`;
 simulator shutdown status alone is not a diagnostic result.
+
+For isolated sensor/controller debugging, `--record-quarantined-robot-truth`
+optionally writes robot-base and camera world poses to a separate
+`diagnostic_truth.jsonl`. This is privileged **evaluation-only** data: never use
+it as controller input, policy context, target selection or a localization
+fallback. It is disabled by default, its use is declared in the receipt, and
+the logger returns no value to the pulse driver. Runs using it are diagnostic
+runs, not evidence of oracle-free end-to-end qualification.
+
+`--head-depth-shadow` adds opt-in fixed-reference head-depth estimates while
+leaving pulse actions unchanged. Shadow failures are recorded, not silently
+reset or treated as collision clearance. The simulator runner preloads Open3D
+before the first capture timestamp; current capture gaps remain bounded.
+
+## Tiny-Perturbation Handoff Diagnostic
+
+`python -m experiments.behavior.hybrid_short` runs one A or B condition against
+an owned, pinned Behavior-Skill server. It requires a verified policy load
+receipt and explicit simulator/unknown-clearance authorization. A receives 384
+policy actions; B first receives the tested short forward pulse and must pass
+response, stop and live head-shadow stability checks before the same 384-action
+ceiling. Native action provenance includes the classical exposure. Inference
+noise is indexed from the acknowledged handoff reset so matching policy chunks
+use matching noise. The original state/image/action normalization and 32-action
+prefix remain unchanged.
+
+This is neither target-directed staging nor the main equal-total-action radio
+comparison. No GPT calls or simulator-truth reads occur in this runner. Inspect
+`hybrid_short.json` for complete versus censored exposure and failure fields;
+process exit alone is insufficient. Recordings and raw evidence remain private.

@@ -95,3 +95,36 @@ def test_rgbd_odometry_rejects_gap_episode_and_bad_artifacts():
     bad = RGBDOdometry(lambda _: [[0]])
     with pytest.raises(ValueError, match="calibration"):
         bad(observation(0))
+
+
+def test_fixed_reference_does_not_accumulate_or_relax_current_frame_freshness():
+    delta = np.eye(4)
+    delta[0, 3] = .1
+    tracker = RGBDOdometry(artifacts, reference_mode="first", max_frame_gap_s=1,
+                          motion_estimator=lambda *_: (True, delta, np.eye(6) * 20))
+    tracker(observation(0))
+    for at in (1, 2, 3):
+        result = tracker(observation(at))
+        assert result["transform"][0][3] == pytest.approx(-.1)
+        assert result["evidence_ids"] == ["frame-0", f"frame-{at}"]
+    with pytest.raises(ValueError, match="stale"):
+        tracker(observation(3))
+    with pytest.raises(LocalizationLost, match="gap"):
+        tracker(observation(5))
+    with pytest.raises(LocalizationLost, match="new map"):
+        tracker(observation(6))
+
+
+@pytest.mark.parametrize("reference_mode", ["first", "previous"])
+def test_reference_rejects_calibration_change(reference_mode):
+    tracker = RGBDOdometry(artifacts, reference_mode=reference_mode)
+    tracker(observation(0))
+    envelope = observation(1).to_envelope()
+    envelope["camera_intrinsics"]["head"]["fx"] = 11
+    with pytest.raises(LocalizationLost, match="calibration changed"):
+        tracker(LegalObservation.from_envelope(envelope))
+
+
+def test_unknown_reference_mode_rejected():
+    with pytest.raises(ValueError, match="reference mode"):
+        RGBDOdometry(artifacts, reference_mode="silent_reset")
