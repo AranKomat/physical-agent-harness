@@ -14,7 +14,7 @@ from physical_harness.hybrid_v0.classical import BodyTwist
 from .base_hold import base_hold, settled
 from .contracts import Stamp
 from .native import BEHAVIOR_COMMIT, check_source, native_config
-from .observations import BehaviorObservationFilter, EvidenceStore, array
+from .observations import BehaviorObservationFilter, EvidenceStore, array, capture_intrinsics
 
 LAYOUT = {
     "base": (0, 3, "HolonomicBaseJointController"),
@@ -26,7 +26,8 @@ LAYOUT = {
 }
 
 
-def stationary_hold(evaluator, observation, store, gripper_ranges, max_steps, save):
+def stationary_hold(evaluator, observation, store, gripper_ranges, max_steps, save,
+                    *, calibration_capture=None, full_window=False):
     """At most 60 explicit hold ticks. Not navigation or moving-base braking."""
     import torch
 
@@ -47,20 +48,30 @@ def stationary_hold(evaluator, observation, store, gripper_ranges, max_steps, sa
     evaluator.policy = Hold()
     ingress = BehaviorObservationFilter(store)
     consecutive = 0
+    established = False
     for step in range(max_steps):
         state["actions_attempted"] += 1
         save(state)
         terminated, truncated = evaluator.step()
         state["actions_executed"] += 1
         state["physical_s"] = state["actions_executed"] / 30
+        save(state)  # Preserve executed-action accounting if capture fails.
         current = ingress.convert(evaluator.obs, observation.stamp.model_copy(
             update={"sequence": step + 1}), time.monotonic())
         p = np.asarray(current.proprio)
         indices = [*range(3, 10), *range(28, 35), *range(53, 57)]
         drift = float(np.max(abs(p[indices] - p0[indices])))
         at_rest = settled(p)
-        state["samples"].append({"sequence": step + 1, "settled": at_rest,
-                                 "joint_drift": drift, "observation": current.model_dump()})
+        sample = {"sequence": step + 1, "settled": at_rest,
+                  "joint_drift": drift, "observation": current.model_dump(),
+                  "post_reset_control_time_s": state["physical_s"]}
+        if calibration_capture is not None:
+            sample["camera_calibration"] = calibration_capture(evaluator, current)
+        state["samples"].append(sample)
+        if full_window and established and not at_rest:
+            state["stop_reason"] = "settled_state_lost"
+            save(state)
+            raise RuntimeError("Stationary state lost during sustained hold")
         consecutive = consecutive + 1 if at_rest else 0
         if drift > .03 or np.linalg.norm(p[:2]) > .02 or abs(p[2]) > .04:
             state["stop_reason"] = "hold_drift_limit"
@@ -71,11 +82,14 @@ def stationary_hold(evaluator, observation, store, gripper_ranges, max_steps, sa
             save(state)
             raise RuntimeError("Native episode ended during hold diagnostic")
         if consecutive >= 5:
-            state.update(settled=True, stop_reason="five_consecutive_settled_samples")
-            save(state)
-            return state
+            established = True
+            if not full_window:
+                state.update(settled=True, stop_reason="five_consecutive_settled_samples")
+                save(state)
+                return state
         save(state)
-    state["stop_reason"] = "hold_budget_exhausted"
+    state["settled"] = established and consecutive >= 5
+    state["stop_reason"] = "sustained_hold_window_complete" if state["settled"] else "hold_budget_exhausted"
     save(state)
     return state
 
@@ -155,9 +169,13 @@ def main():
     parser.add_argument("--licenses-accepted", required=True, action="store_true")
     parser.add_argument("--hold-steps", type=int, default=0)
     parser.add_argument("--allow-motion", action="store_true")
+    parser.add_argument("--full-hold-window", action="store_true",
+                        help="After settling, require it to persist through the remaining hold ticks")
     args = parser.parse_args()
     if not 0 <= args.hold_steps <= 60 or (args.hold_steps and not args.allow_motion):
         parser.error("Hold diagnostic needs --allow-motion and at most 60 steps")
+    if args.full_hold_window and args.hold_steps < 5:
+        parser.error("A sustained hold window requires at least five hold ticks")
     source, output = args.source.resolve(), args.output.resolve()
     check_source(source, BEHAVIOR_COMMIT)
     if os.environ.get("CUDA_VISIBLE_DEVICES") != "0":
@@ -201,13 +219,16 @@ def main():
                 evaluator.obs, Stamp(session=str(uuid.uuid4()), epoch=0, sequence=0), time.monotonic())
             (output / "observation.json").write_text(observation.model_dump_json(indent=2) + "\n")
             report.update(inspect(evaluator.robot, observation.proprio), native_id=301)
+            report["camera_calibration"] = capture_intrinsics(evaluator, observation)
             if args.hold_steps:
                 def save_hold(state):
                     report["hold_diagnostic"] = state
                     report["actions_sent"] = state["actions_executed"]
                     save()
                 result = stationary_hold(evaluator, observation, store, report["gripper_ranges"],
-                                         args.hold_steps, save_hold)
+                                         args.hold_steps, save_hold,
+                                         calibration_capture=capture_intrinsics,
+                                         full_window=args.full_hold_window)
                 report["passed"] = result["settled"]
             else:
                 report["passed"] = True

@@ -61,6 +61,65 @@ def test_hold_budget_is_not_a_stop_acknowledgement(monkeypatch):
     assert result["stop_reason"] == "hold_budget_exhausted"
 
 
+def test_calibration_callback_follows_each_measured_capture(monkeypatch):
+    evaluator, initial = fixture(monkeypatch)
+    calls = []
+
+    def capture(ev, obs):
+        assert ev is evaluator
+        calls.append(obs.stamp.sequence)
+        return {"sequence": obs.stamp.sequence}
+
+    result = audit.stationary_hold(evaluator, initial, None, ((0, .05), (0, .05)),
+                                   60, lambda state: None, calibration_capture=capture)
+    assert calls == [1, 2, 3, 4, 5]
+    for sample in result["samples"]:
+        assert sample["camera_calibration"]["sequence"] == sample["sequence"]
+        assert sample["post_reset_control_time_s"] == sample["sequence"] / 30
+
+
+def test_capture_failure_preserves_executed_action_count(monkeypatch):
+    evaluator, initial = fixture(monkeypatch)
+    saved = []
+
+    def fail(ev, obs):
+        raise ValueError("Calibration failed")
+
+    with pytest.raises(ValueError, match="Calibration failed"):
+        audit.stationary_hold(evaluator, initial, None, ((0, .05), (0, .05)),
+                              60, lambda state: saved.append(dict(state)),
+                              calibration_capture=fail)
+    assert len(evaluator.commands) == 1
+    assert saved[-1]["actions_attempted"] == saved[-1]["actions_executed"] == 1
+
+
+def test_full_window_does_not_stop_at_first_five_settled_samples(monkeypatch):
+    evaluator, initial = fixture(monkeypatch)
+    result = audit.stationary_hold(evaluator, initial, None, ((0, .05), (0, .05)),
+                                   60, lambda state: None, full_window=True)
+    assert result["settled"] and result["actions_executed"] == 60
+    assert result["stop_reason"] == "sustained_hold_window_complete"
+
+
+def test_full_window_aborts_if_measured_settling_is_lost(monkeypatch):
+    evaluator, initial = fixture(monkeypatch)
+    old_step = evaluator.step
+
+    def step():
+        result = old_step()
+        if len(evaluator.commands) == 10:
+            evaluator.obs[57] = .04
+        return result
+
+    evaluator.step = step
+    saved = []
+    with pytest.raises(RuntimeError, match="Stationary state lost"):
+        audit.stationary_hold(evaluator, initial, None, ((0, .05), (0, .05)),
+                              60, lambda state: saved.append(dict(state)), full_window=True)
+    assert saved[-1]["actions_executed"] == 10
+    assert saved[-1]["stop_reason"] == "settled_state_lost"
+
+
 @pytest.mark.parametrize("mode", ["drift", "end"])
 def test_bad_native_state_aborts_without_extra_steps(monkeypatch, mode):
     evaluator, initial = fixture(monkeypatch, mode)

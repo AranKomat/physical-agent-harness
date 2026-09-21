@@ -14,10 +14,19 @@ The V0.1 resolver and telemetry are offline-tested utilities, not implementation
 of the missing perception/collision/native callbacks.
 
 A [retained-view depth coverage diagnostic](HYBRID_DEPTH_COVERAGE_20260921.md)
-now identifies substantial blind regions around proposed 5 cm translations.
-It uses historical intrinsics and unqualified planning proxies, so is provisional
-and authorizes no motion. The next work is contemporaneous calibration and
-causal online coverage/local-pose qualification, not another full-policy trial.
+identified substantial blind regions around proposed 5 cm translations. A
+[fresh calibrated hold and authored-mesh audit](HYBRID_CALIBRATED_GEOMETRY_20260921.md)
+reproduced that result with contemporaneous intrinsics. Short-trace stationary
+odometry passed its bounds, but the 60-tick follow-up exceeded them for head
+translation and right-wrist rotation; moving localization remains unqualified. Accumulating the
+short stationary trace did not resolve blind regions, and upstream planning
+spheres do not enclose all authored collision vertices. Separate empty-scene
+base-response calibration is authorized, but cannot bypass benchmark clearance.
+The [empty-scene response experiment](HYBRID_EMPTY_BASE_DIAGNOSTIC_20260921.md)
+did not qualify tracking or stopping. Its failed baseline and cross-axis motion
+must be resolved separately from the learned policy; do not promote it to B-short.
+The sustained native radio hold passed 60 zero-base ticks. This does not repair
+the empty-fixture discrepancy or establish a moving-base stop.
 
 ## Ordered Gates
 
@@ -38,6 +47,12 @@ Async execution, monitoring and energy optimization follow demonstrated
 competence; policy-action time share is not measured energy efficiency.
 
 ## Immediate Protocol
+
+An explicitly authorized simulator-only exploratory lane now permits bounded
+native-radio response pulses with clearance recorded as **unknown**, not free.
+It is separate from the strict qualification sequence below. Passing response
+and stopping checks in this lane does not establish swept clearance or authorize
+a strict hybrid handoff. No GPT or VLA calls are needed for these diagnostics.
 
 Stage 1 uses ordinary resets and tiny forward/backward/lateral/yaw commands, tens
 of ticks rather than hundreds. Pass only with legal finite full native actions,

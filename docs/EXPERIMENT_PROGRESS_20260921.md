@@ -19,6 +19,11 @@ checkpoint exists are superseded. Compatibility is not performance qualification
 
 ## Stage Status
 
+Latest hybrid prerequisite findings: [calibrated native hold, stationary odometry,
+and robot-geometry coverage](HYBRID_CALIBRATED_GEOMETRY_20260921.md). This narrows the
+current issue to unknown near-robot coverage and unqualified conservative collision
+bounds; it is not a new policy failure or demonstrated task-success improvement.
+
 | Stage | Status and scope |
 | --- | --- |
 | Live semantic cycle | Bounded native observation, GPT executive/verifier, ledger and termination checks passed |
@@ -192,6 +197,13 @@ online local pose and the classical-to-policy handoff remain unqualified.
 Once those gates pass, compare Behavior-Skill A-short/B-short without GPT,
 then equal-total-action A/B. Arm staging, GPT and memory follow only after
 the relevant motor prerequisites. V0.1 integration itself ran no new GPU trial.
+
+The subsequently authorized [native exploratory response tests](HYBRID_NATIVE_EXPLORATION_20260921.md)
+record clearance as unknown without changing strict gates. A small forward pulse
+and measured braking passed and reproduced on a fresh reset; a following backward
+pulse failed tracking/cross-axis checks despite passing braking. General base
+motion and policy handoff therefore remain unqualified. No GPT or VLA inference
+was used for these diagnostics.
 
 Use the completed matched pair to isolate instruction conditioning,
 fine contact control, visual success observability and progress/recovery context.

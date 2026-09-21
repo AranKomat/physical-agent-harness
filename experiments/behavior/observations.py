@@ -25,6 +25,35 @@ def array(value):
     return np.asarray(value)
 
 
+def capture_intrinsics(evaluator, observation):
+    """Bind allowlisted sensor intrinsics to a frozen observation, never world poses.
+
+    Caller must capture without intervening simulator steps or sensor changes.
+    This does not estimate or qualify camera extrinsics/localization.
+    """
+    calibration = {}
+    for camera, prefix in CAMERAS.items():
+        if evaluator.robot_camera_names[camera] != prefix:
+            raise ValueError("Native camera mapping changed")
+        rgb, depth = observation.rgb[camera], observation.depth[camera]
+        if any(ref.stamp != observation.stamp or ref.observed_at != observation.observed_at
+               for ref in (rgb, depth)):
+            raise ValueError("Calibration evidence boundary mismatch")
+        sensor_name = prefix.split("::", 1)[1]
+        matrix = array(evaluator.robot.sensors[sensor_name].intrinsic_matrix).astype(float)
+        if (matrix.shape != (3, 3) or not np.isfinite(matrix).all()
+                or matrix[0, 0] <= 0 or matrix[1, 1] <= 0
+                or not np.allclose(matrix[2], [0, 0, 1])):
+            raise ValueError("Invalid native intrinsics")
+        calibration[camera] = {
+            "intrinsic_matrix": matrix.tolist(), "image_shape": list(RESOLUTIONS[camera]),
+            "source": "native_camera_intrinsics", "extrinsics": None,
+            "stamp": observation.stamp.model_dump(), "observed_at": observation.observed_at,
+            "rgb_evidence_id": rgb.id, "depth_evidence_id": depth.id,
+        }
+    return calibration
+
+
 class EvidenceStore:
     def __init__(self, root: Path):
         self.root = root.resolve()

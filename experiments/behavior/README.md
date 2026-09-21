@@ -178,6 +178,57 @@ for a measured settled result; a timeout is not a stop acknowledgement. Joint
 drift or unexpected base velocity aborts the diagnostic. This tests settling from
 an ordinary reset, not braking a moving base, collision clearance, navigation,
 or task completion. There is no policy inference or GPT call in either mode.
+Add `--full-hold-window` to continue through the requested tick budget after the
+first five settled samples. Losing measured settling after it was established
+aborts this sustained diagnostic; it cannot pass merely by settling again later.
+
+Both modes now save native intrinsics bound to each captured observation's
+stamp, timestamp and RGB/depth evidence IDs. No simulator camera/world pose is
+read. A calibration-capture failure aborts while preserving completed action
+accounting. Intrinsics alone do not qualify extrinsics or localization.
+
+### Separate Empty-Scene Response Calibration
+
+Only with explicit authorization, `experiments.behavior.empty_base_audit` creates
+an empty floor-plane scene with the pinned R1Pro controller configuration. This
+is **not** a benchmark trial or a way to override hybrid admission. It uses
+proprioception only, without a VLA/GPT or global-pose observation. It requires
+`--allow-empty-scene-motion --licenses-accepted`, plus the same `--source`, fresh
+`--output`, GPU-0 environment and external watchdog as above.
+
+After measured initial settling, it runs six 15-tick pulses: +/-0.03 m/s on each
+translation axis and +/-0.05 rad/s yaw. Each is followed by at most 60 hold ticks
+requiring five consecutive samples below 0.002 m/s and 0.005 rad/s, together with
+the existing joint/gripper settling criteria. Arm, torso and gripper targets
+stay fixed. Response mismatch, excess speed, joint/gripper drift or failed stop
+aborts, with at most 60 additional emergency-hold ticks. All dispatched ticks
+are counted; the maximum normal schedule is 510 ticks, plus 60 emergency ticks.
+Environment construction/reset physics is disclosed separately.
+The fixture also applies the pinned evaluator's 250 kg base-footprint mass and
+its pre-trial 25-physics-tick `keep_still`/snapshot initialization. These setup
+operations are never repeated during a pulse or braking measurement. Earlier
+fixture attempts without all of these steps are retained as separate failures.
+
+For an explicitly scoped response-characterization experiment only,
+`--characterize-unsettled` permits the fixed pulses after an unsuccessful bounded
+stop attempt. Failed stops remain recorded, acknowledgement times are null, and
+`passed` is **always false**, even if responses look reasonable. Speed and
+joint/gripper drift aborts remain enforced. This option is restricted to the
+empty-scene runner and must not be used as a benchmark or hybrid gate override.
+`--spawn-height` exposes only the declared 0, 0.01 and 0.05 m calibration conditions;
+an elevated result is not floor-level navigation qualification.
+`--posture-from-audit` can initialize only robot joint positions from a previously
+passed, pinned native hold audit in this empty fixture. It excludes base/world
+poses and all scene state, records source provenance, and is not an ordinary
+benchmark reset or a policy-training operation.
+
+Always inspect the saved receipt, not just the process exit code: simulator
+shutdown can terminate the Python process with status zero even after a failed
+diagnostic. Characterization completion likewise is never a qualification pass.
+
+Braking-distance output is a sampled proprioceptive-velocity integral, not an
+independent position measurement. A passing component test still does not
+qualify radio-scene clearance, localization, navigation or policy handoff.
 
 ## Migration Boundaries
 
@@ -198,3 +249,25 @@ The private lab is unchanged. Credentials, private billing journals, host/SSH
 details, checkpoints, simulator assets, captured media, backup archives, and
 copied upstream repositories do not belong in Git. No software license has been
 chosen for this repository; upstream licenses remain separate obligations.
+
+## Simulator-Only Unknown-Clearance Diagnostic
+
+`native_base_exploration` is an explicitly authorized research diagnostic, not
+a benchmark controller or gate override. It uses the ordinary radio start and
+legal RGB/depth/proprioception, records every fresh capture, and separately
+journals completed native steps before capture failures. The pulse driver's
+`actions_executed` counts successful step-and-capture callbacks; use the outer
+`native_steps_completed` for native execution accounting if capture fails.
+
+Run only with explicit simulator exploration authorization:
+
+```bash
+python -m experiments.behavior.native_base_exploration \
+  --source /path/to/pinned/BEHAVIOR-1K --output /private/new-run \
+  --allow-simulator --licenses-accepted \
+  --allow-unknown-clearance-exploration --pulses forward
+```
+
+Use the same GPU-0 environment and external watchdog as other native diagnostics.
+Clearance remains unknown even if response and braking pass. Inspect `audit.json`;
+simulator shutdown status alone is not a diagnostic result.
