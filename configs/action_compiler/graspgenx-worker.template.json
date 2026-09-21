@@ -1,0 +1,16 @@
+{
+  "assets": {
+    "source": "/PROVISION/GraspGenX",
+    "checkpoint_root": "/PROVISION/GraspGenXModel/release",
+    "gripper_root": "/PROVISION/gripper_descriptions",
+    "assets_dir": "/PROVISION/gripper_descriptions/gripper_descriptions/assets",
+    "gripper_name": "REPLACE_WITH_AUDITED_SIMULATED_R1PRO_GRIPPER",
+    "generator_file": "REPLACE_GENERATOR.pth",
+    "discriminator_file": "REPLACE_DISCRIMINATOR.pth",
+    "source_revision": "b9429097728cb1c430dd78b92edf17ba318aad03"
+  },
+  "gripper": null,
+  "expected_gripper_fingerprint": null,
+  "checkpoint_manifest": {},
+  "gripper_manifest": {}
+}

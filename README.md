@@ -25,6 +25,12 @@ The matched radio driver has an offline-tested public port under
 [`experiments/behavior`](experiments/behavior/README.md); other private drivers
 and licensed observations remain excluded.
 
+The opt-in [Geometry and Action Compiler V1](docs/ACTION_COMPILER_V1.md) adds
+evidence-bound geometry, candidate/action catalogs, bounded primitive execution,
+and control-duty accounting. See the [integration validation](docs/ACTION_COMPILER_V1_INTEGRATION.md)
+for actual-checkout tests and merge corrections. It does not enable native
+motion, install GraspGenX weights, or replace the current experiment controller.
+
 ```bash
 python -m physical_harness demo --output runs/demo-new
 python -m physical_harness doctor

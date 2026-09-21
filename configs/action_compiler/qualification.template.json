@@ -1,0 +1,30 @@
+{
+  "schema_version": "action-compiler-qualification/1",
+  "status": "UNQUALIFIED_AUDIT_TEMPLATE_NOT_RUNTIME_PERMISSION",
+  "reviewed_harness_commit": "ffdd3bb8da9bfffb533cb5b77cd6ea88752c5a14",
+  "motion_enabled": false,
+  "inference_enabled": false,
+  "robot_fingerprint": null,
+  "calibration_fingerprint": null,
+  "gripper_fingerprint": null,
+  "qualified_native_primitives": [],
+  "ports_requiring_evidence": {
+    "legal_capture_and_depth_convention": [],
+    "object_and_part_grounding": [],
+    "robot_model_and_grasp_frame_to_tcp": [],
+    "native_base_response_and_localization": [],
+    "full_swept_collision_unknown_space_and_payload": [],
+    "bounded_ik_and_native_holds": [],
+    "measured_grasp_and_release": [],
+    "contact_corridor_and_failure_monitor": [],
+    "independent_semantic_verification": [],
+    "frozen_policy_identity_and_reset": [],
+    "model_asset_license_and_provenance": []
+  },
+  "notes": [
+    "Do not copy all-true fixture checks into a BEHAVIOR driver.",
+    "This checklist is not consumed as permission by ActionExecutor.",
+    "No force/tactile channel or hidden simulator segmentation/state is assumed.",
+    "No base motion is authorized by the historical forward response diagnostic."
+  ]
+}
