@@ -13,6 +13,12 @@ move, moving-base braking test or classical-to-policy handoff has been qualified
 The V0.1 resolver and telemetry are offline-tested utilities, not implementations
 of the missing perception/collision/native callbacks.
 
+A [retained-view depth coverage diagnostic](HYBRID_DEPTH_COVERAGE_20260921.md)
+now identifies substantial blind regions around proposed 5 cm translations.
+It uses historical intrinsics and unqualified planning proxies, so is provisional
+and authorizes no motion. The next work is contemporaneous calibration and
+causal online coverage/local-pose qualification, not another full-policy trial.
+
 ## Ordered Gates
 
 | Stage | Experiment | Status / Prerequisite |
