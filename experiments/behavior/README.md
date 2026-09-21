@@ -143,6 +143,42 @@ the resolved configuration, source-module hashes, protocol, logs and receipts,
 and retains observations/actions/videos locally. Keep those artifacts private
 unless separately reviewed for publication rights and privacy.
 
+## Hybrid Base Qualification
+
+`base_hold.py` constructs bounded body-frame base commands while preserving
+measured absolute torso/arm positions and inverse-scaled smooth-gripper positions.
+It rejects incompatible or asymmetric gripper feedback instead of clipping.
+It is separate from learned-policy actions and does not authorize motion or
+establish a safe hold for a carried object.
+
+`base_hold_audit` opens the pinned radio scene, captures legal observations, and
+compares the candidate hold against the native no-op action. Six command vectors
+are checked through official preprocessing but never applied in default mode.
+Default mode calls neither `evaluator.step` nor a policy/model service. Ordinary scene reset/loading still
+advances setup physics; zero agent actions is not a claim of zero physics ticks.
+
+Run only in a provisioned native environment with GPU 0 selected, applicable
+licenses already accepted, and an external process timeout:
+
+```bash
+python -m experiments.behavior.base_hold_audit \
+  --source /path/to/pinned/BEHAVIOR-1K --output /path/to/new/audit-directory \
+  --allow-simulator --licenses-accepted
+```
+
+A passing audit qualifies command equivalence only. It does not qualify online
+localization, full-body swept clearance, measured stopping, or a policy handoff.
+No base-motion command is exposed by this audit.
+
+For a separately authorized stationary-hold diagnostic, add
+`--allow-motion --hold-steps 60`. This sends at most 60 controller ticks with zero
+base velocity and fixed initial torso/arm/gripper targets. Every attempted and
+completed action is recorded. Five consecutive low-velocity captures are required
+for a measured settled result; a timeout is not a stop acknowledgement. Joint
+drift or unexpected base velocity aborts the diagnostic. This tests settling from
+an ordinary reset, not braking a moving base, collision clearance, navigation,
+or task completion. There is no policy inference or GPT call in either mode.
+
 ## Migration Boundaries
 
 This port intentionally replaces machine-specific paths and private campaign

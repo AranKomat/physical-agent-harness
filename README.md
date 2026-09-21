@@ -78,6 +78,9 @@ with evidence-bound handoffs and whole-robot ownership. Its numerical fixture
 passes offline; native R1Pro codecs, legal target localization, collision checks
 and measured handoffs still need qualification. It is not enabled in the matched
 radio runner and does not change the executive, verifier or memory defaults.
+The first [native hybrid qualification](docs/HYBRID_NATIVE_QUALIFICATION_20260921.md)
+passed hold-command equivalence and a five-tick stationary settling diagnostic;
+nonzero base movement, swept clearance and policy handoffs remain unqualified.
 
 ### Limits
 
@@ -195,7 +198,7 @@ Exercise sparse posed-view selection with:
 python examples/spatial_memory_v011_demo.py
 ```
 
-The current suite contains 538 offline tests. They validate contracts and
+The current suite contains 560 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install

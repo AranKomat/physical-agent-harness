@@ -32,6 +32,10 @@ base move and A/B handoff comparison, not simultaneous staging/retreat changes.
 
 ## Status and scope
 
+Subsequent native work: the [hold-codec and stationary-settling diagnostics](HYBRID_NATIVE_QUALIFICATION_20260921.md)
+passed on radio instance 301. Nonzero base movement and the A/B policy handoff
+remain unqualified; this does not promote the template to motion authorization.
+
 This is an executable, opt-in **simulator-only** extension. It is not a claim of
 BEHAVIOR success, a qualified R1Pro controller, or a reproduction of SkipVLA.
 There are no model calls, checkpoint downloads, training jobs, GPU services or
