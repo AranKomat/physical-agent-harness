@@ -4,7 +4,7 @@ An experimental, model-agnostic runtime for connecting a sparse reasoning layer
 to robot perception, world state, motor policies, verification, navigation, and
 bounded recovery. The first integration target is BEHAVIOR with R1Pro.
 
-## v0.11.1 implementation status
+## Implementation status
 
 The offline core, bounded experiment runner, and sparse posed-view memory
 contracts are implemented and tested. This is **not yet a qualified BEHAVIOR
@@ -21,7 +21,9 @@ native interfaces, but **no reliable general motor or task-success improvement
 from supervision/memory has been demonstrated**. See the
 [experiment progress report](docs/EXPERIMENT_PROGRESS_20260921.md) for measured
 results, checkpoint pins, failed attempts, limitations and remaining stages.
-Private experiment drivers and licensed observations are not included here.
+The matched radio driver has an offline-tested public port under
+[`experiments/behavior`](experiments/behavior/README.md); other private drivers
+and licensed observations remain excluded.
 
 ```bash
 python -m physical_harness demo --output runs/demo-new
@@ -68,6 +70,14 @@ scene builder, or motion authority from visual plausibility.
 v0.11.1 keeps broad OR matching for ordinary history but requires entity/place
 conjunction for local-scene requests, preserves metric viewpoint diversity from
 the same moving camera, and allows up to 256 entity tags per shadow keyframe.
+
+[Hybrid V0](docs/HYBRID_V0.md) adds an opt-in sequential motor backend: local
+classical navigation, optional joint staging, the unchanged frozen policy, and
+optional guarded retreat. It reuses native bindings and the experiment journal,
+with evidence-bound handoffs and whole-robot ownership. Its numerical fixture
+passes offline; native R1Pro codecs, legal target localization, collision checks
+and measured handoffs still need qualification. It is not enabled in the matched
+radio runner and does not change the executive, verifier or memory defaults.
 
 ### Limits
 
@@ -185,7 +195,7 @@ Exercise sparse posed-view selection with:
 python examples/spatial_memory_v011_demo.py
 ```
 
-The current suite contains 403 offline tests. They validate contracts and
+The current suite contains 538 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install

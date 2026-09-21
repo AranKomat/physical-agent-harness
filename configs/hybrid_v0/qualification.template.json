@@ -1,0 +1,83 @@
+{
+  "schema_version": "hybrid-v0-qualification-template/1",
+  "status": "UNQUALIFIED_TEMPLATE_NOT_EXECUTABLE",
+  "allow_simulated_motion": false,
+  "base_harness_commit": "641cc313dc3bb30b9311e1f3c74bcda178e7f01c",
+  "reported_simulator_pin": "b1979916ec1549b10a4e65e630bc6504a9af1b00",
+  "reported_contract": {
+    "robot": "R1Pro",
+    "action_dimensions": 23,
+    "proprioception_dimensions": 61,
+    "control_dt": 0.03333333333333333
+  },
+  "policy": {
+    "checkpoint": null,
+    "revision": null,
+    "weights_digest": null,
+    "observation_codec": null,
+    "action_codec": null,
+    "normalization": null,
+    "inference_recipe": null,
+    "instruction_contract": null
+  },
+  "private_ports": {
+    "legal_capture_with_source_clock": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "source_faithful_policy": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "policy_queue_history_drain": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "measured_stop_and_settling": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "camera_to_base_transform": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "observed_goal_resolution": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "native_base_codec_and_holds": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "named_joint_codec_and_holds": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "robot_only_ik": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "full_robot_swept_collision_and_unknown_space": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "carried_payload_geometry": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "policy_handoff_envelope": {
+      "qualified": false,
+      "evidence_refs": []
+    },
+    "positive_task_verification": {
+      "qualified": false,
+      "evidence_refs": []
+    }
+  },
+  "notes": [
+    "This JSON is an audit checklist, not a controller config or motion permission.",
+    "Do not fill unknown qualifications with true; leave those regimes unavailable.",
+    "Choose one actually loaded frozen multitask checkpoint; no per-task weight routing.",
+    "Keep private run evidence and checkpoint licenses separate from this code bundle."
+  ]
+}
