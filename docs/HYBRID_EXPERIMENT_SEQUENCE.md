@@ -59,7 +59,10 @@ R1Pro gripper/TCP and closure-geometry gaps; inference is not enabled.
 The [online grounding report](ONLINE_TARGET_GROUNDING_20260922.md) records the
 fresh shadow experiment, not navigation authority. The
 [post-policy stop diagnosis](POST_POLICY_STOP_ANALYSIS_20260922.md) preserves
-the failed stop gate while investigating feedback at physics-substep boundaries.
+the failed stop gate. A fresh 60-hold diagnostic captured 240 physics substeps;
+the velocity/position mismatch persists at that rate, and offline depth shows
+little continuing drift after an early offset. No stop estimator was substituted
+and no clearance or navigation qualification follows from those diagnostics.
 
 ## Ordered Gates
 

@@ -144,3 +144,99 @@ When lighting synchronization is enabled, `eval/evaluator.py:132-143` performs t
 ### Follow-Up Conclusion
 
 The source confirms the intended proprioceptive index mapping, target-based position control, and a distinction between native velocity feedback and an available physics-substep finite-difference estimate. It does **not** prove mismatched capture substeps, stale feedback, a physics-solver cause, or routine arm/trunk state resets in the retained experiment. The observed discrepancy remains real at the saved observation level, but its causal mechanism is **unresolved**. No speculative runtime fix, estimator substitution or threshold adjustment follows; live stop qualification remains failed.
+
+## Fresh Physics-Substep Diagnostic
+
+Two separately labeled ordinary-reset attempts used the same frozen policy,
+384 policy actions, then a maximum of 60 zero-base hold commands. No yaw,
+transit, GPT call or target-conditioned motion was added. Source observation
+and feedback are robot-only; base/world poses and task truth are excluded.
+
+`post-policy-feedback-20260922-r1` sent **zero holds**: an extra entry-speed
+check rejected the policy's final 0.299110 rad/s yaw rate (planar speed
+0.001293 m/s). The logger was never installed. This failed attempt is retained.
+That entry-only condition was then removed so a zero-base command can begin
+braking. All existing post-step speed/drift guards and measured-stop thresholds
+remain unchanged, with regression coverage for a moving entry and a failed
+post-step bound. No nonzero base command was permitted by the correction.
+
+`post-policy-feedback-20260922-r2` completed **384 policy + 60 hold actions**.
+The read-only logger wrapped the pinned simulator's existing post-physics
+handler, invoked the original handler first, and sampled named arm/trunk/finger
+positions and velocities. It captured **240 callbacks at 120 Hz**, four per
+control action, with **239 consecutive time-consistent intervals**, zero dropped
+rows, no logger error, and verified callback removal. Same-callback sampling
+still does not prove atomic native getter timestamps.
+
+The instrumented capture completed, but **measured stopping failed**. Fourteen
+of 60 control-boundary samples passed the conjunction, never five consecutively
+(maximum streak four, final streak zero). The top-level runner's operational
+`passed` flag means the diagnostic was collected; `feedback_hold.passed=false`
+and `stop_acknowledged=false` are the actual stopping outcome.
+
+| Unchanged failure condition | Failed control samples / 60 |
+| --- | ---: |
+| Base linear speed > 0.002 m/s | 46 |
+| Base yaw speed > 0.005 rad/s | 0 |
+| Left/right arm joint speed > 0.03 rad/s | 0 / 0 |
+| Torso joint speed > 0.03 rad/s | 31 |
+| Finger speed > 0.005 m/s | 0 |
+
+Base speed ranged from 0.000398 to 0.003106 m/s; maximum absolute yaw rate
+was 0.003230 rad/s. At control capture boundaries, maximum arm/trunk drift from
+the pre-hold anchor was 1.3005e-5 rad and finger drift 3.9861e-7 m.
+
+Within the latter half of the physics log, maximum native arm/trunk speed was
+**0.036131 rad/s**, while the corresponding maximum finite-difference magnitude
+across all arm/trunk positions was **0.000758 rad/s**. For torso joint 1, mean
+absolute native velocity over the full log was **0.016047 rad/s**, versus
+**0.000126 rad/s** from positions. Its maximum position excursion from the first
+substep sample was **1.43e-6 rad**. Early braking transients exist: this is not a
+claim that every physics interval had zero motion.
+
+The mismatch therefore persists at the exposed physics-callback frequency;
+ordinary 30 Hz observation downsampling alone does not explain it. Getter
+timestamp semantics and internal solver behavior remain unresolved. The logger
+does not capture base virtual positions, and these joint findings cannot
+authorize a base stop. No gate, velocity-source substitution or navigation
+admission is changed by the offline finite differences.
+
+Private artifacts: `A/feedback.json`, `A/hybrid_short.json`, and
+`substep-analysis.json` under the r2 run. Reproduction uses
+`scripts/analyze_substep_feedback.py --input .../A/feedback.json --output .../analysis-new.json --input-kind retained_trace`.
+The source trace is preserved and analysis is written separately. Runtime
+helpers and regressions are public in `experiments/behavior/feedback_diagnostic.py`
+and `tests/test_feedback_diagnostic.py`.
+
+### Independent Depth Check Of The New Hold
+
+The same unchanged fixed-reference head-depth ICP and robot-only FK method was
+then run offline at sequences 384, 399, 414, 429 and 444. All five fits passed
+the existing registration gate. It took 8.38 s and issued no model/native calls.
+The source trace and earlier diagnostic reports were not modified.
+
+| Sequence | Reference-relative translation norm, mm | Reference-relative yaw, degrees |
+| --- | ---: | ---: |
+| 384 | 0 | 0 |
+| 399 | 1.70845 | 0.503404 |
+| 414 | 1.69626 | 0.503122 |
+| 429 | 1.69488 | 0.502999 |
+| 444 | 1.71410 | 0.503223 |
+
+The approximately half-degree offset is already present by the first sampled
+half-second. From 399 to 444, the composed estimates differ by 0.00672 mm and
+0.000246 degrees. These are numerical consistency figures, **not established
+sensor accuracy or proof of zero motion**. Actual early braking, sensor timing
+and registration bias remain possible explanations; this does not resolve the
+origin of the initial offset or qualify live moving-base localization.
+
+The depth evidence supports little continuing relative drift after the first
+half-second, while the native velocity-based stop still rejects the interval.
+The next targeted work is to qualify feedback/observation timing and a measured
+stop estimator under actual motion and stop cases, retaining failure detection;
+not to increase tolerances until this trace passes. Swept clearance remains a
+separate prerequisite for target-directed transit.
+
+Private result: `post-policy-feedback-20260922-r2/depth-analysis/analysis.json`.
+The generalized diagnostic now accepts explicit `--run` and `--output` while
+preserving the original 120-hold default and its existing results.
