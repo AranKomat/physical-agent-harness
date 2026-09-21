@@ -10,6 +10,7 @@ import json
 import os
 import time
 import uuid
+from contextlib import nullcontext
 from pathlib import Path
 
 import numpy as np
@@ -104,6 +105,10 @@ def main():
                         help="Separate 768-action policy-only acquisition, not A-short")
     parser.add_argument("--feedback-hold-diagnostic", action="store_true",
                         help="Separate robot-only substep feedback during 60 zero-base holds")
+    parser.add_argument("--exploratory-transit", action="store_true",
+                        help="One approved simulator-only target-directed probe, unknown clearance")
+    parser.add_argument("--robot-assets", type=Path,
+                        help="Pinned robot-only FK assets for the exploratory transit")
     parser.add_argument("--assisted-target-probe", action="store_true",
                         help="Separate paused-world single-yaw diagnostic after policy exposure")
     for flag in ("allow-simulator", "allow-unknown-clearance-exploration", "licenses-accepted"):
@@ -116,6 +121,11 @@ def main():
     if args.feedback_hold_diagnostic and (
             args.condition != "A" or args.grounding_port or args.assisted_target_probe):
         parser.error("Feedback hold requires isolated A exposure without grounding or assisted probe")
+    if args.exploratory_transit and (
+            args.condition != "A" or not args.grounding_port or not args.robot_assets
+            or not args.extended_grounding_acquisition or args.feedback_hold_diagnostic
+            or args.assisted_target_probe):
+        parser.error("Exploratory transit requires isolated extended A grounding and robot assets")
     source, output = args.source.resolve(), args.output.resolve()
     check_source(source, BEHAVIOR_COMMIT)
     if os.environ.get("CUDA_VISIBLE_DEVICES") != "0":
@@ -141,7 +151,10 @@ def main():
         report["scope"] = "extended_online_target_acquisition_not_a_short_comparison"
     if args.feedback_hold_diagnostic:
         report["scope"] = "policy_approach_then_zero_base_feedback_not_handoff_qualification"
+    if args.exploratory_transit:
+        report["scope"] = "one_target_directed_10cm_exploratory_probe_not_benchmark_admission"
     report["policy_action_budget"] = 768 if args.extended_grounding_acquisition else POLICY_ACTIONS
+    report["policy_action_ceiling"] = report["policy_action_budget"]
 
     def save():
         (output / "hybrid_short.json").write_text(json.dumps(report, indent=2) + "\n")
@@ -204,6 +217,9 @@ def main():
                     row["target_grounding"] = ground_capture(
                         row, store, HttpPolicyTransport(args.grounding_port, timeout_s=30),
                         output / "grounding_masks")
+                    if args.exploratory_transit:
+                        row["target_grounding"]["delivery"] = "synchronous_before_next_native_action"
+                        row["target_grounding"]["usage"] = "exploratory_target_evidence_not_strict_admission"
                     save()
                 return observation
 
@@ -236,9 +252,32 @@ def main():
                 "target_distance_status": "not_measured_not_targeted_staging",
                 "checkpoint_revision": HF_REVISION, "policy_reset_sequence": observation.stamp.sequence}
             save()
-            final = execute_policy(HttpPolicyTransport(args.port), observation, store, step, capture,
-                report, save, lambda actions: verify_native_preprocessing(evaluator.robot, actions),
-                action_budget=report["policy_action_budget"])
+            policy_feedback = None
+            if args.feedback_hold_diagnostic:
+                from .feedback_diagnostic import FeedbackDiagnostic
+
+                policy_feedback = FeedbackDiagnostic(og.sim, evaluator.robot, source_revision=BEHAVIOR_COMMIT)
+
+            def policy_step(action):
+                if policy_feedback is not None:
+                    policy_feedback.mark(control_sequence=report["native_actions"] + 1, phase="policy_motion")
+                return step(action)
+
+            try:
+                with policy_feedback if policy_feedback is not None else nullcontext():
+                    final = execute_policy(HttpPolicyTransport(args.port), observation, store, policy_step, capture,
+                        report, save, lambda actions: verify_native_preprocessing(evaluator.robot, actions),
+                        action_budget=report["policy_action_budget"])
+            finally:
+                if policy_feedback is not None:
+                    packet = json.loads(policy_feedback.to_json())
+                    (output / "policy_feedback.json").write_text(json.dumps(packet, indent=2) + "\n")
+                    report["policy_feedback"] = {k: v for k, v in packet.items() if k != "rows"}
+                    save()
+            if policy_feedback is not None and (
+                    packet["error"] or packet["truncated"] or not packet["callback_removed"]
+                    or len(packet["rows"]) != 4 * report["policy_actions"]):
+                raise RuntimeError("Policy-motion feedback capture incomplete")
             if args.feedback_hold_diagnostic:
                 from .feedback_diagnostic import run_feedback_hold
 
@@ -264,8 +303,30 @@ def main():
 
                 final = run_assisted_probe(final, store, report["codec"]["gripper_ranges"],
                                            step, capture, output, save_probe)
+            if args.exploratory_transit:
+                from .exploratory_transit import run_exploratory_transit
+
+                if report.get("native_end"):
+                    raise RuntimeError("Episode ended before exploratory transit")
+                report["probe_code_sha256"] = {
+                    name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
+                    for name in ("exploratory_transit.py", "base_hold.py", "feedback_diagnostic.py",
+                                 "head_depth_shadow.py", "target_grounding.py", "grounding_manifest.py")}
+                save()
+
+                def save_transit(state):
+                    report["exploratory_transit"] = state
+                    save()
+
+                final = run_exploratory_transit(
+                    final, sim=og.sim, robot=evaluator.robot, store=store,
+                    gripper_ranges=report["codec"]["gripper_ranges"], step=step,
+                    capture=capture, latest_row=lambda: report["captures"][-1],
+                    output=output, save_probe=save_transit, robot_assets=args.robot_assets)
             evaluator.stop_recording()
-            report.update(passed=True, final_observation=final.model_dump(),
+            probe_ok = not args.exploratory_transit or report["exploratory_transit"]["report"]["passed"]
+            report.update(passed=bool(probe_ok), data_collection_completed=True,
+                          final_observation=final.model_dump(),
                           native_success_evaluation_only=bool(evaluator.env.task.success))
             save()
     except BaseException as error:

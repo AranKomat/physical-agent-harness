@@ -77,6 +77,11 @@ def test_unbounded_acquisition_refused_before_policy_use():
     ["--feedback-hold-diagnostic", "--grounding-port", "8021"],
     ["--feedback-hold-diagnostic", "--assisted-target-probe"],
     ["--grounding-port", "8021", "--assisted-target-probe"],
+    ["--exploratory-transit"],
+    ["--exploratory-transit", "--grounding-port", "8021", "--robot-assets", "unused"],
+    ["--exploratory-transit", "--grounding-port", "8021", "--extended-grounding-acquisition"],
+    ["--exploratory-transit", "--grounding-port", "8021", "--extended-grounding-acquisition",
+     "--robot-assets", "unused", "--feedback-hold-diagnostic"],
 ])
 def test_diagnostic_scopes_cannot_be_silently_combined(monkeypatch, tmp_path, flags):
     monkeypatch.setattr("sys.argv", ["hybrid-short", "--source", str(tmp_path),
@@ -103,3 +108,25 @@ def test_handoff_refuses_failed_stop_missing_shadow_or_drift():
     rows[-1]["head_depth_shadow"] = {"error": "lost"}
     with pytest.raises(ValueError, match="Missing"):
         admit_perturbation_handoff(report)
+
+
+@pytest.mark.parametrize("condition", ["A", "B"])
+def test_exploratory_transit_only_accepts_isolated_extended_a(monkeypatch, tmp_path, condition):
+    monkeypatch.setattr("sys.argv", ["hybrid-short", "--source", str(tmp_path),
+        "--output", str(tmp_path / "out"), "--policy-load-receipt", str(tmp_path / "receipt"),
+        "--condition", condition, "--allow-simulator", "--allow-unknown-clearance-exploration",
+        "--licenses-accepted", "--exploratory-transit", "--grounding-port", "8021",
+        "--extended-grounding-acquisition", "--robot-assets", str(tmp_path)])
+
+    def stop_before_native(*args):
+        raise LookupError("reached source preflight")
+
+    monkeypatch.setattr("experiments.behavior.hybrid_short.check_source", stop_before_native)
+    if condition == "A":
+        with pytest.raises(LookupError, match="preflight"):
+            main()
+    else:
+        with pytest.raises(SystemExit) as exc:
+            main()
+        assert exc.value.code == 2
+    assert not (tmp_path / "out").exists()

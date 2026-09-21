@@ -84,6 +84,10 @@ policy actions from another ordinary seed-1 reset, with 25 synchronous captures.
 It uses the post-review provenance checks and separate class caps described
 above; it is **not another A-short/B-short comparison**. Instructions, policy,
 detector weights, prompt and numerical thresholds remained unchanged.
+The original extended receipt's redundant `policy_action_ceiling` retained the
+short-run default 384; `policy_action_budget=768`, action counts and all 25
+captures record its actual declared exposure. The runner now makes the redundant
+field agree. The historical receipt is preserved rather than rewritten.
 
 The radio was identifiable in all 13 views from sequence 384 through 768.
 Twelve were detected; sequence 480 was missed despite the radio being visible
