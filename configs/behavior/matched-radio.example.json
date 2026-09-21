@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "native": {
+    "python": "../../runtime/native/bin/python",
+    "source": "../../runtime/BEHAVIOR-1K",
+    "pythonpath": ["../../runtime/BEHAVIOR-1K/OmniGibson"]
+  },
+  "rpc_source": "../../runtime/RPent",
+  "corvid": {
+    "python": "../../runtime/corvid/bin/python",
+    "source": "../../runtime/corvid-source",
+    "checkpoint": "../../runtime/corvid-weights",
+    "manifest": "../../runtime/manifests/corvid.json",
+    "pythonpath": []
+  },
+  "behavior_skill": {
+    "python": "../../runtime/behavior-skill/bin/python",
+    "source": "../../runtime/behavior-skill-source",
+    "checkpoint": "../../runtime/behavior-skill-weights/pi05-pt50-skill",
+    "manifest": "../../runtime/manifests/behavior-skill.json",
+    "pythonpath": []
+  },
+  "hf_cache": "../../runtime/hf-cache",
+  "openpi_cache": "../../runtime/openpi-cache",
+  "campaign": {
+    "journal": "../../runs/behavior-campaign/budget.sqlite",
+    "max_calls": 36,
+    "max_microusd": 6000000
+  },
+  "model": {
+    "model": "openai/gpt-6-astra",
+    "provider": "openai/flex",
+    "api_key_env": "OPENROUTER_API_KEY",
+    "expected_prompt_usd_per_token": "0.000005",
+    "expected_completion_usd_per_token": "0.000025"
+  },
+  "simulator_gpu": 0,
+  "policy_gpu": 1,
+  "port": 8011
+}

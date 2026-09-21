@@ -17,6 +17,13 @@ artifacts/
 *.mcap
 *.mp4
 *.npz
+*.npy
+*.safetensors
+*.pt
+*.pth
+# Operator-specific native paths and campaign budgets stay local.
+configs/behavior/*.local.json
+/runtime/
 
 # Model/simulator material must remain outside this repository.
 checkpoints/

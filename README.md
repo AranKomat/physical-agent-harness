@@ -185,7 +185,7 @@ Exercise sparse posed-view selection with:
 python examples/spatial_memory_v011_demo.py
 ```
 
-The current suite contains 346 offline tests. They validate contracts and
+The current suite contains 403 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install
@@ -194,8 +194,11 @@ replay example; `.[dev]` includes that image dependency for the complete suite.
 
 ## Repository scope
 
-This public repository contains only the reusable harness, tests, architecture
-notes, and aggregate development results. It intentionally excludes model
+This public repository contains the reusable harness, tests, architecture
+notes, aggregate development results, and a portable
+[matched BEHAVIOR experiment runner](experiments/behavior/README.md).
+The runner is an offline-tested port of the private radio driver; it has not
+yet been requalified on a live simulator. It intentionally excludes model
 weights, simulator assets, benchmark data, captured observations, videos,
 credentials, billing ledgers, and private evaluation artifacts.
 

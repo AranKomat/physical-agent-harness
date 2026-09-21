@@ -10,16 +10,17 @@ requires-python = ">=3.11"
 dependencies = ["networkx>=3.2,<4"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.8", "numpy>=1.26,<3", "Pillow>=10,<13", "jsonschema>=4.22,<5"]
+dev = ["pytest>=8", "ruff>=0.8", "numpy>=1.26,<3", "Pillow>=10,<13", "jsonschema>=4.22,<5", "pydantic>=2.11,<3"]
 localization = ["numpy>=1.26,<3", "open3d>=0.18,<0.20"]
 memory = ["Pillow>=10,<13"]
 experiment = ["Pillow>=10,<13", "jsonschema>=4.22,<5"]
+behavior = ["numpy>=1.26,<2", "Pillow>=11,<13", "pydantic>=2.11,<3", "jsonschema>=4.22,<5"]
 
 [project.urls]
 Repository = "https://github.com/AranKomat/physical-agent-harness"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "experiments/behavior/tests"]
 
 [tool.ruff]
 target-version = "py311"
@@ -29,4 +30,4 @@ line-length = 100
 select = ["E4", "E7", "E9", "F", "I"]
 
 [tool.setuptools.packages.find]
-include = ["physical_harness*"]
+include = ["physical_harness*", "experiments", "experiments.behavior"]
