@@ -30,6 +30,14 @@ INSTRUCTION = "Move to the radio receiver on the table."
 POLICY_ACTIONS = 384
 
 
+def capture_record(evaluator, observation, shadow=None):
+    calibration = capture_intrinsics(evaluator, observation)
+    row = {"observation": observation.model_dump(), "calibration": calibration}
+    if shadow is not None:
+        row["head_depth_shadow"] = shadow.update(observation, calibration)
+    return row
+
+
 def execute_policy(transport, observation, store, step, capture, report, save, preprocessing):
     stamp = observation.stamp.model_dump()
     if transport.reset(stamp)["stamp"] != stamp:
@@ -160,10 +168,7 @@ def main():
             def capture(*, track=False):
                 current = stamp.model_copy(update={"sequence": report["native_actions"]})
                 observation = ingress.convert(evaluator.obs, current, time.monotonic())
-                row = {"observation": observation.model_dump()}
-                if track:
-                    row["head_depth_shadow"] = shadow.update(
-                        observation, capture_intrinsics(evaluator, observation))
+                row = capture_record(evaluator, observation, shadow if track else None)
                 report["captures"].append(row)
                 save()
                 return observation

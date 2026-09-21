@@ -39,13 +39,19 @@ and yaw replay checks and a live forward shadow run. This supports a separate,
 explicitly labeled tiny-perturbation handoff diagnostic; it does not complete
 target localization or certify a navigation corridor.
 
+The [tiny-perturbation A-short/B-short diagnostic](HYBRID_TINY_HANDOFF_20260921.md)
+completed with 384 policy actions in each condition, no immediate obvious visual
+handoff disruption, and no task success in either condition. This is a limited
+positive handoff result, not completion of target-directed stage 3. The next
+experiment records same-boundary camera calibration for legal target measurement.
+
 ## Ordered Gates
 
 | Stage | Experiment | Status / Prerequisite |
 | --- | --- | --- |
 | 1 | Native base control, no GPT or VLA | Partial: codec and stationary settling passed; online local pose, full-body swept clearance and measured moving-base stop still required |
 | 2 | Legal sensors to target point to staging proposal, no motion | Pending detector/depth/localization validation; resolver software is tested |
-| 3 | Behavior-Skill A-short versus B-short, no GPT | Blocked on 1 and 2; 384 policy-action ceilings, independent ordinary resets |
+| 3 | Behavior-Skill A-short versus B-short, no GPT | Tiny-perturbation diagnostic completed; target-directed comparison still gated on 1 and 2 |
 | 4 | Behavior-Skill A versus B radio, no GPT | After interpretable short handoff; 3,224 total robot-action ceilings, one exploratory pair then replication |
 | 5 | Arm/torso staging and return, no object interaction | Only after B; named-joint/FK/IK, full-body swept clearance and measured endpoint checks |
 | 6 | C-short, then A/B/C radio | After staging qualification; preserve an empirically supported handoff envelope |

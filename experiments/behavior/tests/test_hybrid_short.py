@@ -2,7 +2,37 @@ import numpy as np
 import pytest
 
 from experiments.behavior.contracts import Observation, Stamp
-from experiments.behavior.hybrid_short import admit_perturbation_handoff, execute_policy
+from experiments.behavior.hybrid_short import (
+    admit_perturbation_handoff,
+    capture_record,
+    execute_policy,
+)
+
+
+@pytest.mark.parametrize("track", [False, True])
+def test_every_capture_retains_same_boundary_calibration(monkeypatch, track):
+    observation = Observation(stamp=Stamp(session="capture", epoch=0, sequence=384),
+                              observed_at=12.8, proprio=(0.,)*61, rgb={})
+    evaluator = object()
+    calibration = {"head": {"stamp": observation.stamp.model_dump()}}
+    calls = []
+
+    def calibrate(native, frozen):
+        assert native is evaluator and frozen is observation
+        calls.append(frozen.stamp)
+        return calibration
+
+    class Shadow:
+        def update(self, frozen, intrinsics):
+            assert frozen is observation and intrinsics is calibration
+            return {"status": "recorded"}
+
+    monkeypatch.setattr("experiments.behavior.hybrid_short.capture_intrinsics", calibrate)
+    row = capture_record(evaluator, observation, Shadow() if track else None)
+    assert row["calibration"] is calibration
+    assert row["observation"] == observation.model_dump()
+    assert len(calls) == 1
+    assert ("head_depth_shadow" in row) == track
 
 
 @pytest.mark.parametrize("offset", [0, 25])
