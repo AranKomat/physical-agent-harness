@@ -65,11 +65,12 @@ cross-axis limits passed, but yaw tracking failed. Stopping again passed after
 five braking ticks. Exposure: 25 native actions, 26 captures, 15 nonzero-command
 ticks. This is not a license to rescale yaw retrospectively and call it qualified.
 
-The native process finished before the rental stopped during backup. The local
-r3 receipt records the failed trial and all 26 capture references, but 100 of
-153 referenced evidence files are missing locally. The r3 transfer is therefore
-**incomplete and not remotely checksum-verified**. Recover it after the existing
-instance resumes; do not rerun or overwrite it merely to fill the archive.
+The native process finished before the rental stopped during backup. After the
+user restarted the retained instance, the interrupted transfer was completed:
+all 154 receipt/evidence files match remote SHA-256 checksums, including all 153
+referenced evidence assets. The native log was also recovered. Receipt:
+`c8d49de34f5601f348c179bb42ed6f9785c6e7e3d3dd68295d4c1c01c276d847`.
+No experiment rerun was needed to complete the archive.
 
 ## Visual Consistency Check
 
@@ -100,7 +101,9 @@ not GPT prompts, policy retraining, or relaxed thresholds. No A/B policy inferen
 was performed by these diagnostics. Strict gates remain unchanged.
 
 Local verification after implementation: 619 tests passed, Ruff passed. The
-instance becoming unavailable prevents further native checks this session.
+instance interruption initially prevented further native checks. After restart,
+SSH, both GPUs and CUDA were verified available; this infrastructure check did
+not rerun the simulator or resolve the response/localization limitations above.
 
 ## Accounting
 
