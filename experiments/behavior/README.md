@@ -301,3 +301,21 @@ This is neither target-directed staging nor the main equal-total-action radio
 comparison. No GPT calls or simulator-truth reads occur in this runner. Inspect
 `hybrid_short.json` for complete versus censored exposure and failure fields;
 process exit alone is insufficient. Recordings and raw evidence remain private.
+
+`--assisted-target-probe` adds a separate post-policy diagnostic, not another A/B
+condition. It first settles the empty-handed robot, publishes a frozen legal
+observation in `selection_request.json`, and pauses without stepping for at most
+five minutes. An operator must inspect that episode's images and provide a
+`selection_response.json` bound to the exact stamp and head RGB/depth evidence
+IDs. `decision: not_visible` refuses motion. `decision: yaw` additionally requires
+an interior integer `pixel_uv` and assisted `direction` of +1 or -1. The pixel
+must have valid measured depth. Direction/identity are assisted inputs, not a
+qualified detector or navigation planner.
+
+At most one 15-tick 0.05 rad/s yaw is sent, followed by measured braking. Joint,
+gripper and instantaneous speed aborts stay active. Stop checks allow at most
+60 hold ticks, with a separate bounded emergency-hold attempt after failure.
+Paused annotation time is recorded; this lane neither runs nor bypasses the
+strict hybrid freshness gate, and cannot qualify autonomous live staging. No
+annotation or coordinates may be recycled from an earlier episode. Inspect
+`assisted_probe.passed` and `outcome` separately from overall protocol completion.

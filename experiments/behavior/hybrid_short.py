@@ -94,6 +94,8 @@ def main():
     parser.add_argument("--condition", choices=("A", "B"), required=True)
     parser.add_argument("--policy-load-receipt", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8011)
+    parser.add_argument("--assisted-target-probe", action="store_true",
+                        help="Separate paused-world single-yaw diagnostic after policy exposure")
     for flag in ("allow-simulator", "allow-unknown-clearance-exploration", "licenses-accepted"):
         parser.add_argument("--" + flag, action="store_true", required=True)
     args = parser.parse_args()
@@ -204,6 +206,17 @@ def main():
             save()
             final = execute_policy(HttpPolicyTransport(args.port), observation, store, step, capture,
                 report, save, lambda actions: verify_native_preprocessing(evaluator.robot, actions))
+            if args.assisted_target_probe:
+                from .assisted_probe import run_assisted_probe
+
+                report["scope"] = "policy_approach_then_assisted_target_probe_not_ab_comparison"
+
+                def save_probe(state):
+                    report["assisted_probe"] = state
+                    save()
+
+                final = run_assisted_probe(final, store, report["codec"]["gripper_ranges"],
+                                           step, capture, output, save_probe)
             evaluator.stop_recording()
             report.update(passed=True, final_observation=final.model_dump(),
                           native_success_evaluation_only=bool(evaluator.env.task.success))
