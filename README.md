@@ -81,6 +81,11 @@ radio runner and does not change the executive, verifier or memory defaults.
 The first [native hybrid qualification](docs/HYBRID_NATIVE_QUALIFICATION_20260921.md)
 passed hold-command equivalence and a five-tick stationary settling diagnostic;
 nonzero base movement, swept clearance and policy handoffs remain unqualified.
+The [Hybrid V0.1 experiment utilities](docs/HYBRID_V01_EXPERIMENT_TOOLS.md) add
+depth-supported staging proposals, handoff telemetry, equal-policy-exposure
+diagnostics and a paused-world comparison that does not bypass stale-state gates.
+The [ordered experiment queue](docs/HYBRID_EXPERIMENT_SEQUENCE.md) starts with
+native base qualification, then no-GPT Behavior-Skill A-short/B-short trials.
 
 ### Limits
 
@@ -198,7 +203,7 @@ Exercise sparse posed-view selection with:
 python examples/spatial_memory_v011_demo.py
 ```
 
-The current suite contains 560 offline tests. They validate contracts and
+The current suite contains 580 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install

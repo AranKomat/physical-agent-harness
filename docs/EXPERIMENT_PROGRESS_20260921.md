@@ -183,6 +183,16 @@ step10000 was source/metadata-reviewed, not locally executed.
 
 ## Remaining Work
 
+The immediate empirical queue is now the
+[Hybrid experiment sequence](HYBRID_EXPERIMENT_SEQUENCE.md), not more long
+supervised radio rollouts. Hybrid V0/V0.1 are integrated and offline-tested.
+[Native codec equivalence and stationary settling](HYBRID_NATIVE_QUALIFICATION_20260921.md)
+passed; nonzero base movement, sensor-derived full-body swept clearance,
+online local pose and the classical-to-policy handoff remain unqualified.
+Once those gates pass, compare Behavior-Skill A-short/B-short without GPT,
+then equal-total-action A/B. Arm staging, GPT and memory follow only after
+the relevant motor prerequisites. V0.1 integration itself ran no new GPU trial.
+
 Use the completed matched pair to isolate instruction conditioning,
 fine contact control, visual success observability and progress/recovery context.
 The current-view-only supervisor lacks accumulated failed-attempt history and

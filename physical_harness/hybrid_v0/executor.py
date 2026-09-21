@@ -31,6 +31,7 @@ from .contracts import (
     real,
     text,
 )
+from .telemetry import HandoffTelemetry, telemetry_payload
 
 
 @dataclass(frozen=True)
@@ -47,6 +48,7 @@ class Backend:
     guard: Callable[[Phase, str, Snapshot, float], GateReport]
     current_policy: Callable[[], PolicyIdentity] | None = None
     reset_policy: Callable[[ResetRequest, float], ResetReceipt] | None = None
+    handoff_telemetry: Callable[[Phase, Snapshot, int], HandoffTelemetry] | None = None
 
     def __post_init__(self):
         if not isinstance(self.qualification, Qualification):
@@ -57,6 +59,10 @@ class Backend:
             not callable(self.current_policy) or not callable(self.reset_policy)
         ):
             raise ValueError("Frozen policy requires identity and reset callbacks")
+        if self.handoff_telemetry is not None and (
+            self.qualification.regime != Regime.POLICY or not callable(self.handoff_telemetry)
+        ):
+            raise ValueError("Handoff telemetry requires a policy-backend callback")
 
 
 class HybridExecutor:
@@ -304,6 +310,16 @@ class HybridExecutor:
                         reply.require(reset)
                         self._record("policy_reset", request=asdict(reset))
                         self._identity(backend)
+                    if backend.handoff_telemetry is not None:
+                        telemetry = backend.handoff_telemetry(phase, current, self._generation)
+                        if not isinstance(telemetry, HandoffTelemetry):
+                            raise ValueError("Typed handoff telemetry required")
+                        telemetry.require(phase, current, self.policy, self._generation)
+                        self._check(phase_deadline)
+                        self._fresh(current)
+                        self._identity(backend)
+                        self._record("handoff_telemetry", phase=phase.id,
+                                     telemetry=telemetry_payload(telemetry))
                 self._gate(backend, phase, "entry", current, phase_deadline)
                 checked = self._sample(phase_deadline)
                 if checked.fingerprint != current.fingerprint:

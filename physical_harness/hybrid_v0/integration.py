@@ -76,3 +76,30 @@ def ablation_routes(*, target: str, policy_instruction: str, total_steps=3224,
             learned = replace(learned, policy_entry="ordinary_start")
         result[key] = Route(key, prefix+(learned,)+suffix)
     return result
+
+
+def policy_exposure_diagnostic_routes(*, target: str, policy_instruction: str,
+                                     policy_steps=384, navigation_steps=60, staging_steps=80,
+                                     max_wall_s=600, max_policy_chunks=384):
+    """Equal policy-action ceilings, intentionally unequal total-action ceilings.
+
+    Freeze one condition per trial. This is not an executive action menu and is
+    not a task-success comparison. Actual exposure can be censored by any gate,
+    failure or wall deadline; report that instead of assuming the cap was used.
+    """
+    for value in (policy_steps, navigation_steps, staging_steps, max_policy_chunks):
+        integer(value, minimum=1)
+    # Reuse the established phase definitions and admission semantics, not a
+    # second controller recipe. Retreat is omitted from these diagnostics.
+    templates = ablation_routes(
+        target=target, policy_instruction=policy_instruction,
+        total_steps=policy_steps + navigation_steps + staging_steps + 1,
+        navigation_steps=navigation_steps, staging_steps=staging_steps, retreat_steps=1,
+        max_wall_s=max_wall_s, max_policy_chunks=max_policy_chunks,
+    )
+    return {
+        key + "-short": Route(key + "-short", tuple(
+            replace(phase, max_steps=policy_steps) if phase.regime == Regime.POLICY else phase
+            for phase in templates[key].phases))
+        for key in ("A", "B", "C")
+    }
