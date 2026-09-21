@@ -133,13 +133,16 @@ def _joint_window(log, phase):
 
 
 def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
-                            capture, latest_row, output, save_probe, robot_assets):
+                            capture, latest_row, output, save_probe, robot_assets,
+                            control_only=False):
     """Return last fresh observation; save detached {report, feedback} after cleanup.
 
     At 30 Hz, command integral <=8 cm; measured adjacent endpoint path triggers
     braking at 8 cm and hard-abort status at 10 cm (not a physical guarantee).
     Aborts never resume motion. Brake failures are retained, not treated as stops.
     """
+    if type(control_only) is not bool:
+        raise ValueError("Explicit boolean control condition required")
     started = time.monotonic()
     final, frame, target, log, zero = initial, None, None, None, None
     pairs = []
@@ -150,6 +153,7 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
     context_installed = False
     integrated = np.eye(4)
     report = dict(scope="simulator_only_experimental_unknown_clearance_probe",
+                  control_only=control_only,
                   passed=False, clearance="unknown", strict_gate_passed=False,
                   motion_qualified=False, stop_certified=False, error=None,
                   actions_attempted=0, actions_completed=0, commanded_integral_m=0.,
@@ -330,14 +334,17 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
         report["prehold_experimental_stop"] = True
         direction = target[:2] / np.linalg.norm(target[:2])
         report["direction_base_xy"] = direction.tolist()
-        command = base_hold(anchor, BodyTwist(float(.03*direction[0]), float(.03*direction[1]), 0),
-                            gripper_ranges=gripper_ranges)
+        command = zero if control_only else base_hold(
+            anchor, BodyTwist(float(.03*direction[0]), float(.03*direction[1]), 0),
+            gripper_ranges=gripper_ranges)
         for _ in range(80):
             if report["measured_path_m"] >= .08:
+                if control_only:
+                    raise RuntimeError("Zero-base control exceeded measured path bound")
                 break
             if report["commanded_integral_m"] + .03*CONTROL_DT > .08 + 1e-12:
                 break
-            act(command, "move", deadline)
+            act(command, "control_hold" if control_only else "move", deadline)
         for _ in range(60):
             if act(zero, "final_hold", deadline):
                 break

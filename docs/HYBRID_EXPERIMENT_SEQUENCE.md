@@ -76,6 +76,14 @@ experimental stopping before and after, and no abort. Estimated lateral deviatio
 was 1.11 cm. No policy handoff or task success was claimed, and this experiment
 is not strict Stage 4 admission. Its one-probe authorization has been consumed.
 
+The subsequent [matched target-directed handoff](MATCHED_TARGET_HANDOFF_20260922.md)
+also completed in the separately labeled exploratory lane. Both conditions had
+1,152 policy actions and 92 classical actions, including 384 fresh-reset policy
+actions after control/transit. Both resumed approach without obvious immediate
+base retreat. Acquisition states diverged before intervention, so this is not
+evidence of causal improvement. Resolve that comparison limitation before a
+longer A/B; strict clearance and moving-localization gates remain unchanged.
+
 ## Ordered Gates
 
 These are the updated 15 stages. Older experiment reports retain their original
@@ -87,7 +95,7 @@ stage numbers; use names rather than equating those historical numbers.
 | 2 | Retained legal RGB-D geometry/catalog replay | First replay complete; zero qualified contact candidates; actual-gripper inference blocked |
 | 3 | Online target acquisition | Three fresh shadow resets complete; positive detection and failure cases retained; metric/multi-view qualification incomplete |
 | 4 | Bounded target-directed base transit | One separately authorized unknown-clearance probe completed; strict qualification still blocked on moving localization and swept clearance; no metre-scale move |
-| 5 | Target-directed A-short/B-short, no GPT | After 3/4; prior tiny perturbation is not this experiment |
+| 5 | Target-directed A-short/B-short, no GPT | One unknown-clearance exploratory pair completed; handoff operational, causal benefit unproven; strict admission still gated by 3/4 |
 | 6 | Equal-total-action A/B radio | After interpretable target-directed short handoff; 3,224 actions each |
 | 7 | Arm/torso free-space staging and return | After B; qualified FK/IK, clearance and measured endpoint |
 | 8 | C-short, then A/B/C radio | After staging; unchanged frozen policy and explicit handoff envelope |

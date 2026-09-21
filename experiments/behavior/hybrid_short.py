@@ -91,6 +91,41 @@ def admit_perturbation_handoff(report):
             raise ValueError("Head motion has not stabilized for the perturbation handoff")
 
 
+def execute_post_handoff(transport, observation, store, step, capture, report, save, preprocessing):
+    """Equal fresh-reset exposure after the separately labeled exploratory intervention."""
+    probe = report.get("exploratory_transit", {}).get("report", {})
+    if (report.get("policy_actions") != 768 or report.get("native_end")
+            or any(probe.get(k) is not True for k in
+                   ("passed", "feedback_complete", "experimental_stop_observed"))
+            or observation.stamp.sequence != report["native_actions"]):
+        raise ValueError("Incomplete acquisition or exploratory stop; no policy handoff")
+    if "post_handoff" in report:
+        raise ValueError("Policy handoff is one-shot")
+    post = {"native_actions": report["native_actions"], "policy_actions": 0,
+            "policy_chunks": [], "policy_action_budget": POLICY_ACTIONS,
+            "reset_sequence": observation.stamp.sequence, "completed": False,
+            "handoff_observation": observation.model_dump()}
+    report["post_handoff"] = post
+    report["total_policy_actions"] = report["policy_actions"]
+
+    def post_step(action):
+        done = step(action)
+        post["native_actions"] = report["native_actions"]
+        return done
+
+    def post_save():
+        report["total_policy_actions"] = report["policy_actions"] + post["policy_actions"]
+        save()
+
+    final = execute_policy(transport, observation, store, post_step, capture,
+                           post, post_save, preprocessing, action_budget=POLICY_ACTIONS)
+    post["completed"] = post["policy_actions"] == POLICY_ACTIONS and not post.get("native_end")
+    post_save()
+    if not post["completed"]:
+        raise RuntimeError("Post-handoff exposure censored; not a completed matched short trial")
+    return final
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True)
@@ -107,6 +142,8 @@ def main():
                         help="Separate robot-only substep feedback during 60 zero-base holds")
     parser.add_argument("--exploratory-transit", action="store_true",
                         help="One approved simulator-only target-directed probe, unknown clearance")
+    parser.add_argument("--matched-target-handoff", action="store_true",
+                        help="Same acquisition, A zero holds/B exploratory transit, then 384 policy actions")
     parser.add_argument("--robot-assets", type=Path,
                         help="Pinned robot-only FK assets for the exploratory transit")
     parser.add_argument("--assisted-target-probe", action="store_true",
@@ -114,7 +151,8 @@ def main():
     for flag in ("allow-simulator", "allow-unknown-clearance-exploration", "licenses-accepted"):
         parser.add_argument("--" + flag, action="store_true", required=True)
     args = parser.parse_args()
-    if args.grounding_port and (args.condition != "A" or args.assisted_target_probe):
+    if args.grounding_port and ((args.condition != "A" and not args.matched_target_handoff)
+                               or args.assisted_target_probe):
         parser.error("Grounding shadow is isolated to policy-only A captures")
     if args.extended_grounding_acquisition and not args.grounding_port:
         parser.error("Extended acquisition requires synchronous grounding shadow")
@@ -126,6 +164,11 @@ def main():
             or not args.extended_grounding_acquisition or args.feedback_hold_diagnostic
             or args.assisted_target_probe):
         parser.error("Exploratory transit requires isolated extended A grounding and robot assets")
+    if args.matched_target_handoff and (
+            not args.grounding_port or not args.robot_assets or not args.extended_grounding_acquisition
+            or args.exploratory_transit or args.feedback_hold_diagnostic or args.assisted_target_probe):
+        parser.error("Matched handoff requires extended grounding/robot assets and no other diagnostic")
+    target_experiment = args.exploratory_transit or args.matched_target_handoff
     source, output = args.source.resolve(), args.output.resolve()
     check_source(source, BEHAVIOR_COMMIT)
     if os.environ.get("CUDA_VISIBLE_DEVICES") != "0":
@@ -153,6 +196,10 @@ def main():
         report["scope"] = "policy_approach_then_zero_base_feedback_not_handoff_qualification"
     if args.exploratory_transit:
         report["scope"] = "one_target_directed_10cm_exploratory_probe_not_benchmark_admission"
+    if args.matched_target_handoff:
+        report["scope"] = "matched_acquisition_exploratory_target_handoff_not_strict_benchmark"
+        report["post_handoff_policy_budget"] = POLICY_ACTIONS
+        report["total_policy_action_ceiling"] = 768 + POLICY_ACTIONS
     report["policy_action_budget"] = 768 if args.extended_grounding_acquisition else POLICY_ACTIONS
     report["policy_action_ceiling"] = report["policy_action_budget"]
 
@@ -217,7 +264,7 @@ def main():
                     row["target_grounding"] = ground_capture(
                         row, store, HttpPolicyTransport(args.grounding_port, timeout_s=30),
                         output / "grounding_masks")
-                    if args.exploratory_transit:
+                    if target_experiment:
                         row["target_grounding"]["delivery"] = "synchronous_before_next_native_action"
                         row["target_grounding"]["usage"] = "exploratory_target_evidence_not_strict_admission"
                     save()
@@ -231,9 +278,9 @@ def main():
                 return bool(terminated or truncated)
 
             evaluator.start_recording(str(output / "rollout.mp4"))
-            observation = capture(track=args.condition == "B")
+            observation = capture(track=args.condition == "B" and not args.matched_target_handoff)
             report["codec"] = inspect(evaluator.robot, observation.proprio)
-            if args.condition == "B":
+            if args.condition == "B" and not args.matched_target_handoff:
                 def classical_step(action):
                     if step(action):
                         raise RuntimeError("Episode ended before handoff")
@@ -303,7 +350,7 @@ def main():
 
                 final = run_assisted_probe(final, store, report["codec"]["gripper_ranges"],
                                            step, capture, output, save_probe)
-            if args.exploratory_transit:
+            if target_experiment:
                 from .exploratory_transit import run_exploratory_transit
 
                 if report.get("native_end"):
@@ -322,9 +369,14 @@ def main():
                     final, sim=og.sim, robot=evaluator.robot, store=store,
                     gripper_ranges=report["codec"]["gripper_ranges"], step=step,
                     capture=capture, latest_row=lambda: report["captures"][-1],
-                    output=output, save_probe=save_transit, robot_assets=args.robot_assets)
+                    output=output, save_probe=save_transit, robot_assets=args.robot_assets,
+                    control_only=args.matched_target_handoff and args.condition == "A")
+                if args.matched_target_handoff:
+                    final = execute_post_handoff(
+                        HttpPolicyTransport(args.port), final, store, step, capture, report, save,
+                        lambda actions: verify_native_preprocessing(evaluator.robot, actions))
             evaluator.stop_recording()
-            probe_ok = not args.exploratory_transit or report["exploratory_transit"]["report"]["passed"]
+            probe_ok = not target_experiment or report["exploratory_transit"]["report"]["passed"]
             report.update(passed=bool(probe_ok), data_collection_completed=True,
                           final_observation=final.model_dump(),
                           native_success_evaluation_only=bool(evaluator.env.task.success))

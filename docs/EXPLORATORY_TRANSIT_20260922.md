@@ -112,14 +112,13 @@ Private run ID: `target-transit-exploratory-20260922-r1`.
 Native receipt SHA-256:
 `9c8aad77b797c8e9a5db8af854a0ca24c11057202d9693a41f7b862e56f9d662`.
 
-## Next Experiment
+## Follow-Up
 
-The next informative test is a matched short policy handoff, not a larger drive:
-give both conditions the same 768-action acquisition prelude, then compare a
-zero-base control against the bounded intervention, reset the same frozen policy
-in both conditions, and expose each to the same 384 policy actions. Log the
-handoff observation and first actions. This would be another separately labeled
-unknown-clearance exploratory experiment, not strict benchmark admission, and
-requires authorization for the additional motion. The current one-probe approval
-has been consumed. Strict Stage 4 remains blocked on clearance and broader
-moving-localization qualification.
+After the user's continuation request, one separately labeled
+[matched short policy handoff](MATCHED_TARGET_HANDOFF_20260922.md) completed:
+768 acquisition actions, zero-base control versus bounded intervention, and
+384 fresh-reset policy actions in both conditions. Both resumed approach, but
+acquisition divergence prevents a causal benefit claim. Neither experiment
+constitutes strict benchmark admission. The one-probe approval is consumed;
+strict Stage 4 remains blocked on clearance and broader moving-localization
+qualification.
