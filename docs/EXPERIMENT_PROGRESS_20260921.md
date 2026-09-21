@@ -114,10 +114,17 @@ near the radio table, including during the initial refrigerator instruction.
 No convincing redirection was observed. Short navigation phrasing may be outside
 the training distribution; this is not proof of universal language insensitivity.
 
-## Matched GPT Comparison: Pending
+## Matched GPT Comparison: Completed
 
-One Corvid + GPT radio episode and one Behavior-Skill + GPT radio episode are
-running sequentially under a frozen protocol. No result is claimed here yet.
+One Corvid + GPT radio episode and one Behavior-Skill + GPT radio episode
+completed sequentially under a frozen protocol. Both reached their action caps
+without runtime errors or wall-time censoring; both native outcomes were false
+with final Q=0.
+
+| Candidate + GPT | Actions | Simulated s | Wall s | Policy calls | GPT calls |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Corvid | 3224 | 107.47 | 2372.55 | 3224 | 18 |
+| Behavior-Skill | 3224 | 107.47 | 583.55 | 101 | 18 |
 
 - Same ordinary native301 start, simulator seed0, 3,224-action / 107.47-s cap.
 - Same 3,600-s post-initialization wall cap and 4,200-s native-process deadline.
@@ -127,6 +134,24 @@ running sequentially under a frozen protocol. No result is claimed here yet.
   no historical memory, retries, provider fallback or mid-pair prompt changes.
 - Preserve official motor recipes: Corvid every-action ensemble, Behavior-Skill
   32-action prefix. Model randomness is not paired.
+
+Corvid's executive chose approach seven times and press twice. Behavior-Skill
+chose approach twice, then press seven times. All nine verifications per episode
+were power-uncertain. Sampled videos show Corvid repositioning around the table
+and reaching toward the radio late, versus Behavior-Skill repeatedly contacting,
+displacing/rotating it without activation. Neither is a task-success winner.
+
+Median policy RPC was 0.17081/0.17234s respectively. GPT HTTP median latency was
+16.85/8.72s despite the shared route, so wall-time differences include provider
+latency as well as control recipe, rendering, logging and IPC. The 36 calls cost
+$0.72168375 in total and all settled. This is not a general per-call price quote.
+
+Shared protocol fields/prompt hashes and exact initial proprioception equality
+passed checks. All 6,448 native actions were finite 23D vectors with contiguous traces;
+instructions matched executive choices and verifier evidence was fresh.
+Thirteen compact source artifacts matched remote hashes; 126 selected sensor
+files, including all GPT current images, passed content hashes. Full every-action
+RGB-D is not all retained locally. Both worker sets exited after completion.
 
 Actual observations and adaptive choices differ as trajectories diverge. Equal
 information rules do not mean replaying one robot's frames into another. One
@@ -158,8 +183,11 @@ step10000 was source/metadata-reviewed, not locally executed.
 
 ## Remaining Work
 
-First complete and audit the matched pair, then isolate instruction conditioning,
+Use the completed matched pair to isolate instruction conditioning,
 fine contact control, visual success observability and progress/recovery context.
+The current-view-only supervisor lacks accumulated failed-attempt history and
+the fixed menu lacks fine-adjustment/active-inspection actions. Those are plausible
+limitations, not established causes or proof that memory would rescue the task.
 Preserve exact upstream camera/state/action/normalization recipes. A failed
 baseline can improve with supervision; it does not make comparison impossible.
 
