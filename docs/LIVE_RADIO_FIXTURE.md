@@ -1,5 +1,10 @@
 # Live radio fixture bridge
 
+This document records the earlier deterministic fixture and replay milestones.
+For subsequent real GPT cycles, live spatial shadow, controlled memory ablations
+and multitask motor tests, see [experiment progress](EXPERIMENT_PROGRESS_20260921.md).
+Historical next-step statements below are not the current experiment status.
+
 ## Recorded native memory shadow replay, 2026-09-19
 
 The retained one-boundary native radio trace was replayed through the v0.8

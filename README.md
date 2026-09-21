@@ -12,6 +12,17 @@ robot runtime**. The original component overview below is retained as
 architectural context; its implementation checklist is now a set of native
 qualification and integration gates.
 
+### Research status, 2026-09-21
+
+Private native experiments have closed bounded live GPT executive/verifier
+cycles, recorded live memory shadow evidence, and completed controlled causal
+memory ablations. Several released multitask BEHAVIOR policies now have working
+native interfaces, but **no reliable general motor or task-success improvement
+from supervision/memory has been demonstrated**. See the
+[experiment progress report](docs/EXPERIMENT_PROGRESS_20260921.md) for measured
+results, checkpoint pins, failed attempts, limitations and remaining stages.
+Private experiment drivers and licensed observations are not included here.
+
 ```bash
 python -m physical_harness demo --output runs/demo-new
 python -m physical_harness doctor
@@ -26,13 +37,13 @@ execution, evidence, verification and task completion.
 
 | Component | Implemented | Remaining integration |
 | --- | --- | --- |
-| Executive | Sparse semantic tool loop, bounded context/call budget, image-bearing model transports and durable accounting | Real model IDs, rates, endpoint qualification and approved budget |
+| Executive | Sparse semantic tool loop, bounded context/call budget, image-bearing model transports and durable accounting; bounded live GPT cycles tested privately | Task-level progress/recovery qualification and deployment-specific endpoint/budget checks |
 | World state | Episode-isolated beliefs, evidence, explicit task bindings, contradiction invalidation | Atomic sidecar snapshots and restart watermarks |
-| Motor | Chunk/prefix execution, cancellation, deadlines, resource ownership and bounded simulator subprocess IPC | Qualified policy, native driver wiring and calibrated R1Pro controller |
+| Motor | Chunk/prefix execution, cancellation, deadlines, resource ownership and bounded simulator subprocess IPC; several private native policy adapters exercised | Performance-qualified frozen motor and reproducible deployment of native drivers |
 | Perception | Legal BEHAVIOR envelopes, Open3D RGB-D odometry, RTSM translation and relation memory | Live artifact store, services and sensor calibration |
 | Navigation | Depth occupancy, NetworkX routes, frontiers, semantic gateways | Native odometry qualification and qualified N0 controller |
-| Verification | Evidence-bearing tier routing, image-bearing semantic verifier transport and completion gates | Live GPT-6 qualification and native evidence validator |
-| Historical memory | Episode-local cards/media, causal cutoffs, shadow decision packets, frozen replay, and opt-in posed RGB-D keyframes | Native posed-view capture and multi-object held-out replay before active use |
+| Verification | Evidence-bearing tier routing, image-bearing semantic verifier transport and completion gates; bounded live semantic checks | Positive manipulation-state recognition and broader native evidence qualification |
+| Historical memory | Episode-local cards/media, causal cutoffs, shadow decision packets, frozen replay, and opt-in posed RGB-D keyframes; private native shadow and controlled replay tested | Live decision/task benefit beyond controlled scripted traces |
 | Local scene | Bounded scene-build requests with separate display, collision, and motion authority | Select and qualify a builder only after a real geometry failure |
 | Recovery | Evidence-bound, one-use translation previews | Native IK, collision checks and control |
 
@@ -87,10 +98,12 @@ a localization-accuracy claim. It rejects large jumps, low-information updates,
 frame gaps and cross-episode input, and latches loss rather than silently
 resetting the map origin. Install it with `pip install -e ".[localization]"`.
 
-Synthetic tests establish neither motor competence nor physical safety. No
-inspected general policy currently has a verified training-free BEHAVIOR/R1Pro
-path. G0.5 pairing is deferred, GR00T lacks a verified parallel-gripper R1Pro
-interface, and no guessed action slicing or scaling is used.
+Synthetic tests establish neither motor competence nor physical safety.
+Behavior-Skill, Corvid and Kmy multitask GR00T have working native R1Pro paths
+in private experiments without training by us. These are BEHAVIOR-adapted
+checkpoints, not zero-shot base-model transfers, and none is performance-qualified.
+G0.5/base-policy pairing remains unqualified; no guessed action slicing or scaling
+is used. Known benchmark training overlap must be disclosed.
 
 See [adapter schemas](docs/ADAPTERS.md), [navigation assumptions](docs/NAVIGATION.md),
 the [closed semantic boundary](docs/SEMANTIC_CYCLE.md), the
@@ -102,7 +115,7 @@ The opt-in [live radio fixture bridge](docs/LIVE_RADIO_FIXTURE.md) connects nati
 action prefixes to receipts, telemetry memory, conservative verification and
 deterministic executive events. It is not a general-policy or GPT planning result.
 The radio-trained pi0.5 checkpoint is an integration fixture only; held-out
-generalization and general motor-policy selection are deferred.
+generalization is deferred and final multitask motor selection remains unresolved.
 The additive [multimodal memory prototype](docs/MULTIMODAL_MEMORY_V07.md) now has
 an opt-in [shadow integration](docs/MEMORY_INTEGRATION_V08.md) for legal
 observations, runtime events and durable decision cutoffs. Shadow mode returns
@@ -112,9 +125,9 @@ causal replay, but is too narrow to establish useful long-term recall. See the
 [research ledger](docs/MEMORY_RESEARCH_LEDGER.md) and
 [gap analysis](docs/HARNESS_GAP_ANALYSIS_V08.md).
 The runtime exposes closed-boundary hooks for fresh post-skill observation,
-verification, ledger update and event publication in that order. The native
-radio fixture still needs its live perception and GPT-6 transports wired into
-those hooks before it constitutes an autonomous semantic cycle.
+verification, ledger update and event publication in that order. Private native
+pilots have exercised real GPT calls across these boundaries. They do not yet
+qualify autonomous perception, navigation, manipulation or long-horizon success.
 
 A deliberately small, benchmark/model-agnostic core for the first
 BEHAVIOR experiment.
@@ -172,7 +185,7 @@ Exercise sparse posed-view selection with:
 python examples/spatial_memory_v011_demo.py
 ```
 
-The current suite contains 332 offline tests. They validate contracts and
+The current suite contains 346 offline tests. They validate contracts and
 failure handling; they do not establish robot competence or physical safety.
 
 The core historical store and retriever use only the standard library. Install
@@ -191,22 +204,24 @@ permission to copy, modify, or redistribute the code beyond applicable law.
 
 ## Qualification And Integration Gates
 
-1. Wire the reviewed native BEHAVIOR driver into the v0.10 subprocess bridge,
-   then close one live radio-fixture cycle from legal perception through GPT-6
-   verification and ledger update into a real GPT-6 executive turn.
-2. Exercise episodic memory concurrently in live shadow mode and verify timing,
-   source lineage, backpressure, and causal cutoffs without changing actions.
-3. Collect a multi-object, multi-place development trace and compare current,
-   episodic, and posed-keyframe conditions under equal context budgets before
-   enabling historical context.
+1. Extend the completed bounded native/GPT semantic cycle to task-relevant
+   progress, recovery and supported completion, rather than treating integration
+   success as physical task success.
+2. Extend live memory-shadow checks to longer episodes, restart behavior and
+   durable RGB-D retention without changing actions prematurely.
+3. Move beyond the completed controlled multi-place memory replays to a live
+   memory-sensitive decision comparison. Scripted interventions and proposed
+   actions do not establish autonomous task benefit.
 4. Launch and qualify the RTSM/perception service against native artifacts,
    including identity, relation, and object-permanence errors.
 5. Qualify RGB-D odometry, occupancy planning, place/gateway resolution, and
    the N0 base controller on native sequences.
 6. Qualify bounded native IK, trajectory, and collision recovery before enabling L3.
-7. Qualify a general motor backend with documented R1Pro interfaces and training
-   provenance; the radio-trained pi0.5 checkpoint remains a fixture only.
-8. Add supervised IPC, hard service timeouts, restart watermarks, and end-to-end
-   accounting before longer autonomous episodes.
+7. Performance-qualify a frozen multitask motor under matched task/horizon and
+   supervision conditions. Preserve each published control recipe and disclose
+   training overlap; the official radio checkpoint remains a fixture only.
+8. Qualify existing supervised IPC, hard service timeouts and accounting under
+   failures and restarts; close remaining snapshot/watermark gaps before longer
+   autonomous episodes.
 
 See `BUILD_SPEC.md` for the detailed handoff.
