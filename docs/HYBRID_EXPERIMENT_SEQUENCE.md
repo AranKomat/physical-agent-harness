@@ -45,12 +45,17 @@ handoff disruption, and no task success in either condition. This is a limited
 positive handoff result, not completion of target-directed stage 3. The next
 experiment records same-boundary camera calibration for legal target measurement.
 
+Two [fresh calibrated approaches](HYBRID_TARGET_ACQUISITION_20260921.md) now
+completed. One ended without the target in view; the other supports an assisted
+offline RGB-D measurement about 1.72 m horizontally from the base. This exposes
+the remaining target-acquisition/transit gap, not a completed staging proposal.
+
 ## Ordered Gates
 
 | Stage | Experiment | Status / Prerequisite |
 | --- | --- | --- |
 | 1 | Native base control, no GPT or VLA | Partial: codec and stationary settling passed; online local pose, full-body swept clearance and measured moving-base stop still required |
-| 2 | Legal sensors to target point to staging proposal, no motion | Pending detector/depth/localization validation; resolver software is tested |
+| 2 | Legal sensors to target point to staging proposal, no motion | Same-boundary calibration and assisted retained-frame deprojection exercised; autonomous selection, multi-view localization and admitted staging still pending |
 | 3 | Behavior-Skill A-short versus B-short, no GPT | Tiny-perturbation diagnostic completed; target-directed comparison still gated on 1 and 2 |
 | 4 | Behavior-Skill A versus B radio, no GPT | After interpretable short handoff; 3,224 total robot-action ceilings, one exploratory pair then replication |
 | 5 | Arm/torso staging and return, no object interaction | Only after B; named-joint/FK/IK, full-body swept clearance and measured endpoint checks |
