@@ -84,6 +84,11 @@ base retreat. Acquisition states diverged before intervention, so this is not
 evidence of causal improvement. Resolve that comparison limitation before a
 longer A/B; strict clearance and moving-localization gates remain unchanged.
 
+A [CPU-only acquisition audit](ACQUISITION_REPRODUCIBILITY_20260922.md) now locates
+the first mismatch at initial RGB, before either intervention. Initial depth and
+proprioception are identical and logged noise indices match. The next GPU check
+is five retained-input inferences with no simulator or motion, not a longer drive.
+
 ## Ordered Gates
 
 These are the updated 15 stages. Older experiment reports retain their original

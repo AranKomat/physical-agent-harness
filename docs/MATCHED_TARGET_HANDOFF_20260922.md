@@ -122,3 +122,9 @@ Before spending on a longer A/B comparison, diagnose acquisition reproducibility
 and define how to account for differing handoff states. Do not promote this pair
 to a causal benefit claim or silently expand the motion envelope. Strict stages
 remain gated; this report does not authorize another native run.
+
+The subsequent [CPU-only acquisition audit](ACQUISITION_REPRODUCIBILITY_20260922.md)
+found differing initial RGB despite identical initial depth and proprioception,
+with matched logged noise indices. This narrows the first divergence but does
+not isolate its cause. The next diagnostic is a five-inference retained-input
+replay without a simulator, after the user restarts the GPU instance.
