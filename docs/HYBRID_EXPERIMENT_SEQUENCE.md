@@ -86,6 +86,14 @@ internal consistency, not absolute accuracy or control qualification. Next run
 the fixed configuration in a fresh bounded native shadow trial, measuring both
 candidate-bearing joins and live freshness while the frozen policy retains control.
 
+The user's attribute-preservation concern is now tested in a
+[117-case prompt audit](SAM31_ATTRIBUTE_ROBUSTNESS_20260922.md): `red radio` and
+`a red radio` admit all ten positive views, wrong-color prompts reject all ten,
+but `a portable radio` misses all ten. Wording sensitivity remains real even
+though color rejection works on this asset. The prepared live trial has not
+started. Preserve complete target constraints and qualify candidate verification
+or abstention before treating a bare-category proposal as the selected task object.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
