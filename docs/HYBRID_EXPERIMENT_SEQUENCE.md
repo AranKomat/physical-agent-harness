@@ -4,6 +4,23 @@ Updated 2026-09-22 after Action Compiler V1 integration. This sequence supersede
 more GPT-supervised full-radio trials before the motor handoff is interpretable.
 It does not authorize new spend, training, license acceptance or weakening gates.
 
+## Immediate Three-Step Plan
+
+The 15 stages below are a research roadmap, not a mandatory near-term checklist.
+Focus on these three steps before expanding scope:
+
+1. Check radio depth/geometry. The [retained-depth audit](RADIO_DEPTH_AUDIT_20260922.md)
+   is complete: no obvious depth-convention mismatch; handle-gap/edge mask
+   contamination and optical-axis-depth versus range confusion identified.
+   Absolute metric accuracy and contact geometry remain unqualified.
+2. Establish enough observation timing, localization and motion qualification
+   for an interpretable short handoff comparison. This is the current work,
+   spanning original stages 3/4. Low-space coverage remains unresolved.
+3. Compare the short hybrid intervention against the frozen policy, then make
+   a go/no-go decision on further investment. Earlier exploratory pairs do not
+   establish causal benefit. Defer arm/contact, broad task expansion, memory
+   comparisons and duty-cycle optimization until benefit is demonstrated.
+
 ## Current Position
 
 The [native hold-codec and stationary-settling diagnostics](HYBRID_NATIVE_QUALIFICATION_20260921.md)
