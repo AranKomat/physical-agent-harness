@@ -73,7 +73,12 @@ Keep SAM Large plus measured depth patches as a shadow candidate; further model
 search is not required before the next test. Next, connect this logging to a
 bounded frozen-policy approach trace with real radio views, preserving policy
 inputs/actions and measuring capture cadence and source age while moving.
-This preflight hook currently exists only in the private no-motion runner.
+At the time of this preflight, the hook existed only in the private no-motion runner.
+
+Follow-up: the [bounded policy-only approach](SAM_MOVING_SHADOW_20260922.md)
+has now completed with a separate opt-in capture observer. It validates live
+radio shadow logging, while confirming that capture-gap scheduling remains
+unresolved. The measurements above remain the original stationary preflight.
 
 Do not enable classical/contact control from these results. Moving localization,
 low-space clearance, requested-part association and cross-view geometry remain

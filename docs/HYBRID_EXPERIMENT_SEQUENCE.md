@@ -19,8 +19,12 @@ Focus on these three steps before expanding scope:
    background. SAM is a semantic-mask candidate, not a qualified geometry fix;
    [live stationary co-residency](SAM_LIVE_SHADOW_20260922.md) now passes:
    peak sampled 21.36 GiB and warm result age 1.18-1.22 s on one 4090.
-   This start exercises distractor masks, not positive radio masks; moving
-   shadow logging and geometry qualification remain next.
+   That start exercises distractor masks, not positive radio masks. The subsequent
+   [policy-only moving shadow run](SAM_MOVING_SHADOW_20260922.md) completed 768
+   actions, 25 shadow captures and 13 radio masks at peak sampled 21.44 GiB.
+   All 52 partitions reproduce offline; warm return age stays below 2 s, but
+   dense capture gaps still reach 3.27 s. Fix capture scheduling next; motion
+   and contact geometry remain unqualified.
    The [depth-aware patch replay](DEPTH_SURFACE_PATCHES_20260922.md) then separated
    deeper handle-gap regions from the radio body across three fixed tolerances,
    preserving every valid pixel. This supports separate semantic masks and

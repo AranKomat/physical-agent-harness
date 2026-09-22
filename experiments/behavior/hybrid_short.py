@@ -11,6 +11,7 @@ import os
 import time
 import uuid
 from contextlib import nullcontext
+from copy import deepcopy
 from pathlib import Path
 
 import numpy as np
@@ -131,7 +132,13 @@ def execute_post_handoff(transport, observation, store, step, capture, report, s
     return final
 
 
-def main():
+def notify_capture(observer, row, store, output):
+    """Optional synchronous diagnostics; results never enter the control record."""
+    if observer is not None:
+        observer(deepcopy(row), store, output)
+
+
+def main(*, capture_observer=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -176,6 +183,11 @@ def main():
             or args.exploratory_transit or args.feedback_hold_diagnostic or args.assisted_target_probe):
         parser.error("Matched handoff requires extended grounding/robot assets and no other diagnostic")
     target_experiment = args.exploratory_transit or args.matched_target_handoff
+    if capture_observer is not None and (
+            args.condition != "A" or not args.extended_grounding_acquisition
+            or not args.grounding_port or target_experiment
+            or args.feedback_hold_diagnostic or args.assisted_target_probe):
+        parser.error("Capture observer requires isolated extended policy-only acquisition")
     if args.dense_observation_diagnostic and (
             args.condition != "A" or not args.extended_grounding_acquisition
             or target_experiment or args.feedback_hold_diagnostic or args.assisted_target_probe):
@@ -285,6 +297,7 @@ def main():
                         row["target_grounding"]["delivery"] = "synchronous_before_next_native_action"
                         row["target_grounding"]["usage"] = "exploratory_target_evidence_not_strict_admission"
                     save()
+                notify_capture(capture_observer, row, store, output)
                 return observation
 
             def step(action):
