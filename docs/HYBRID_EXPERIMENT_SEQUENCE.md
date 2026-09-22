@@ -15,6 +15,14 @@ unqualified JPEG-prefix adapter. Software integration itself launches no campaig
 
 ## Immediate Three-Step Plan
 
+The [fresh dense async run](DENSE_ASYNC_LOCALIZATION_20260922.md) now passes
+32/32 depth-fit, camera-step and two-second freshness checks within the fixed
+384-512-action window. Stateful causal pose replay admits all 33 views, compared
+with only the initial view on the earlier synchronous-grounding trace. This is
+bounded offline pose validation on fresh native evidence, not live localization
+or clearance admission. Next measure pose-ready age and backlog with that updater
+running live in shadow mode, then join masks/depth to legal current poses.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
