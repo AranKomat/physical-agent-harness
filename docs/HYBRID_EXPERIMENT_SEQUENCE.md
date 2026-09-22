@@ -6,6 +6,13 @@ It does not authorize new spend, training, license acceptance or weakening gates
 
 ## Immediate Three-Step Plan
 
+Latest perception update: [official SAM 3.1 tracking](SAM31_TRACKING_20260922.md)
+retained one radio ID through all 14 selected views, including single-frame
+detection gaps. The small-batch configuration measured 142 ms median yield and
+6.0 GiB peak PyTorch allocation in isolation. It is the next shadow backend;
+full-stack memory, incremental-frame causality and capture scheduling remain
+to be checked. Stop model search and resume the timing/qualification work below.
+
 The 15 stages below are a research roadmap, not a mandatory near-term checklist.
 Focus on these three steps before expanding scope:
 
