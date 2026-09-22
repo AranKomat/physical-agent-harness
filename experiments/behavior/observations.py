@@ -55,14 +55,17 @@ def capture_intrinsics(evaluator, observation):
 
 
 class EvidenceStore:
-    def __init__(self, root: Path):
+    def __init__(self, root: Path, *, png_compress_level: int = 6):
+        if type(png_compress_level) is not int or not 0 <= png_compress_level <= 9:
+            raise ValueError("PNG compression level must be an integer from 0 to 9")
+        self.png_compress_level = png_compress_level
         self.root = root.resolve()
         self.root.mkdir(parents=True, exist_ok=True)
 
     def put(self, pixels: np.ndarray, modality: str, stamp: Stamp, at: float) -> Evidence:
         data = io.BytesIO()
         if modality == "rgb":
-            Image.fromarray(pixels).save(data, format="PNG")
+            Image.fromarray(pixels).save(data, format="PNG", compress_level=self.png_compress_level)
             suffix = ".png"
         elif modality == "depth":
             np.save(data, pixels, allow_pickle=False)
@@ -79,13 +82,17 @@ class EvidenceStore:
         ).hexdigest()
         return Evidence(id=identity, stamp=stamp, observed_at=at, source=modality, uri=path.name)
 
-    def read(self, evidence: Evidence) -> np.ndarray:
+    def _read_content(self, evidence: Evidence) -> bytes:
         path = (self.root / evidence.uri).resolve()
         if path.parent != self.root:
             raise ValueError("Evidence path escapes store")
         content = path.read_bytes()
         if hashlib.sha256(content).hexdigest() != path.stem:
             raise ValueError("Evidence content hash mismatch")
+        return content
+
+    def read(self, evidence: Evidence) -> np.ndarray:
+        content = self._read_content(evidence)
         if evidence.source == "rgb":
             return np.asarray(Image.open(io.BytesIO(content)).convert("RGB"))
         if evidence.source == "depth":
@@ -93,9 +100,16 @@ class EvidenceStore:
         raise ValueError("Not an image")
 
     def png(self, evidence: Evidence) -> bytes:
-        data = io.BytesIO()
-        Image.fromarray(self.read(evidence)).save(data, format="PNG")
-        return data.getvalue()
+        if evidence.source != "rgb":
+            raise ValueError("PNG delivery requires RGB evidence")
+        content = self._read_content(evidence)
+        with Image.open(io.BytesIO(content)) as image:
+            image.load()
+            if image.format == "PNG" and image.mode == "RGB":
+                return content
+            data = io.BytesIO()
+            image.convert("RGB").save(data, format="PNG", compress_level=self.png_compress_level)
+            return data.getvalue()
 
 
 class BehaviorObservationFilter:
