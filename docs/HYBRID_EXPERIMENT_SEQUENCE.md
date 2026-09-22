@@ -13,6 +13,11 @@ Focus on these three steps before expanding scope:
    is complete: no obvious depth-convention mismatch; handle-gap/edge mask
    contamination and optical-axis-depth versus range confusion identified.
    Absolute metric accuracy and contact geometry remain unqualified.
+   The subsequent [local SAM 2.1 Large comparison](SAM21_LOCAL_COMPARISON_20260922.md)
+   completed on 18 boxes: warm radio inference ~48 ms and ~2.5 GiB total GPU memory
+   at end. Masks recover omitted object parts but still include handle-gap
+   background. SAM is a semantic-mask candidate, not a qualified geometry fix;
+   live co-residency remains untested.
 2. Establish enough observation timing, localization and motion qualification
    for an interpretable short handoff comparison. This is the current work,
    spanning original stages 3/4. Low-space coverage remains unresolved.
