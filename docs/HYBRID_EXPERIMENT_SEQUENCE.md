@@ -22,8 +22,10 @@ with only the initial view on the earlier synchronous-grounding trace. This is
 bounded offline pose validation on fresh native evidence, not live localization
 or clearance admission. The subsequent [live pose shadow](LIVE_POSE_SHADOW_20260922.md)
 estimated all 33 poses but delivered only 14 within two seconds. Profiling identified
-repeated cloud/normal preparation as the main CPU cost. Qualify the exact-input
-preparation cache live before joining masks/depth to legal current poses.
+repeated cloud/normal preparation as the main CPU cost. The opt-in exact-input
+preparation cache then passed 33/33 fresh live results (1.428 s maximum age), with
+unchanged checks. Next join masks/depth to legal current poses for multi-view
+analysis; this is not yet independent drift, base-pose, or clearance qualification.
 
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
