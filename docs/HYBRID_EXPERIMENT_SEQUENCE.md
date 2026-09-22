@@ -6,6 +6,12 @@ It does not authorize new spend, training, license acceptance or weakening gates
 
 ## Immediate Three-Step Plan
 
+[SAM 3.1 full-stack no-motion capacity](SAM31_CAPACITY_AND_TIMING_20260922.md)
+now passes three fresh cycles on one 4090 at peak sampled 22.65 GiB. This clears
+stationary capacity, not moving-tracker memory or classical motion. The parallel
+CPU audit attributes all four old >2 s gaps to model boundaries; live scheduling
+and incremental causal tracking remain the immediate next experiment.
+
 Latest perception update: [official SAM 3.1 tracking](SAM31_TRACKING_20260922.md)
 retained one radio ID through all 14 selected views, including single-frame
 detection gaps. The small-batch configuration measured 142 ms median yield and
