@@ -52,6 +52,15 @@ the remaining target-acquisition/transit gap, not a completed staging proposal.
 
 ## Current Parallel Results
 
+The [acquisition cadence and coverage audits](SINGLE_GPU_DENSE_OBSERVATIONS_20260922.md)
+completed on the fresh extended single-GPU trace. Sparse 32-action views do not
+pass the existing freshness requirement, and low-body coverage remains absent.
+The bounded dense-observation run also completed: all 32 short-step pairs passed
+fit and step-size checks versus 0/4 sparse fits in the same window. Four dense
+intervals still exceeded the freshness gate at synchronous model boundaries.
+Next qualify sensor scheduling and the actual tracker; do not promote independent
+pair fits to control or authorize another unknown-clearance transit.
+
 The [single-GPU restore and co-residency test](SINGLE_GPU_REPLAY_20260922.md)
 passed with native radio simulation and frozen Behavior-Skill on one RTX 4090:
 three no-motion captures/inferences, 18,902 MiB maximum sampled memory and

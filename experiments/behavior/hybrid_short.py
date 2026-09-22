@@ -40,9 +40,11 @@ def capture_record(evaluator, observation, shadow=None):
 
 
 def execute_policy(transport, observation, store, step, capture, report, save, preprocessing,
-                   *, action_budget=POLICY_ACTIONS):
+                   *, action_budget=POLICY_ACTIONS, dense_capture=None):
     if action_budget not in (384, 768):
         raise ValueError("Only fixed short or separately labeled acquisition budgets are supported")
+    if dense_capture is not None and action_budget != 768:
+        raise ValueError("Dense capture requires the fixed extended acquisition")
     stamp = observation.stamp.model_dump()
     if transport.reset(stamp)["stamp"] != stamp:
         raise ValueError("Policy reset acknowledgement mismatch")
@@ -69,6 +71,9 @@ def execute_policy(transport, observation, store, step, capture, report, save, p
             if done:
                 report["native_end"] = True
                 break
+            count = report["policy_actions"]
+            if dense_capture is not None and 384 <= count <= 512 and count % 4 == 0 and count % 32:
+                dense_capture()
         observation = capture()
         if report.get("native_end"):
             break
@@ -138,6 +143,8 @@ def main():
                         help="Optional synchronous target-grounding shadow, never motion authority")
     parser.add_argument("--extended-grounding-acquisition", action="store_true",
                         help="Separate 768-action policy-only acquisition, not A-short")
+    parser.add_argument("--dense-observation-diagnostic", action="store_true",
+                        help="Shadow RGB-D every 4 actions at 384..512; no extra model calls")
     parser.add_argument("--feedback-hold-diagnostic", action="store_true",
                         help="Separate robot-only substep feedback during 60 zero-base holds")
     parser.add_argument("--exploratory-transit", action="store_true",
@@ -169,6 +176,10 @@ def main():
             or args.exploratory_transit or args.feedback_hold_diagnostic or args.assisted_target_probe):
         parser.error("Matched handoff requires extended grounding/robot assets and no other diagnostic")
     target_experiment = args.exploratory_transit or args.matched_target_handoff
+    if args.dense_observation_diagnostic and (
+            args.condition != "A" or not args.extended_grounding_acquisition
+            or target_experiment or args.feedback_hold_diagnostic or args.assisted_target_probe):
+        parser.error("Dense observations require isolated extended policy-only A")
     source, output = args.source.resolve(), args.output.resolve()
     check_source(source, BEHAVIOR_COMMIT)
     if os.environ.get("CUDA_VISIBLE_DEVICES") != "0":
@@ -202,6 +213,12 @@ def main():
         report["total_policy_action_ceiling"] = 768 + POLICY_ACTIONS
     report["policy_action_budget"] = 768 if args.extended_grounding_acquisition else POLICY_ACTIONS
     report["policy_action_ceiling"] = report["policy_action_budget"]
+    if args.dense_observation_diagnostic:
+        report["dense_observation_diagnostic"] = {
+            "start": 384, "end": 512, "stride": 4, "captures": [],
+            "boundary_captures_reused": True, "motion_authority": False,
+            "policy_inputs_unchanged": True, "additional_model_calls": 0,
+        }
 
     def save():
         (output / "hybrid_short.json").write_text(json.dumps(report, indent=2) + "\n")
@@ -277,6 +294,13 @@ def main():
                 save()
                 return bool(terminated or truncated)
 
+            def dense_capture():
+                current = stamp.model_copy(update={"sequence": report["native_actions"]})
+                observation = ingress.convert(evaluator.obs, current, time.monotonic())
+                row = capture_record(evaluator, observation)
+                report["dense_observation_diagnostic"]["captures"].append(row)
+                save()
+
             evaluator.start_recording(str(output / "rollout.mp4"))
             observation = capture(track=args.condition == "B" and not args.matched_target_handoff)
             report["codec"] = inspect(evaluator.robot, observation.proprio)
@@ -314,7 +338,8 @@ def main():
                 with policy_feedback if policy_feedback is not None else nullcontext():
                     final = execute_policy(HttpPolicyTransport(args.port), observation, store, policy_step, capture,
                         report, save, lambda actions: verify_native_preprocessing(evaluator.robot, actions),
-                        action_budget=report["policy_action_budget"])
+                        action_budget=report["policy_action_budget"],
+                        dense_capture=dense_capture if args.dense_observation_diagnostic else None)
             finally:
                 if policy_feedback is not None:
                     packet = json.loads(policy_feedback.to_json())
