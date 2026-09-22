@@ -104,6 +104,11 @@ images, without changing weights or thresholds:
 | `a red object` | 5/5 |
 
 The broad red-object output is **candidate evidence, not radio identification**.
+Color recognition needs less detail than category recognition. This comparison
+does not isolate a semantic-matching defect from small target size, unfamiliar
+asset appearance, or their interaction. Candidate boxes span only 50x44 to
+84x68 pixels in the native 720x720 images. The assistant's visual inspection was
+primed by knowing the task/target; it is not a blind GPT-versus-SAM comparison.
 Visual review places these candidates on the radio in the five retained images,
 but mask coverage varies and no distractor/negative-control qualification follows.
 This diagnostic was chosen after viewing the misses; it is development evidence,

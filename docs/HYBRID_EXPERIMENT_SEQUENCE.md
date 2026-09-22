@@ -38,6 +38,30 @@ Do not count empty joins as positive geometry qualification
 or shift the window simply to obtain a passing result. A separate five-view
 retained body-surface consistency check passed on the earlier cached-pose run.
 
+The [scale and label-blind check](RADIO_SCALE_BLIND_RECOGNITION_20260922.md)
+now shows no SAM radio output on five full frames or either fixed crop size.
+GPT, without the expected label, identifies three exact paired crops as portable
+radios, describes two controls correctly and abstains on a gripper crop. This
+supports testing complementary recognition/masking, not a general model ranking.
+Next qualify same-frame semantic binding and look-alike controls before positive
+live fusion; changing the prompt to red-object alone does not supply identity.
+
+The [upstream SAM usage audit](SAM31_UPSTREAM_AUDIT_20260922.md) now reproduces
+0/5 radio acquisitions through upstream video loading as well as our adapter.
+Image-only loading finds 2/5, but uses a different new-object admission threshold
+(0.5 versus video's 0.65). Exact file preprocessing alone does not recover video
+detections; its adapter masks/IDs match upstream video on all 10 prompt/image
+pairs. Next qualify acquire-once/track identity instead of treating every view as
+independent semantic recognition. No threshold or deployed default changed.
+
+The [causal acquisition-then-tracking replay](SAM31_ACQUIRE_TRACK_20260922.md)
+now acquires a candidate at action 416 and retains it through all 12 subsequent
+observations including acquisition, versus acquisition at 672 for matched
+video-only preprocessing. All 50 outputs pass source/read/artifact checks;
+visual review places the candidate on the radio. This is not autonomous identity
+confirmation. Next test loss/reacquisition and distractors, then qualify semantic
+binding and replay fusion before another live rollout.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
