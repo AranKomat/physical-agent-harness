@@ -15,6 +15,13 @@ unqualified JPEG-prefix adapter. Software integration itself launches no campaig
 
 ## Immediate Three-Step Plan
 
+The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
+four 32-frame capacity resets and retained radio masks through partial hand
+occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
+reset failure below or qualify full disappearance/distractor identity. Stop
+repeating easy tracker tests: next prioritize native observation cadence and
+legal camera-pose qualification. No new policy/model selection is needed.
+
 The [Situated reset diagnostic](SITUATED_TRACKING_RESET_20260922.md) is complete:
 the same 25 retained frames gave 12 positive views uninterrupted versus 11 with
 forced resets. The final reset lost a visible radio that ongoing tracking retained.
