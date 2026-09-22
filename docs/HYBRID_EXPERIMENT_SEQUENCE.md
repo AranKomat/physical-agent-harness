@@ -94,6 +94,13 @@ though color rejection works on this asset. The prepared live trial has not
 started. Preserve complete target constraints and qualify candidate verification
 or abstention before treating a bare-category proposal as the selected task object.
 
+The bounded tokenizer/text-precision follow-up also passes implementation checks:
+official BPE bytes match, prompts are not truncated, and FP32 text encoding
+changes none of 12 paired admission decisions. See the attribute report above.
+This is not a full-model numerical audit. Next exercise explicit candidate
+verification against the complete target description instead of extending
+prompt tuning or assuming a tracker ID proves task identity.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter

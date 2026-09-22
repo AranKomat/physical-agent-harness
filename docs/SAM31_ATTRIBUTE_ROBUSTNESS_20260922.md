@@ -61,3 +61,40 @@ The prepared category-only live experiment remains unlaunched. These results
 support SAM's usefulness for masks and tracking while showing why its prompted
 mask output is not sufficient on its own to establish task-level identity.
 GPT paraphrase robustness has not been measured in a matched experiment.
+
+## Tokenizer and precision follow-up
+
+The BPE asset SHA-256 equals the official pinned upstream file:
+`924691ac288e54409236115652ad4aa250f48203de50a9e4722a6ecd48d6804a`.
+Actual token IDs (including start/end tokens) are:
+
+- `radio`: 49406, 2638, 49407.
+- `portable radio`: 49406, 11949, 2638, 49407.
+- `a portable radio`: 49406, 320, 11949, 2638, 49407.
+- `red radio`: 49406, 736, 2638, 49407.
+
+Decoded content retains every word. All fit well within the configured 32-token
+context; no truncation or unexpected padding occurs. Earlier exact comparisons
+already established that every loaded learned parameter matches the checkpoint.
+
+Private run `sam31-text-precision-20260922-r1` compares default inference with
+FP32 text encoding (text autocast and text TF32 disabled), holding visual
+inference and thresholds unchanged. Four prompts on sequence-448 full/cropped
+images and the television negative control yield 12 paired cases, 24 outputs.
+FP32 text output dtype was checked during actual inference. The visual backbone
+has explicit BF16 fused operations, so this is not full-model FP32 validation.
+
+All 12 admission decisions are unchanged. Maximum top-score change is about
+0.0081. `a portable radio` still fails on both positive views. All 12 default
+output masks exactly match the preceding attribute audit. Every input and output
+hash was verified; report SHA-256:
+`172908cc79b96a3d33e50fb6131e44affbab20419717bfefe706a617230bbc23`.
+The diagnostic script passes Ruff. No weights, production configuration or
+thresholds were changed, and no model API calls or simulator actions were made.
+
+This weakens tokenizer corruption and text-precision explanations for these
+failures. It does not prove the whole upstream implementation correct or establish
+the internal cause of the prompt sensitivity. Stop expanding this audit without
+new evidence; preserve the full-description verification requirement and test a
+bounded candidate-plus-semantic-check path next. Wider object-category testing
+remains open rather than being inferred from this one asset.
