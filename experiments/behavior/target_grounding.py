@@ -1,4 +1,4 @@
-"""Pinned RGB-only grounding plus depth support, no motion or semantic oracle."""
+"""Pinned box detection; segmentation is delegated to SAM, never motion authority."""
 
 import argparse
 import hashlib
@@ -10,7 +10,13 @@ from pathlib import Path
 import numpy as np
 
 from .contracts import Observation
-from .grounding_manifest import MODEL, REVISION, ROBOT_FILES, validate_online_identity, verify_files
+from .grounding_manifest import (
+    MODEL,
+    REVISION,
+    ROBOT_FILES,
+    validate_detector_identity,
+    verify_files,
+)
 from .observations import EvidenceStore
 
 PROMPT = "a radio."
@@ -120,40 +126,6 @@ def read_grounding_packet(row, store):
     return packet
 
 
-def segmented_depth(rgb, depth, box, k):
-    import cv2
-
-    bounds = np.asarray(box, dtype=float)
-    if bounds.shape != (4,) or not np.isfinite(bounds).all():
-        raise ValueError("Invalid detector box")
-    h, w = depth.shape
-    x0, y0 = np.maximum(np.floor(bounds[:2]), [1, 1]).astype(int)
-    x1, y1 = np.minimum(np.ceil(bounds[2:]), [w-1, h-1]).astype(int)
-    if x1-x0 < 5 or y1-y0 < 5:
-        raise ValueError("Detector support too small")
-    labels = np.zeros((h, w), dtype=np.uint8)
-    cv2.setRNGSeed(0)
-    cv2.grabCut(rgb, labels, (x0, y0, x1-x0, y1-y0),
-                np.zeros((1, 65)), np.zeros((1, 65)), 3, cv2.GC_INIT_WITH_RECT)
-    mask = (labels == cv2.GC_FGD) | (labels == cv2.GC_PR_FGD)
-    mask = cv2.erode(mask.astype(np.uint8), np.ones((3, 3), dtype=np.uint8)).astype(bool)
-    support = int(mask.sum())
-    valid = mask & np.isfinite(depth) & (depth > 0) & (depth <= 10)
-    if support < 16 or int(valid.sum()) < 16 or float(valid.sum())/support < .8:
-        raise ValueError("Insufficient segmented depth support")
-    v, u = np.nonzero(valid)
-    indices = np.linspace(0, len(u)-1, min(len(u), 4096), dtype=int)
-    z = depth[v[indices], u[indices]]
-    points = np.column_stack(((u[indices]-k[0, 2])*z/k[0, 0],
-                              (v[indices]-k[1, 2])*z/k[1, 1], z))
-    return {"mask": mask, "mask_pixels": support, "valid_depth_pixels": int(valid.sum()),
-            "surface_median_camera_m": np.median(points, axis=0).tolist(),
-            "depth_p05_p95_m": np.quantile(z, [.05, .95]).tolist(),
-            "frame": "current_head_optical_not_local_map",
-            "part": "visible_object_surface_not_power_button",
-            "mask_provenance": "RGB_box_initialized_GrabCut_3_iterations_eroded_1px"}
-
-
 class GroundingBackend:
     def __init__(self, checkpoint, prompt=PROMPT, robot_assets=None):
         import torch
@@ -180,7 +152,9 @@ class GroundingBackend:
                          "load_s": time.monotonic()-start,
                          "weights_sha256": verified_files["model.safetensors"],
                          "files_sha256": verified_files}
-        self.identity["robot_self_check"] = self.self_check.identity if self.self_check else None
+        self.identity["geometry_backend"] = "none_detection_only"
+        self.identity["robot_self_check"] = ({"assets_sha256": ROBOT_FILES,
+            "scope": "robot_fk_validation_only_no_target_self_filter"} if self.self_check else None)
 
     def reset(self, stamp):
         return {"stamp": stamp}
@@ -188,9 +162,10 @@ class GroundingBackend:
     def infer(self, packet):
         from PIL import Image
 
-        obs, k, rgb, depth = validate_packet(packet)
+        obs, _, rgb, _ = validate_packet(packet)
         started = time.monotonic()
-        robot_transform = self.self_check.transform(obs) if self.self_check else None
+        if self.self_check:
+            self.self_check.transform(obs)
         inputs = self.processor(images=Image.fromarray(rgb), text=self.prompt, return_tensors="pt").to("cuda")
         with self.torch.inference_mode():
             outputs = self.model(**inputs)
@@ -214,12 +189,8 @@ class GroundingBackend:
             if not target:
                 distractors.append(row)
                 continue
-            try:
-                row.update(segmented_depth(rgb, depth, box, k))
-                if self.self_check:
-                    self.self_check.annotate(row, obs, robot_transform)
-            except (ValueError, RuntimeError) as exc:
-                row["rejected"] = str(exc)
+            row.update(geometry_status="unqualified_requires_sam_depth_association",
+                       identity_verified=False)
             candidates.append(row)
         return {"stamp": obs.stamp.model_dump(), "rgb_evidence_id": obs.rgb["head"].id,
                 "depth_evidence_id": obs.depth["head"].id, "identity": self.identity,
@@ -258,7 +229,7 @@ def ground_capture(row, store, transport, output):
             or result.get("depth_evidence_id") != obs.depth["head"].id
             or result.get("motion_authorized") is not False):
         raise ValueError("Grounding result has stale evidence or invalid authority")
-    validate_online_identity(result.get("identity"))
+    validate_detector_identity(result.get("identity"))
     result["delivery"] = "synchronous_online_shadow_before_next_policy_chunk"
     result["completed_wall"] = time.monotonic()
     return save_result(result, output)

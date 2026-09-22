@@ -25,6 +25,9 @@ Focus on these three steps before expanding scope:
    All 52 partitions reproduce offline; warm return age stays below 2 s, but
    dense capture gaps still reach 3.27 s. Fix capture scheduling next; motion
    and contact geometry remain unqualified.
+   GrabCut has since been removed from the live worker; detection-only boxes feed
+   the separate SAM path. See [current perception options](PERCEPTION_OPTIONS_20260922.md).
+   The earlier timing results predate removal; no post-removal speedup is claimed.
    The [depth-aware patch replay](DEPTH_SURFACE_PATCHES_20260922.md) then separated
    deeper handle-gap regions from the radio body across three fixed tolerances,
    preserving every valid pixel. This supports separate semantic masks and

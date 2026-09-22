@@ -9,7 +9,9 @@ import pytest
 from experiments.behavior import target_grounding
 from experiments.behavior.contracts import Observation, Stamp
 from experiments.behavior.grounding_manifest import (
+    detector_identity,
     online_identity,
+    validate_detector_identity,
     validate_online_identity,
     verify_files,
 )
@@ -78,7 +80,7 @@ def test_online_capture_rejects_stale_service_result(tmp_path, corrupt):
             assert sent["observation"] == p["observation"]
             return {"stamp": {} if corrupt else obs.stamp.model_dump(),
                     "rgb_evidence_id": obs.rgb["head"].id, "depth_evidence_id": obs.depth["head"].id,
-                    "motion_authorized": False, "candidates": [], "identity": online_identity()}
+                    "motion_authorized": False, "candidates": [], "identity": detector_identity()}
 
     row = {key: p[key] for key in ("observation", "calibration")}
     if corrupt:
@@ -126,6 +128,14 @@ def test_snapshot_checks_actual_contents_and_extra_loader_config(tmp_path):
         verify_files(tmp_path, expected)
 
 
+def test_detector_output_cannot_impersonate_segmented_geometry():
+    validate_detector_identity(detector_identity())
+    with pytest.raises(ValueError, match="frozen online"):
+        validate_online_identity(detector_identity())
+    with pytest.raises(ValueError, match="detection-only"):
+        validate_detector_identity(online_identity())
+
+
 class FakeTensor:
     def __init__(self, values):
         self.values = np.asarray(values)
@@ -171,21 +181,16 @@ def test_infer_caps_targets_separately_and_reports_omissions(
     backend.model = lambda **kwargs: None
     backend.torch = SimpleNamespace(inference_mode=nullcontext)
     backend.prompt, backend.identity, backend.self_check = "a radio.", {}, None
-    segmented_boxes = []
-
-    def segment(rgb, depth, box, k):
-        segmented_boxes.append(box)
-        return {"mask_pixels": 20}
-
-    monkeypatch.setattr(target_grounding, "segmented_depth", segment)
     result = backend.infer(packet(tmp_path))
     assert len(result["candidates"]) == min(4, target_count)
     assert len(result["distractors"]) == min(4, distractor_count)
     assert result["omitted_target_count"] == max(0, target_count - 4)
     assert result["omitted_distractor_count"] == max(0, distractor_count - 4)
     assert result["target_candidate_limit"] == result["distractor_limit"] == 4
-    assert [box[0] for box in segmented_boxes] == list(
+    assert [c["box_xyxy"][0] for c in result["candidates"]] == list(
         range(distractor_count, distractor_count + min(4, target_count)))
+    assert all(c["identity_verified"] is False and "surface_median_camera_m" not in c
+               and "mask" not in c for c in result["candidates"])
     assert not result["motion_authorized"]
 
 

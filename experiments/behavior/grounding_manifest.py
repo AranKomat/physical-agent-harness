@@ -34,6 +34,7 @@ def verify_files(checkpoint, expected=None):
 
 
 def online_identity():
+    """Legacy segmented-geometry contract, retained for historical trace readers."""
     return {"model": MODEL, "revision": REVISION, "prompt": ONLINE_PROMPT,
             "box_threshold": .4, "text_threshold": .3,
             "weights_sha256": FILES["model.safetensors"], "files_sha256": dict(FILES),
@@ -45,3 +46,14 @@ def online_identity():
 def validate_online_identity(identity):
     if not isinstance(identity, dict) or any(identity.get(k) != v for k, v in online_identity().items()):
         raise ValueError("Grounding service does not match frozen online configuration")
+
+
+def detector_identity():
+    return {**online_identity(), "geometry_backend": "none_detection_only",
+            "robot_self_check": {"assets_sha256": dict(ROBOT_FILES),
+                                 "scope": "robot_fk_validation_only_no_target_self_filter"}}
+
+
+def validate_detector_identity(identity):
+    if not isinstance(identity, dict) or any(identity.get(k) != v for k, v in detector_identity().items()):
+        raise ValueError("Grounding service does not match detection-only configuration")
