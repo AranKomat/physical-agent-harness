@@ -27,6 +27,17 @@ preparation cache then passed 33/33 fresh live results (1.428 s maximum age), wi
 unchanged checks. Next join masks/depth to legal current poses for multi-view
 analysis; this is not yet independent drift, base-pose, or clearance qualification.
 
+The [live surface consumer](LIVE_SURFACE_FUSION_20260922.md) subsequently delivered
+5/5 timely joins, but all had **empty target lists**: SAM missed the visibly present
+radio in the fixed pose window and acquired it only at action 704. Exact-frame
+replay reproduces the delay and fresh detection still misses all five views.
+A bounded prompt probe finds broad red-object candidates in 5/5, but that does
+not establish radio identity. Next test candidates plus separate current-image
+semantic confirmation, including distractors, before another native trial.
+Do not count empty joins as positive geometry qualification
+or shift the window simply to obtain a passing result. A separate five-view
+retained body-surface consistency check passed on the earlier cached-pose run.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
