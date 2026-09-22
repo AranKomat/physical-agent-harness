@@ -90,6 +90,7 @@ surface over the entire object, or use these results as contact authority.
 Before contact use, a requested visible part must be associated with a patch,
 its local geometry and support checked, and ambiguity must lead to abstention
 or a new observation. Local normals, cross-view stability, moving localization
-and low-space clearance remain separate unqualified requirements. Live SAM
-co-residency also remains untested. None of these replay results advances the
+and low-space clearance remain separate unqualified requirements. Subsequent
+[live stationary SAM co-residency](SAM_LIVE_SHADOW_20260922.md) passes its capacity
+and warm-age checks; moving performance remains untested. None of these results advances the
 strict hybrid-motion gate by itself.

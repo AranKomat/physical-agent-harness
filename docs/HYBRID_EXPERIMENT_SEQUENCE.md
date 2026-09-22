@@ -17,7 +17,10 @@ Focus on these three steps before expanding scope:
    completed on 18 boxes: warm radio inference ~48 ms and ~2.5 GiB total GPU memory
    at end. Masks recover omitted object parts but still include handle-gap
    background. SAM is a semantic-mask candidate, not a qualified geometry fix;
-   live co-residency remains untested.
+   [live stationary co-residency](SAM_LIVE_SHADOW_20260922.md) now passes:
+   peak sampled 21.36 GiB and warm result age 1.18-1.22 s on one 4090.
+   This start exercises distractor masks, not positive radio masks; moving
+   shadow logging and geometry qualification remain next.
    The [depth-aware patch replay](DEPTH_SURFACE_PATCHES_20260922.md) then separated
    deeper handle-gap regions from the radio body across three fixed tolerances,
    preserving every valid pixel. This supports separate semantic masks and
