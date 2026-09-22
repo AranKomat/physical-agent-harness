@@ -18,6 +18,10 @@ Focus on these three steps before expanding scope:
    at end. Masks recover omitted object parts but still include handle-gap
    background. SAM is a semantic-mask candidate, not a qualified geometry fix;
    live co-residency remains untested.
+   The [depth-aware patch replay](DEPTH_SURFACE_PATCHES_20260922.md) then separated
+   deeper handle-gap regions from the radio body across three fixed tolerances,
+   preserving every valid pixel. This supports separate semantic masks and
+   measured patches, not automatic background removal or contact admission.
 2. Establish enough observation timing, localization and motion qualification
    for an interpretable short handoff comparison. This is the current work,
    spanning original stages 3/4. Low-space coverage remains unresolved.
