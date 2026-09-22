@@ -74,6 +74,11 @@ synchronous evidence I/O and capture scheduling.
 
 ## Decision
 
+Update: the user selected SAM 3 for the first test instead. It is now installed
+in an isolated environment and tested on retained frames. See
+[the measured results](SAM3_RETAINED_TEST_20260922.md). The shortlist below
+records the original recommendation, not the current installation status.
+
 First candidate for a short retained-frame check: YOLOE-26 L, with direct
 text-prompted masks. Compare the same images for radio recall, gripper/fireplace
 confusion, thin parts/handle openings, warm latency and memory. Keep SAM 3/3.1
