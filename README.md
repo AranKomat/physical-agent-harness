@@ -31,6 +31,14 @@ and control-duty accounting. See the [integration validation](docs/ACTION_COMPIL
 for actual-checkout tests and merge corrections. It does not enable native
 motion, install GraspGenX weights, or replace the current experiment controller.
 
+The opt-in [Situated Execution V2](docs/SITUATED_EXECUTION_V2.md) adds
+evidence-bound identity history, inspection/keypose proposals, bounded semantic
+graphs, advisory monitors, and offline SAM prefix replay. Its
+[integration report](docs/SITUATED_EXECUTION_V2_INTEGRATION.md) distinguishes
+software validation from native qualification. It preserves the corrected
+[live SAM 3.1 shadow path](docs/SAM31_INCREMENTAL_SHADOW_20260922.md);
+the new replay adapter does not replace that worker or authorize motion.
+
 The [2026-09-22 online grounding experiment](docs/ONLINE_TARGET_GROUNDING_20260922.md)
 completed three fresh radio shadow runs (39 captures): three correct target
 detections, one missed edge view, no accepted false targets in inspected frames.
@@ -42,6 +50,7 @@ stopping feedback, localization and clearance, not on adding more architecture.
 ```bash
 python -m physical_harness demo --output runs/demo-new
 python -m physical_harness doctor
+python -m physical_harness.situated demo --output /tmp/situated-demo-new
 python -m physical_harness.experiment demo --output /tmp/physical-demo-new
 python -m physical_harness.experiment doctor \
   --config configs/experiment_v010/doctor.fixture.json

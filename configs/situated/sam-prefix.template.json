@@ -1,0 +1,10 @@
+{
+  "version": "sam3.1",
+  "source": "/REPLACE_WITH_REVIEWED_LOCAL_SAM_SOURCE",
+  "source_revision": "2345a4ad109ac29c569da749c91d84f10dc08c40",
+  "checkpoint": "/REPLACE_WITH_VIDEO_PREDICTOR_COMPATIBLE_LOCAL_CHECKPOINT.pt",
+  "checkpoint_sha256": "REPLACE_WITH_VERIFIED_SHA256",
+  "bpe": "/REPLACE_WITH_VERIFIED_LOCAL_BPE_FILE",
+  "bpe_sha256": "REPLACE_WITH_VERIFIED_SHA256",
+  "use_fa3": false
+}

@@ -1,0 +1,141 @@
+{
+  "id": "identify-target-information-goal",
+  "entry": "acquire",
+  "nodes": [
+    {
+      "id": "acquire",
+      "kind": "observe",
+      "capability": "perception.acquire_target",
+      "roles": [],
+      "required_facts": [],
+      "transitions": [
+        [
+          "ok",
+          "view_options"
+        ],
+        [
+          "unknown",
+          "escalate"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 3,
+      "purpose": "Find an observed target instance; return unknown rather than guessing."
+    },
+    {
+      "id": "view_options",
+      "kind": "reason",
+      "capability": "geometry.inspect_candidates",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [
+        "target_tracked"
+      ],
+      "transitions": [
+        [
+          "ok",
+          "inspect"
+        ],
+        [
+          "unknown",
+          "escalate"
+        ],
+        [
+          "blocked",
+          "escalate"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 3,
+      "purpose": "Propose an informative viewpoint using available calibrated geometry; do not invent clearance."
+    },
+    {
+      "id": "inspect",
+      "kind": "act",
+      "capability": "compiled.inspect_current",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [
+        "view_candidate_available"
+      ],
+      "transitions": [
+        [
+          "ok",
+          "recognize"
+        ],
+        [
+          "unknown",
+          "escalate"
+        ],
+        [
+          "blocked",
+          "escalate"
+        ],
+        [
+          "failed",
+          "escalate"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 3,
+      "purpose": "Select and execute a current reviewed inspection candidate through the existing executor."
+    },
+    {
+      "id": "recognize",
+      "kind": "monitor",
+      "capability": "perception.resolve_identity",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [],
+      "transitions": [
+        [
+          "complete",
+          "done"
+        ],
+        [
+          "unknown",
+          "escalate"
+        ],
+        [
+          "failed",
+          "escalate"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 3,
+      "purpose": "Resolve the information goal using observed evidence, not completion of the view trajectory."
+    },
+    {
+      "id": "escalate",
+      "kind": "reason",
+      "capability": "executive.review_information_gap",
+      "roles": [],
+      "required_facts": [],
+      "transitions": [],
+      "max_wall_s": 30.0,
+      "max_visits": 1,
+      "purpose": "Suspend for bounded review. No direct motion, threshold changes, or automatic retries."
+    },
+    {
+      "id": "done",
+      "kind": "done",
+      "capability": "existing_task_ledger",
+      "roles": [],
+      "required_facts": [],
+      "transitions": [],
+      "max_wall_s": 30.0,
+      "max_visits": 3,
+      "purpose": "Requires independent information-goal completion; not radio activation or benchmark success."
+    }
+  ],
+  "budget": {
+    "max_nodes": 12,
+    "max_visits": 12,
+    "max_repairs": 1,
+    "max_wall_s": 180
+  },
+  "schema_version": "situated-graph/1"
+}

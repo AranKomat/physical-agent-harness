@@ -4,6 +4,15 @@ Updated 2026-09-22 after Action Compiler V1 integration. This sequence supersede
 more GPT-supervised full-radio trials before the motor handoff is interpretable.
 It does not authorize new spend, training, license acceptance or weakening gates.
 
+Situated Execution V2 is now integrated as an opt-in software layer; see its
+[validation report](SITUATED_EXECUTION_V2_INTEGRATION.md) and
+[two-lane sequence](SITUATED_EXECUTION_V2.md#13-updated-experiment-sequence--two-lanes-one-motion-authority).
+Its no-motion lane starts with retained identity/permanence replay, then tracking
+reset/reacquisition and causal monitor evaluation. It does not restart model
+selection or supersede the native geometry, clearance and stopping gates below.
+The corrected SAM 3.1 live worker remains the baseline, separate from V2's
+unqualified JPEG-prefix adapter. Software integration itself launches no campaign.
+
 ## Immediate Three-Step Plan
 
 [SAM 3.1 full-stack no-motion capacity](SAM31_CAPACITY_AND_TIMING_20260922.md)
