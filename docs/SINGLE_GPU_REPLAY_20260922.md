@@ -68,10 +68,46 @@ SHA-256: `922b72246b782fcc48b71ec52ebc77cf8c97a289eee3f16471d8072a2bb0ae95`.
 Raw outputs and source packets remain private. This fulfills the five-inference
 check proposed in [the acquisition audit](ACQUISITION_REPRODUCIBILITY_20260922.md).
 
+## Native Co-Residency Follow-Up
+
+The simulator restore and no-motion co-residency test subsequently **passed**.
+Pinned BEHAVIOR v3.9.2 and Isaac Sim 5.1.0 loaded the ordinary radio public-test
+instance 301, seed 0, while the frozen Behavior-Skill worker remained on GPU0.
+Three fresh RGB-D/proprio captures produced finite 32-by-23 policy chunks. None
+was applied: zero commanded actions, zero GPT calls, no benchmark-success claim.
+
+| Measurement | Single 4090, simulator and policy resident |
+| --- | ---: |
+| Maximum sampled global GPU memory | 18,902 MiB (18.46 GiB) |
+| Native startup including first-use loading | 587.38 s |
+| Warm policy inference | 99.95, 88.55, 93.87 ms |
+| Render/read/evidence capture | 409.72, 444.90, 457.35 ms |
+
+Memory was sampled about every five seconds, not continuously; instantaneous
+peaks may be higher. Rendering and inference were sequential with both workers
+resident. Capture timing includes evidence serialization, not physics stepping.
+The 93.87 ms inference median is about 11% above the policy-only median, but
+three different-input samples cannot establish a matched slowdown. The first-use
+startup cost is not an estimate of every future restart.
+
+All three captures held simulation time and all 61 proprioceptive values exactly
+constant. RGB pixels nevertheless differed: consecutive head-view mean absolute
+channel changes were 0.578 and 0.696 on the 0-255 scale. With policy reset before
+each request, maximum pairwise action-component difference was 0.011003. This
+supports paused-render variability affecting policy inputs, not a calibrated
+motion error or an explanation of all earlier cross-host divergence. A fresh
+head image was visually inspected and showed the furnished native scene.
+
+Both workers exited and were reaped; a subsequent GPU process query was empty.
+The complete private run was downloaded and checksum-rsync verification returned
+no differences. Receipt: `single4090-co-residency-20260922-r1/native.json`, SHA-256
+`972a4a0f9ff8edaa58a2b0831fc9a25d624301c3865efa654c5036d8e227ea20`.
+
 ## Next Step
 
-Keep this host for policy-only work. Before a live combined run, restore the
-simulator assets/runtime and measure concurrent memory and step latency without
-motion. Do not assume the existing two-GPU launcher works unchanged: it pins
-policy and grounding to GPU1, which is absent here. No long policy rollout or
-classical motion is authorized by this report.
+Keep this host for the next bounded experiment. Simulator plus policy fits this
+static scene, but GroundingDINO was absent, moving-rollout throughput was not
+measured, and larger-scene capacity remains unknown. Adapt the normal launcher
+to GPU0 and qualify perception capacity before resuming full-stack trials; its
+old GPU1 assignments cannot work unchanged. Strict motion/clearance gates remain
+unchanged. No long policy rollout or classical motion is authorized by this report.

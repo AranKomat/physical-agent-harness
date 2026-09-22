@@ -52,6 +52,14 @@ the remaining target-acquisition/transit gap, not a completed staging proposal.
 
 ## Current Parallel Results
 
+The [single-GPU restore and co-residency test](SINGLE_GPU_REPLAY_20260922.md)
+passed with native radio simulation and frozen Behavior-Skill on one RTX 4090:
+three no-motion captures/inferences, 18,902 MiB maximum sampled memory and
+93.87 ms median warm inference. This qualifies static co-residency only, not
+perception capacity, moving throughput or any motion gate. Both workers exited;
+the complete private evidence is checksum-verified locally. Before full-stack
+experiments, replace legacy GPU1 assignments and check perception co-residency.
+
 The [compiler replay](ACTION_COMPILER_REPLAY_20260922.md) processed 78 legal
 RGB-D views and produced zero qualified contact actions. The
 [GraspGenX readiness audit](GRASPGENX_READINESS_20260922.md) identifies actual
