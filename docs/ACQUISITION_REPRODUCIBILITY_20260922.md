@@ -77,6 +77,11 @@ or that deterministic rendering is necessary for all future evaluation.
 
 ## Smallest Next GPU Check
 
+Update: the [five-inference single-GPU replay](SINGLE_GPU_REPLAY_20260922.md)
+completed. Repeated identical inputs reproduced exactly within the new process;
+A/B inputs differed. Small cross-host action differences remain. The procedure
+below is retained as the predeclared protocol; do not repeat it automatically.
+
 After the user restarts the instance:
 
 1. Start only the pinned policy backend, not BEHAVIOR. Replay the saved initial

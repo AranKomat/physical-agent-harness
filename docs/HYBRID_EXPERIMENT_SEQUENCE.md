@@ -87,7 +87,11 @@ longer A/B; strict clearance and moving-localization gates remain unchanged.
 A [CPU-only acquisition audit](ACQUISITION_REPRODUCIBILITY_20260922.md) now locates
 the first mismatch at initial RGB, before either intervention. Initial depth and
 proprioception are identical and logged noise indices match. The next GPU check
-is five retained-input inferences with no simulator or motion, not a longer drive.
+was five retained-input inferences with no simulator or motion, not a longer drive.
+That [single-GPU replay](SINGLE_GPU_REPLAY_20260922.md) has now completed: repeated
+identical inputs reproduce within the process, policy-only latency is comparable
+to the prior host, and small cross-host action differences remain. A single-GPU
+simulator/policy co-residency check is still needed before another native run.
 
 ## Ordered Gates
 
