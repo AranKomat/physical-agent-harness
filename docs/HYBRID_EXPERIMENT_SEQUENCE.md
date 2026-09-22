@@ -68,6 +68,16 @@ driver 580.178.04. The capacity probe shares a policy/detector worker and omits
 robot-self-filtering; the normal RPC launcher and positive metric acquisition
 still need qualification. It does not advance any motion gate.
 
+The [normal single-GPU RPC integration](SINGLE_GPU_ONLINE_20260922.md) subsequently
+passed with the robot self-filter enabled. One fresh 384-action acquisition run
+and one separately declared 768-action run completed using policy-only motion;
+no classical transit, GPT or memory intervention. The short run ended with a
+clipped target and zero accepted detections; the longer run produced 12 accepted
+target captures and one gap in its final 13 boundaries. Neither achieved task
+success. Concurrent CPU checks reproduced the retained mask/depth/FK geometry,
+without qualifying world localization or contact semantics. Migration setup is
+no longer the next experiment; continue the stage 3/4 geometric gates.
+
 The [compiler replay](ACTION_COMPILER_REPLAY_20260922.md) processed 78 legal
 RGB-D views and produced zero qualified contact actions. The
 [GraspGenX readiness audit](GRASPGENX_READINESS_20260922.md) identifies actual
@@ -115,11 +125,11 @@ Resume the same 15-stage sequence, not a new policy search. The old stopped VM
 is not needed for these fresh experiments; some full historical sensor traces
 remain there and must not be assumed durably backed up.
 
-1. Check pinned grounding inference alongside resident simulator and policy on
+1. Complete: checked pinned grounding inference alongside resident simulator and policy on
    GPU0, with fresh calibrated observations and no applied actions. This is a
    capacity test, not semantic, robot-self-filter or moving-control qualification.
-2. Restore the normal grounding worker's verified robot-only self-filter and
-   make GPU/path assignments explicit before fresh online acquisition runs.
+2. Complete: restored the normal grounding worker's verified robot-only self-filter,
+   made GPU/path assignments explicit, and completed fresh online acquisition runs.
 3. Continue stage 3 metric/multi-view acquisition and stage 4 localization/stop/
    clearance work. Do not reuse remembered target coordinates or silently extend
    the consumed one-probe unknown-clearance authorization.
