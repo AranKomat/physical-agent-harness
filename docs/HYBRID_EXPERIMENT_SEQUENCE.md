@@ -15,6 +15,13 @@ unqualified JPEG-prefix adapter. Software integration itself launches no campaig
 
 ## Immediate Three-Step Plan
 
+The [Situated reset diagnostic](SITUATED_TRACKING_RESET_20260922.md) is complete:
+the same 25 retained frames gave 12 positive views uninterrupted versus 11 with
+forced resets. The final reset lost a visible radio that ongoing tracking retained.
+All 100 raw-image reads were current. This supports retaining validated history,
+not declaring identity solved. Real loss/reappearance, distractors and legally
+posed observations remain the next perception checks; no motion gate is relaxed.
+
 [SAM 3.1 full-stack no-motion capacity](SAM31_CAPACITY_AND_TIMING_20260922.md)
 passes three fresh cycles on one 4090. The later level-1 lossless-encoding test
 reduces capture to 178-212 ms and warm three-prompt result age to 792-831 ms, but
