@@ -39,7 +39,8 @@ or shift the window simply to obtain a passing result. A separate five-view
 retained body-surface consistency check passed on the earlier cached-pose run.
 
 The [scale and label-blind check](RADIO_SCALE_BLIND_RECOGNITION_20260922.md)
-now shows no SAM radio output on five full frames or either fixed crop size.
+shows no SAM radio output on five full frames or either fixed crop size under
+the original streaming/video configuration, not all SAM acquisition settings.
 GPT, without the expected label, identifies three exact paired crops as portable
 radios, describes two controls correctly and abstains on a gripper crop. This
 supports testing complementary recognition/masking, not a general model ranking.
@@ -61,6 +62,13 @@ video-only preprocessing. All 50 outputs pass source/read/artifact checks;
 visual review places the candidate on the radio. This is not autonomous identity
 confirmation. Next test loss/reacquisition and distractors, then qualify semantic
 binding and replay fusion before another live rollout.
+
+The [raw-score audit](SAM31_RAW_SCORE_AUDIT_20260922.md) further finds radio-shaped
+top proposals even on rejected frames. Standard image acquisition with `radio`
+admits 5/5 crops and 4/5 full frames, versus 2/5 full frames with `a radio`.
+All three easy negative controls are rejected across three prompts. No thresholds
+changed. Validate the fixed category prompt on other views and harder distractors
+before deployment; the original result does not establish a GPT capability gap.
 
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
