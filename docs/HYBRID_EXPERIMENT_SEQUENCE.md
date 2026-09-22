@@ -60,6 +60,14 @@ perception capacity, moving throughput or any motion gate. Both workers exited;
 the complete private evidence is checksum-verified locally. Before full-stack
 experiments, replace legacy GPU1 assignments and check perception co-residency.
 
+The subsequent [grounding capacity probe](SINGLE_GPU_GROUNDING_20260922.md)
+passed three fresh no-motion cycles with simulator, policy and detector resident
+on GPU0 (20,416 MiB maximum sampled memory). An initial attempt was interrupted
+by an unattended driver update and retained as failed. The passing retry uses
+driver 580.178.04. The capacity probe shares a policy/detector worker and omits
+robot-self-filtering; the normal RPC launcher and positive metric acquisition
+still need qualification. It does not advance any motion gate.
+
 The [compiler replay](ACTION_COMPILER_REPLAY_20260922.md) processed 78 legal
 RGB-D views and produced zero qualified contact actions. The
 [GraspGenX readiness audit](GRASPGENX_READINESS_20260922.md) identifies actual
@@ -99,7 +107,28 @@ was five retained-input inferences with no simulator or motion, not a longer dri
 That [single-GPU replay](SINGLE_GPU_REPLAY_20260922.md) has now completed: repeated
 identical inputs reproduce within the process, policy-only latency is comparable
 to the prior host, and small cross-host action differences remain. A single-GPU
-simulator/policy co-residency check is still needed before another native run.
+simulator/policy co-residency check subsequently passed, as recorded above.
+
+## Resume After Host Migration
+
+Resume the same 15-stage sequence, not a new policy search. The old stopped VM
+is not needed for these fresh experiments; some full historical sensor traces
+remain there and must not be assumed durably backed up.
+
+1. Check pinned grounding inference alongside resident simulator and policy on
+   GPU0, with fresh calibrated observations and no applied actions. This is a
+   capacity test, not semantic, robot-self-filter or moving-control qualification.
+2. Restore the normal grounding worker's verified robot-only self-filter and
+   make GPU/path assignments explicit before fresh online acquisition runs.
+3. Continue stage 3 metric/multi-view acquisition and stage 4 localization/stop/
+   clearance work. Do not reuse remembered target coordinates or silently extend
+   the consumed one-probe unknown-clearance authorization.
+4. Once admission is established, use repeated balanced-order short A/B pairs
+   instead of requiring bitwise-identical independently rendered rollouts.
+   Predeclare starts and budgets, report acquisition/handoff distributions and
+   include rejected trials. Do not claim causal benefit from the existing pair.
+5. Only then proceed to stage 6 and the later arm/contact/GPT sequence. Offline
+   compiler analysis may continue independently, without bypassing motion gates.
 
 ## Ordered Gates
 
