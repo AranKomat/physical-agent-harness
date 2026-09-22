@@ -70,6 +70,14 @@ All three easy negative controls are rejected across three prompts. No threshold
 changed. Validate the fixed category prompt on other views and harder distractors
 before deployment; the original result does not establish a GPT capability gap.
 
+The [fixed-category controls](SAM31_CATEGORY_CONTROLS_20260922.md) now pass on
+another retained trace: both acquisition modes return 13 consecutive radio
+masks from action 384. Two forced resets reacquire immediately; a separately
+labeled scene-switch stress test returns no masks on three off-target images
+and resumes the radio mask on return. All 103 outputs pass provenance checks.
+Hard distractors remain untested. Move to offline same-frame surface replay,
+without claiming live timing for newly computed masks or expanding prompt tuning.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
