@@ -138,7 +138,7 @@ def notify_capture(observer, row, store, output):
         observer(deepcopy(row), store, output)
 
 
-def main(*, capture_observer=None):
+def main(*, capture_observer=None, dense_capture_observer=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -167,6 +167,8 @@ def main(*, capture_observer=None):
     for flag in ("allow-simulator", "allow-unknown-clearance-exploration", "licenses-accepted"):
         parser.add_argument("--" + flag, action="store_true", required=True)
     args = parser.parse_args()
+    if dense_capture_observer is not None and not args.dense_observation_diagnostic:
+        parser.error("Dense capture observer requires the bounded dense diagnostic")
     if args.grounding_port and ((args.condition != "A" and not args.matched_target_handoff)
                                or args.assisted_target_probe):
         parser.error("Grounding shadow is isolated to policy-only A captures")
@@ -215,6 +217,7 @@ def main(*, capture_observer=None):
     report["seed"] = args.seed
     report["png_compress_level"] = args.png_compress_level
     report["capture_observer_enabled"] = capture_observer is not None
+    report["dense_capture_observer_enabled"] = dense_capture_observer is not None
     if args.grounding_port:
         report["scope"] = "online_target_grounding_shadow_during_frozen_policy_approach"
     if args.extended_grounding_acquisition:
@@ -302,6 +305,8 @@ def main(*, capture_observer=None):
                         row["target_grounding"]["usage"] = "exploratory_target_evidence_not_strict_admission"
                     save()
                 notify_capture(capture_observer, row, store, output)
+                if 384 <= current.sequence <= 512:
+                    notify_capture(dense_capture_observer, row, store, output)
                 return observation
 
             def step(action):
@@ -317,6 +322,7 @@ def main(*, capture_observer=None):
                 row = capture_record(evaluator, observation)
                 report["dense_observation_diagnostic"]["captures"].append(row)
                 save()
+                notify_capture(dense_capture_observer, row, store, output)
 
             evaluator.start_recording(str(output / "rollout.mp4"))
             observation = capture(track=args.condition == "B" and not args.matched_target_handoff)

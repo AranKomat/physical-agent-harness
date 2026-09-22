@@ -7,20 +7,28 @@ from physical_harness.localization import LocalizationLost, RGBDOdometry
 
 
 def point_to_plane(previous_rgb, previous_depth, rgb, depth, calibration):
+    return _register_clouds([_prepare_cloud(values, calibration)
+                             for values in (previous_depth, depth)])
+
+
+def _prepare_cloud(values, calibration):
     import open3d as o3d
 
     intr = o3d.camera.PinholeCameraIntrinsic(
         (calibration["width"] + 1) // 2, (calibration["height"] + 1) // 2,
         *(calibration[k] / 2 for k in ("fx", "fy", "cx", "cy")))
-    clouds = []
-    for values in (previous_depth, depth):
-        image = o3d.geometry.Image(np.ascontiguousarray(values[::2, ::2], dtype=np.float32))
-        cloud = o3d.geometry.PointCloud.create_from_depth_image(
-            image, intr, depth_scale=1., depth_trunc=10., stride=1).voxel_down_sample(.01)
-        if len(cloud.points) < 100:
-            raise LocalizationLost("Insufficient head depth for fixed-reference registration")
-        cloud.estimate_normals(o3d.geometry.KDTreeSearchParamHybrid(radius=.04, max_nn=30))
-        clouds.append(cloud)
+    image = o3d.geometry.Image(np.ascontiguousarray(values[::2, ::2], dtype=np.float32))
+    cloud = o3d.geometry.PointCloud.create_from_depth_image(
+        image, intr, depth_scale=1., depth_trunc=10., stride=1).voxel_down_sample(.01)
+    if len(cloud.points) < 100:
+        raise LocalizationLost("Insufficient head depth for fixed-reference registration")
+    cloud.estimate_normals(o3d.geometry.KDTreeSearchParamHybrid(radius=.04, max_nn=30))
+    return cloud
+
+
+def _register_clouds(clouds):
+    import open3d as o3d
+
     reg = o3d.pipelines.registration
     result = reg.registration_icp(*clouds, .05, np.eye(4), reg.TransformationEstimationPointToPlane(),
                                   reg.ICPConvergenceCriteria(max_iteration=50))
@@ -28,6 +36,25 @@ def point_to_plane(previous_rgb, previous_depth, rgb, depth, calibration):
     # These checks reject poor fits, but do not establish world-motion observability.
     success = bool(result.fitness >= .75 and result.inlier_rmse <= .015)
     return success, result.transformation, info
+
+
+class CachedPointToPlane:
+    """Opt-in one-frame preparation cache, never a cached pose or acceptance decision."""
+
+    def __init__(self):
+        self._depth = self._calibration = self._cloud = None
+
+    def __call__(self, previous_rgb, previous_depth, rgb, depth, calibration):
+        key = tuple(calibration[k] for k in ('width', 'height', 'fx', 'fy', 'cx', 'cy'))
+        previous = self._cloud if (
+            self._depth is not None and key == self._calibration
+            and previous_depth.dtype == self._depth.dtype
+            and np.array_equal(previous_depth, self._depth)
+        ) else _prepare_cloud(previous_depth, calibration)
+        current = _prepare_cloud(depth, calibration)
+        result = _register_clouds([previous, current])
+        self._depth, self._calibration, self._cloud = depth.copy(), key, current
+        return result
 
 
 class HeadDepthShadow:

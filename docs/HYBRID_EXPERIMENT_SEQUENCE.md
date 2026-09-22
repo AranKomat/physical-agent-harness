@@ -20,8 +20,10 @@ The [fresh dense async run](DENSE_ASYNC_LOCALIZATION_20260922.md) now passes
 384-512-action window. Stateful causal pose replay admits all 33 views, compared
 with only the initial view on the earlier synchronous-grounding trace. This is
 bounded offline pose validation on fresh native evidence, not live localization
-or clearance admission. Next measure pose-ready age and backlog with that updater
-running live in shadow mode, then join masks/depth to legal current poses.
+or clearance admission. The subsequent [live pose shadow](LIVE_POSE_SHADOW_20260922.md)
+estimated all 33 poses but delivered only 14 within two seconds. Profiling identified
+repeated cloud/normal preparation as the main CPU cost. Qualify the exact-input
+preparation cache live before joining masks/depth to legal current poses.
 
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand

@@ -28,6 +28,26 @@ def test_observer_failure_stops_experiment():
         notify_capture(observer, {}, None, None)
 
 
+@pytest.mark.parametrize('enabled', [False, True])
+def test_dense_observer_requires_explicit_dense_mode(monkeypatch, enabled):
+    from experiments.behavior import hybrid_short
+
+    class ReachedSourceCheck(Exception):
+        pass
+
+    def check_source(*args):
+        raise ReachedSourceCheck
+
+    monkeypatch.setattr(hybrid_short, 'check_source', check_source)
+    monkeypatch.setattr('sys.argv', ['hybrid_short', '--source', '/not-used', '--output', '/not-used',
+        '--condition', 'A', '--policy-load-receipt', '/not-used', '--extended-grounding-acquisition',
+        '--allow-simulator', '--allow-unknown-clearance-exploration', '--licenses-accepted',
+        *(['--dense-observation-diagnostic'] if enabled else [])])
+    with pytest.raises(ReachedSourceCheck if enabled else SystemExit):
+        hybrid_short.main(capture_observer=lambda *args: None,
+                          dense_capture_observer=lambda *args: None)
+
+
 @pytest.mark.parametrize("observer,extra,admitted", [
     (True, [], True), (False, [], False),
     (True, ["--condition", "B"], False),
