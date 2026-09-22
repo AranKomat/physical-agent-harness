@@ -101,6 +101,13 @@ This is not a full-model numerical audit. Next exercise explicit candidate
 verification against the complete target description instead of extending
 prompt tuning or assuming a tracker ID proves task identity.
 
+The [six-case full-description check](CANDIDATE_DESCRIPTION_CHECK_20260922.md)
+accepts three matching radio descriptions and rejects two wrong colors and a
+non-radio control, with $0.039415 total cost and 4.93-6.12 s transport latency.
+All six request-body/image/result audits match. This is retained crop verification,
+not live identity qualification. Next bind current verification evidence to the
+existing identity contracts and require association checks before reuse.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
