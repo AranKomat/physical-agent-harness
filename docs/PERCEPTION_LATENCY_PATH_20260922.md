@@ -4,8 +4,10 @@
 
 Keep SAM 3.1 local for the next tracking experiment. The earlier 0.49-0.55 s
 capacity measurement covered three independent text prompts, not one tracking
-update. Isolated single-radio tracking yielded frames at a 142 ms median.
-Neither measurement proves a 300 ms capture-to-geometry pipeline.
+update. The corrected arrived-frame replay measured 167 ms; the corrected live
+moving shadow measured 252 ms tracking and 483 ms observation-to-result median.
+An earlier incremental adapter had a one-frame indexing bug and its mask-freshness
+results are superseded. No measurement proves a 300 ms capture-to-geometry pipeline.
 
 Meta's [SAM overview](https://dev.meta.ai/docs/sam/overview) and
 [prompt API](https://dev.meta.ai/docs/sam/segmenting) document `sam-3.1` through
@@ -60,11 +62,25 @@ cover losslessness, original-byte delivery, defaults and invalid inputs.
 Private receipt: `evidence-encoding-profile-20260922-r1.json`.
 Full public suite: 1,091 passing tests; Ruff passes.
 
-## Next Measurement
+## Live Encoding Follow-Up
 
-Run the live shadow experiment with explicit level-1 evidence encoding and
-incrementally available tracking inputs. Measure native capture, evidence ingest,
-tracking, depth association, queue age and output delivery separately. Keep
-archival work off the control-critical path where it can be bounded safely.
-Only consider replacing the model if the measured local tracking/depth stage
-still prevents the target after eliminating unnecessary serialization/detection.
+The three-cycle live level-1 test passed: capture 178-212 ms, warm three-prompt
+result age 792-831 ms, versus prior capture 404-448 ms and result age 1.001-1.050 s.
+This is no-motion single-frame detection, not incremental tracking. GPU peak was
+23,482 MiB, close to the 23,552 MiB abort threshold. See the
+[incremental qualification report](SAM31_INCREMENTAL_SHADOW_20260922.md) for
+the live split timings, causal replay failures and mask-quality caveats.
+
+## Moving Shadow Follow-Up
+
+The corrected latest-only worker processed 25 captures during 768 frozen-policy
+actions without queue drops; all raw-image reads were on the emitted current
+frame. Warm result age p50/p95 was 483/540 ms; positive-mask depth partitioning
+took 7 ms median. Results never entered policy inputs or authorized motion.
+Captures were at 32-action boundaries, not continuously sampled video.
+
+Keep the local model and return to geometry/temporal-quality qualification.
+Encoding/decoding and observation cadence remain optimization candidates if
+the next control experiment needs a faster path. The fixed 32-frame adapter
+requires further long-stream/reset qualification. Do not trade source alignment
+or archival integrity for a favorable timing number.

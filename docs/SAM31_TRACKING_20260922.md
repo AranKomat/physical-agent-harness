@@ -1,5 +1,9 @@
 # SAM 3.1 Tracking Probe
 
+Historical offline probe. See the [incremental qualification report](SAM31_INCREMENTAL_SHADOW_20260922.md)
+for the corrected live shadow results and the adapter frame-index bug found
+during integration. Whole-clip timing/ID retention is not a live tracking result.
+
 ## Decision
 
 Use official SAM 3.1 as the next experimental tracking backend. Do not continue

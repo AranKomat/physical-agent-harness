@@ -72,7 +72,13 @@ The full public suite passes 1,080 tests; 48 focused private tests and Ruff pass
 
 ## Next Gate
 
-Stationary capacity is established; live tracking/scheduling is not. Keep native
+Follow-up: the [incremental qualification report](SAM31_INCREMENTAL_SHADOW_20260922.md)
+records the completed live level-1 encoding test, an invalidated incremental
+adapter attempt, its frame-index correction, and a passing bounded moving shadow
+run. Corrected warm result age is 483 ms median / 540 ms p95. This does not qualify
+continuous high-rate tracking or accurate geometry.
+
+Stationary capacity and one bounded moving shadow are established. Keep native
 rendering and stepping on the simulator-owning thread. Give the tracking worker
 only already-captured images, bound its queue, retain observation and availability
 timestamps, and explicitly record overflow/loss rather than silently treating

@@ -146,6 +146,8 @@ def main(*, capture_observer=None):
     parser.add_argument("--policy-load-receipt", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8011)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--png-compress-level", type=int, choices=range(10), default=6,
+                        help="Lossless evidence encoding; default remains unchanged")
     parser.add_argument("--grounding-port", type=int,
                         help="Optional synchronous target-grounding shadow, never motion authority")
     parser.add_argument("--extended-grounding-acquisition", action="store_true",
@@ -168,8 +170,8 @@ def main(*, capture_observer=None):
     if args.grounding_port and ((args.condition != "A" and not args.matched_target_handoff)
                                or args.assisted_target_probe):
         parser.error("Grounding shadow is isolated to policy-only A captures")
-    if args.extended_grounding_acquisition and not args.grounding_port:
-        parser.error("Extended acquisition requires synchronous grounding shadow")
+    if args.extended_grounding_acquisition and not (args.grounding_port or capture_observer is not None):
+        parser.error("Extended acquisition requires grounding or an isolated capture observer")
     if args.feedback_hold_diagnostic and (
             args.condition != "A" or args.grounding_port or args.assisted_target_probe):
         parser.error("Feedback hold requires isolated A exposure without grounding or assisted probe")
@@ -185,7 +187,7 @@ def main(*, capture_observer=None):
     target_experiment = args.exploratory_transit or args.matched_target_handoff
     if capture_observer is not None and (
             args.condition != "A" or not args.extended_grounding_acquisition
-            or not args.grounding_port or target_experiment
+            or target_experiment
             or args.feedback_hold_diagnostic or args.assisted_target_probe):
         parser.error("Capture observer requires isolated extended policy-only acquisition")
     if args.dense_observation_diagnostic and (
@@ -211,6 +213,8 @@ def main(*, capture_observer=None):
               "policy_load_receipt": receipt,
               "policy_receipt_sha256": hashlib.sha256(args.policy_load_receipt.read_bytes()).hexdigest()}
     report["seed"] = args.seed
+    report["png_compress_level"] = args.png_compress_level
+    report["capture_observer_enabled"] = capture_observer is not None
     if args.grounding_port:
         report["scope"] = "online_target_grounding_shadow_during_frozen_policy_approach"
     if args.extended_grounding_acquisition:
@@ -262,7 +266,7 @@ def main(*, capture_observer=None):
             evaluator.reset()
             if not np.isclose(og.sim.get_sim_step_dt(), 1/30):
                 raise ValueError("Native timestep changed")
-            store = EvidenceStore(output / "evidence")
+            store = EvidenceStore(output / "evidence", png_compress_level=args.png_compress_level)
             ingress, shadow = BehaviorObservationFilter(store), HeadDepthShadow(store)
             stamp = Stamp(session=str(uuid.uuid4()), epoch=0, sequence=0)
 

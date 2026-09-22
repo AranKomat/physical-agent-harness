@@ -7,17 +7,18 @@ It does not authorize new spend, training, license acceptance or weakening gates
 ## Immediate Three-Step Plan
 
 [SAM 3.1 full-stack no-motion capacity](SAM31_CAPACITY_AND_TIMING_20260922.md)
-now passes three fresh cycles on one 4090 at peak sampled 22.65 GiB. This clears
-stationary capacity, not moving-tracker memory or classical motion. The parallel
-CPU audit attributes all four old >2 s gaps to model boundaries; live scheduling
-and incremental causal tracking remain the immediate next experiment.
+passes three fresh cycles on one 4090. The later level-1 lossless-encoding test
+reduces capture to 178-212 ms and warm three-prompt result age to 792-831 ms, but
+peak sampled GPU memory rises to 23,482 MiB, close to the 23,552 MiB cutoff.
 
-Latest perception update: [official SAM 3.1 tracking](SAM31_TRACKING_20260922.md)
-retained one radio ID through all 14 selected views, including single-frame
-detection gaps. The small-batch configuration measured 142 ms median yield and
-6.0 GiB peak PyTorch allocation in isolation. It is the next shadow backend;
-full-stack memory, incremental-frame causality and capture scheduling remain
-to be checked. Stop model search and resume the timing/qualification work below.
+The [incremental qualification report](SAM31_INCREMENTAL_SHADOW_20260922.md)
+records a corrected live shadow run: 768 frozen-policy actions, 25 captures,
+zero queue drops, and all 50 raw-image reads on the current frame. Warm tracking
+is 252 ms median; result age is 483 ms median / 540 ms p95. An adapter off-by-one
+bug invalidated the earlier drifting-mask run; it is preserved and explicitly
+superseded. This is sparse boundary sampling, not continuous video or qualified
+geometry, localization, clearance or classical motion. Stop model search and
+return to the sensor geometry/temporal-quality gates below.
 
 The 15 stages below are a research roadmap, not a mandatory near-term checklist.
 Focus on these three steps before expanding scope:
