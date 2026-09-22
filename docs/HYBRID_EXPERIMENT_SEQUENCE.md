@@ -78,6 +78,14 @@ and resumes the radio mask on return. All 103 outputs pass provenance checks.
 Hard distractors remain untested. Move to offline same-frame surface replay,
 without claiming live timing for newly computed masks or expanding prompt tuning.
 
+The [offline candidate-surface replay](SAM31_CANDIDATE_SURFACE_REPLAY_20260922.md)
+now yields five candidate clouds on the cross-trace check and four in the earlier
+empty-fusion window. Largest surfaces contain about 80% of masked valid depth;
+neighbor-cloud p95 distances are 4-7 mm without alignment refitting. This is
+internal consistency, not absolute accuracy or control qualification. Next run
+the fixed configuration in a fresh bounded native shadow trial, measuring both
+candidate-bearing joins and live freshness while the frozen policy retains control.
+
 The subsequent [131-frame replay](SITUATED_LONG_TRACKING_20260922.md) passed
 four 32-frame capacity resets and retained radio masks through partial hand
 occlusion, with 262/262 current-frame raw reads. This does not erase the shorter
