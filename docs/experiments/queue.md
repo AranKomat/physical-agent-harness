@@ -136,6 +136,13 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+Phase 5 [reverse-direction holdout](2026-09-24/REVERSE_STOP_PROTOCOL.md) completed
+25 native actions and 26 paired captures. Refreshed legal RGB-D/FK max observed
+translation error is 6.59 micrometres; all 5 moving and 15 braking intervals have
+the expected 2 mm/s classification. Combined replay yields 11 stop candidates,
+but raw stop acknowledgement stays false. This is directional evidence, not a
+calibrated uncertainty guarantee, clearance certificate or phase completion.
+
 Critical-path update: [candidate-2 coverage and reach](2026-09-24/GRASP_COVERAGE_STAGING.md)
 show 44,033/116,020 exposed vertex samples outside all current views. Torso motion
 carries the idle right arm into unseen space. Locking the torso cannot reach any
