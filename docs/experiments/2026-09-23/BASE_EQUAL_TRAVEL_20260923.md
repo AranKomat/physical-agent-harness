@@ -61,6 +61,44 @@ Private replay: `runs/base-drive-shortpulse-rgbd-20260923-r1/receipt.json`;
 robot asset and input evidence hashes are retained there. No extra native actions
 or paid calls were used for this local replay.
 
+### Timing Follow-Up: Suspected One-Control Image Lag
+
+The first moving control interval has legal estimated planar speed 0.273 mm/s
+versus evaluator-derived 2.973 mm/s. The first braking interval has estimated
+2.977 mm/s while evaluator displacement is approximately zero. Thus a naive
+2 mm/s threshold on uncorrected RGB-D interval speed would miss initial movement
+and report movement after braking. Do not promote it to stop authority.
+
+A retrospective lag diagnostic compares the same 22 interior captures for all
+offsets. Positive offset pairs estimate k with evaluator state k-offset:
+
+| Offset in 30 Hz controls | Mean translation difference | Maximum |
+| --- | ---: | ---: |
+| -1 (future truth, evaluator-only negative control) | 58.49 micrometres | 221.65 micrometres |
+| 0 | 34.33 micrometres | 113.72 micrometres |
+| +1 | 11.29 micrometres | 18.58 micrometres |
+| +2 | 32.72 micrometres | 107.06 micrometres |
+
+At the pinned BEHAVIOR source, `eval/evaluator.py:249` requests
+`n_render_iterations=1`. `envs/env_base.py:642` only adds renders when more are
+requested. `simulator.py:1396` explicitly notes delayed rendering propagation.
+`sensors/vision_sensor.py:308` reads annotator data. These observations support a
+render-lag hypothesis but do not prove which component causes the alignment.
+The corrected error is not a new accuracy claim: selecting an offset after
+looking at evaluator truth is diagnostic, not online calibration.
+
+Next compare normal post-action observation with render-only recaptures at
+unchanged sim time and measured joint state, retaining both streams. Do not
+rewrite historical timestamps, shift data into control, alter frozen-policy
+inputs, or assume a universal one-frame correction from this single trace.
+
+Private diagnostic: `runs/base-drive-shortpulse-lag-20260923-r1/receipt.json`.
+Source replay SHA-256:
+`8bfd0b5d51ab33b4e034de26d1be6170c51f8d1e510bbb46337ddfb656aef75e`.
+Three focused tests verify synthetic delay alignment, a common comparison range,
+and rejection of missing/out-of-order timing. Focused Ruff passes. No native
+actions or paid calls were used for this timing analysis.
+
 ## Evidence
 
 Private analysis: `runs/base-drive-shortpulse-analysis-20260923-r1/receipt.json`.

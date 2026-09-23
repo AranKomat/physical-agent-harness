@@ -96,6 +96,11 @@ then produced 0.532 mm forward motion using five 0.01 m/s commands, compared wit
 0.002067 mm for ten 0.005 m/s commands. Initial state and preflight match. This
 provides a moving/braking contrast for Phase 5, but final raw stop still fails
 and strict navigation remains unqualified. It is not an adopted controller gain.
+Offline timing analysis then found an apparent one-control RGB-D lag: matching
+estimates to previous evaluator poses reduces maximum discrepancy from 114 to
+18.6 micrometres. This is not an online correction. Prioritize paired render-only
+recaptures during the bounded moving diagnostic before promoting RGB-D stop
+evidence or attributing all error to registration accuracy.
 
 ## 1. Executive Summary
 
