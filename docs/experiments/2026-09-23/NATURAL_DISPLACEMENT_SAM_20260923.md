@@ -152,3 +152,41 @@ Script SHA-256:
 `80b37ca80296590e6072c640decdfe44bf22d81cc3c6670a2543b2c8af28d31f`.
 Do not tune thresholds on these same views to manufacture a positive result;
 the remaining transition needs denser visual evidence or fresh discrimination.
+
+## Full-Rate Video Follow-Up
+
+The retained native video contains 3,224 frames at 30 fps. The inspected recorder
+composes the head-camera image into columns 224-671, resized to 448x448. A fixed
+interval, video frames 1663-1791, corresponds to source observations 52 and 56.
+Its two endpoint mean absolute grayscale differences against resized retained
+RGB captures are 2.042 and 2.028 on a 0-255 scale, within the predeclared limit 8.
+No offset search was performed. This is compressed/resized pixel evidence, not
+native full-resolution RGB-D or newly qualified timing/metric calibration.
+
+The same 53 initial corners and unchanged LK checks were used for four temporal
+sampling conditions. Destination masks were used only for evaluation.
+
+| Video stride | Frames used | Surviving points | In ending radio mask |
+| --- | ---: | ---: | ---: |
+| 128 | 2 | 1 | 1 |
+| 32 | 5 | 2 | 2 |
+| 8 | 17 | 0 | 0 |
+| 1 | 129 | 17 | 14 |
+
+All off-target translated-mask controls received zero points. The full-rate
+condition took 121 ms for the entire 128-interval propagation, excluding video
+decoding, hashes and feature seeding. This is offline local CPU timing, not an
+end-to-end native latency claim. Visual review finds surviving points on the
+radio body/handle but also on the gripper; endpoint mask inclusion is not ground
+truth identity. The stride-8 failure is retained, not discarded.
+
+This changes the next implementation direction: test a cheap full-rate visual
+continuity signal between slower SAM/discovery updates. Do not conclude from the
+sparse failures that temporal association is impossible. Robot-pixel exclusion,
+uniqueness, loss/reset behavior and independent metric support are still required
+before this signal can establish physical identity or authorize manipulation.
+
+Private artifacts: `runs/contact-video-flow-20260923-r1/receipt.json` and
+`review.png`; script `scripts/replay_contact_video_flow.py`.
+Video SHA-256:
+`38a2f21ce2213d19617d8233a1a8f620815548ce0ea543d212235b92db10c52e`.
