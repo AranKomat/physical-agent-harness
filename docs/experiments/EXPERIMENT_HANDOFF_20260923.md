@@ -58,7 +58,7 @@ historical diagnostics are described later in this document.
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial diagnostics; fresh paused recapture consistency passes | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
-| 7. Free-space arm staging and return | Not done | Robot/TCP/collision assets, independent FK checks, measured endpoint and stop |
+| 7. Free-space arm staging and return | GPU robot-only FK passes 37 numerical configurations; execution not done | Conservative collision assets, exact held-joint planning configuration, legal scene, measured endpoint and stop |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
 | 9. Compiler manipulation | Contracts and negative replay only | Positive sensor-grounded candidate, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
@@ -79,6 +79,14 @@ pixels were identical and registered with zero displacement; this is not moving
 accuracy. Public odometry rejected equal-time recaptures without guard changes.
 The retained 33-pose replay matched prior output to numerical precision. New
 private suite snapshot: 648 passed, one skip; public runtime remains unchanged.
+
+The [cuRobo V2 FK diagnostic](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now
+validates real GPU kinematics against yourdfpy for 37 numerical configurations
+and against one native measured posture. It explicitly composes missing tool
+frames using generated asset offsets. Collision/planning remain unqualified;
+the known sphere undercoverage is unresolved. A native-schema parser error in
+attempt r1 was fixed before declared r2; both are retained. Latest private suite:
+687 passed, one skip. No new robot actions or paid calls.
 
 Phase 0's private audit passed 641 checks. All 25 exported PNGs have the same
 decoded pixels as native captures, and the six API image payloads match retained
