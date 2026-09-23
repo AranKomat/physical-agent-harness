@@ -78,6 +78,11 @@ confirmed native damping of 1e7 and sentinel-scale raw effort/velocity limits.
 Joint-wrapper limits (100 effort, 1/15 velocity) are fallbacks, not measured
 physical caps. One adapter error was corrected and retained as a failed attempt.
 Audit the reset/limit lifecycle and applied targets before escalating motion.
+The [instrumented base pulse](2026-09-23/BASE_DRIVE_PULSE_20260923.md) now
+confirms finite limits become sentinel-scale across evaluator settings. Controller
+output matches PhysX targets exactly, but the same tiny 2.067 micrometre response
+recurs. Command delivery is observed; downstream native physical response remains
+unresolved. No motion qualification or physics-parameter changes follow.
 
 ## 1. Executive Summary
 
