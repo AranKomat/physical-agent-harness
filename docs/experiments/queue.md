@@ -61,6 +61,10 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+Infrastructure prerequisite: [automatic GPU driver update](2026-09-23/GPU_DRIVER_UPDATE_20260923.md)
+currently prevents new GPU work. Reboot is approved after package completion
+and verified backups; recovery checks remain pending. No motion gates change.
+
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite
    563 passed, one existing skip. The initial 1,418-test consolidation also

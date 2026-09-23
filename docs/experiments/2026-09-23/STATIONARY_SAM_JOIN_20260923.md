@@ -59,3 +59,14 @@ Full private suite after the correction: **867 passed, one existing skip** with
 pytest invocation failed collection because the scripts directory was absent
 from its import path; the configured suite passed. Public production code was
 not changed by this correction.
+
+## Subsequent Environment Incident
+
+An automatic Ubuntu update was later found to have overlapped this test.
+The SAM log places acquisition at 06:41:11 UTC; dpkg records NVIDIA library
+replacement at 06:42:19 UTC. The successful result is retained, but its timing
+may include background package-update contention and is not a clean isolated
+latency benchmark. Source/checkpoint hashes did not cover OS package state.
+Future stationary runs now check package-manager activity, GPU driver agreement,
+boot identity and CUDA/NVML library hashes before/after execution. This change
+does not retroactively qualify the earlier environment or authorize a repeat.
