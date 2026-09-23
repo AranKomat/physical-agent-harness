@@ -94,6 +94,12 @@ Those path tests describe unrelated endpoints, not the intended grasp poses.
 See [the frame correction](2026-09-24/GRASP_FRAME_CORRECTION.md).
 Keep all proposals shadow-only. No grasp, external-clearance, or execution gate
 has passed on these invalidated results.
+The separate [frame-704 proposal trial](2026-09-24/GRASP_VIEW704.md) now uses
+a closer retained online view and new GraspGen-X proposals. Frame-corrected IK
+and independent FK recomputation find 8/8 numerical pose matches on this new
+set. No collision/contact/scene/path qualification transfers from the invalid
+old runs. Next screen these source-bound endpoints before planning or motion;
+the large torso changes particularly require review. Phase 9 remains partial.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
