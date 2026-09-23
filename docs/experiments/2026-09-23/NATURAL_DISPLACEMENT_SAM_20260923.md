@@ -284,3 +284,36 @@ Private receipt: `runs/contact-deferred-shadow-20260923-r1/receipt.json`.
 Seven added tests cover delayed propagation, expired/future/reset sources,
 superseded results and failure atomicity. Full private suite with isolated OpenCV:
 1,092 passed, one existing skip. No GPU work, paid calls or robot actions.
+
+## Real Remote SAM Arrival
+
+One warmed SAM 3.1 request was run on the existing RTX 4090 while the Mac replayed
+129 retained video frames at 30 fps. The worker used a black-image warmup, then
+received exactly one request for source observation 52 with prompt `radio` and
+official-file image acquisition. No future task image was used for warmup.
+The source RGB was already stored and hash-checked on the remote host; the SSH
+request sent its reference, not image bytes. Thus this is not cloud-upload/API
+latency or native-simulator timing.
+
+Measured warmed step: 174 ms; request/result round trip: 376 ms. The result was
+consumed at video frame 1675, twelve frames after source frame 1663. SAM returned
+zero candidates, so the shadow correctly rejected seeding and retained zero
+tracking points. The worker exited successfully, GPU memory returned to zero,
+and the attempt was not retried. This verifies real transport/empty-result
+handling, but does not exercise positive delayed catch-up with actual inference.
+
+This result separates category reacquisition from tracking: the prior ongoing
+track covered this view, whereas standalone text acquisition did not. It is not
+evidence that the mask buffer or optical flow failed. Future acquisition should
+use a separately evidenced current proposal, not repeated text retries or a
+manually invented positive identity claim.
+
+Private receipt and full worker log:
+`runs/remote-async-continuity-20260923-r1/`. No paid calls or robot actions;
+the remote worker used low priority, four scoped CPU cores and thread caps.
+No unrelated processes, packages or instance lifecycle settings were changed.
+
+A post-run decoder review added exact packed-mask payload-length validation:
+truncated bit arrays must be rejected rather than silently padded by NumPy.
+Seven decoder tests cover valid, empty, detached and malformed results. This
+fix was unit-tested without repeating the model request.
