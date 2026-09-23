@@ -93,6 +93,35 @@ the explicit scalar conversion was fixed and serialization is now regression
 tested. R1's directory remains; no native run was repeated. Five focused tests
 and Ruff pass. This follow-up adds no actions, paid calls or threshold changes.
 
+## Independent Head-Depth Replay
+
+A subsequent offline replay processes all 31 saved head RGB-D captures through
+the existing public `RGBDOdometry` contract and point-to-plane backend, with a
+fixed first-frame reference. Actual recorded sim times and source-bound camera
+calibration are retained. No simulator/global poses, new motion, model calls,
+changed thresholds or outcome-selected frames are used. Artifact loading checks
+the existing evidence hashes. Open3D 0.19.0 runs locally on the Mac CPU.
+
+All 31 updates complete without registration rejection. Maximum estimated
+camera translation from the first view is **6.1825 micrometres**, and maximum
+rotation is **0.00050431 degrees**. The largest translation difference between
+consecutive estimates divided by sim dt is **0.00022258 m/s**. This is a derived
+camera-motion diagnostic, not a qualified base-speed measurement. Median update
+processing time excluding initialization is **0.639 seconds** on this host;
+no real-time latency qualification follows.
+
+The scene evidence is consistent with very little head-camera motion during
+the hold and strengthens the readback-discrepancy hypothesis. It does not prove
+micrometre physical accuracy, constrain uncertainty under other views, separate
+torso/camera movement from base movement, or demonstrate response during real
+movement. A successful registration fit is not an independent stop certificate.
+The raw stopping result remains failed, and no production predicate changed.
+
+Private run: `runs/hold-head-odometry-20260923-r1/receipt.json`.
+SHA-256: `b1f4105140cecfdfa823c894069233dfacd96a0d2223f935ded22338c5168ec3`.
+Runner: `scripts/replay_hold_head_odometry.py`; focused Ruff passes. This actual
+31-capture replay is its execution evidence, not a broader localization test.
+
 ## Evidence And Cleanup
 
 Private run: `runs/wrist-hold-substep-20260923-r1`.
