@@ -14,8 +14,10 @@ records a fresh-capture adapter failure and its bounded correction separately
 from model quality and Phase 5 qualification.
 The subsequent [native collision-settings inspection](2026-09-23/R1PRO_NATIVE_COLLISION_SETTINGS_20260923.md)
 passes its runtime-filter scope after the approved GPU reboot: 14 symmetric
-filters and 164 enabled collider approximations. Effective contact/rest offsets,
-cooked geometry and safe motion remain unqualified. No planner exclusions changed.
+filters and 164 enabled collider approximations. Follow-up r4 measures effective
+contact offsets of 1.36-5.04 mm and zero rest offsets, with self-collision enabled
+and all 44 joint collision flags disabled. Cooked geometry and safe motion remain
+unqualified. No planner exclusions changed; private suite: 901 passed, one skip.
 
 ## 1. Executive Summary
 

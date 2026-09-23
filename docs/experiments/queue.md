@@ -72,9 +72,12 @@ only 0.46-0.51 mm. Native cooking/margins and swept-path checks remain required;
 no geometry candidate is promoted to motion authority.
 The [native collision-settings inspection](2026-09-23/R1PRO_NATIVE_COLLISION_SETTINGS_20260923.md)
 now verifies 14 symmetric runtime filters, including both narrow finger/camera
-pairs, and 164 enabled collider approximations. Contact/rest offsets remain
-unresolved: source defaults are not measurements of effective native offsets.
-No exclusions or motion gates changed; both attempts are backed up locally.
+pairs, and 164 enabled collider approximations. Follow-up r4 measures effective
+contact offsets of 1.36-5.04 mm and zero rest offsets; no PhysxCollisionAPI instances
+exist for the source's 1 mm assignment to update. All 25 legacy-only exclusions
+are accounted for by disabled connected-joint collision flags. Cooked geometry,
+changed postures and swept paths remain unqualified. No exclusions or motion
+gates changed; all attempts are backed up locally. Private suite: 901 plus one skip.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite
