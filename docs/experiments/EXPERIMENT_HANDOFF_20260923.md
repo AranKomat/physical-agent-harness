@@ -51,12 +51,12 @@ historical diagnostics are described later in this document.
 
 | Phase | Status at this snapshot | Remaining work |
 | --- | --- | --- |
-| 0. Preflight | Software/retained audit, SAM restoration and native sensor smoke passed | Restore policy/geometry-specific environments; qualify live timing and recover missing provenance where possible |
+| 0. Preflight | Software/retained audit, SAM restoration, numeric pins and native sensor smoke passed | Restore policy environment; qualify live integration and recover missing provenance where possible |
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
 | 2. Hard discovery/SAM identity and loss | CPU contracts on 10/14 cases; fresh SAM inference on four bounded cases; physical association unqualified | Native loss/reappearance/crossings, independent association and live timing; basic simulator/sensors now restored |
 | 3. Live shadow GLM discovery | Not done with V3 | Record real observation/publication clocks, current-source associations and asynchronous inventory updates |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
-| 5. Native localization, clearance and stopping | Partial diagnostics only | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
+| 5. Native localization, clearance and stopping | Partial diagnostics; fresh paused recapture consistency passes | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
 | 7. Free-space arm staging and return | Not done | Robot/TCP/collision assets, independent FK checks, measured endpoint and stop |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
@@ -72,6 +72,13 @@ passed on reserved development instance 301, with zero commanded actions/API
 calls and clean process exit. Three RGB-D cameras and the 61-D/23-D/30-Hz robot
 interface work. This does not qualify geometry, physical association or motion.
 All sensor evidence is backed up locally; the old host remains stopped.
+
+The [paused recapture follow-up](2026-09-23/PAUSED_RECAPTURE_20260923.md) adds
+three live zero-action captures after restoring geometry numeric pins. Head-depth
+pixels were identical and registered with zero displacement; this is not moving
+accuracy. Public odometry rejected equal-time recaptures without guard changes.
+The retained 33-pose replay matched prior output to numerical precision. New
+private suite snapshot: 648 passed, one skip; public runtime remains unchanged.
 
 Phase 0's private audit passed 641 checks. All 25 exported PNGs have the same
 decoded pixels as native captures, and the six API image payloads match retained

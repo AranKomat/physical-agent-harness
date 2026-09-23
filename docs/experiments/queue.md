@@ -23,6 +23,10 @@ The [native sensor restoration](2026-09-23/NATIVE_SENSOR_RESTORATION_20260923.md
 also passed on the new 4090: three RGB-D cameras, 61-D proprioception, 23-D
 action interface at 30 Hz, zero commanded actions. This is sensor readiness,
 not localization, identity or motion qualification.
+The [paused recapture diagnostic](2026-09-23/PAUSED_RECAPTURE_20260923.md)
+restores numeric pins and passes three zero-action native captures. Identical
+paused head depth registers consistently; public odometry rejects equal sim time.
+Neither result qualifies moving localization. Private suite: 648 plus one skip.
 
 ## Completed Software And Retained-Data Work
 
@@ -51,9 +55,9 @@ not localization, identity or motion qualification.
    do not reconstruct publication-time history. Restore the approved SAM weights
    or authenticated download access before fresh GPU inference. This restoration
    and the first 25-step inference diagnostic are now complete; do not repeat them
-   as if unstarted. Basic simulator/sensor restoration now passes; policy and
-   geometry-specific runtime restoration remain pending. Latest
-   public suite: 1,481 tests; Linux embodied subset: 204; private: 629 plus one skip.
+   as if unstarted. Basic simulator/sensor restoration now passes; frozen-policy
+   restoration remains pending; numeric pins are now restored. Latest
+   public suite: 1,481 tests; Linux embodied subset: 204; private: 648 plus one skip.
    The strengthened synthetic loss test checks previously valid geometry and journal
    reload. Native loss remains unqualified: retained no-center candidates do not
    exercise that transition.
