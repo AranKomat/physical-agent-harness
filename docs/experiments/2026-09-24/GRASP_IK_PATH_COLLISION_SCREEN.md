@@ -1,5 +1,9 @@
 # Grasp IK Path Collision Screen
 
+**INVALIDATED AS GRASP EVIDENCE 2026-09-24:** these paths came from the
+frame-invalid IK r1. Their sampled collision counts describe those joint
+paths, not paths to the intended grasps. See `GRASP_FRAME_CORRECTION.md`.
+
 This Phase 9A follow-up checked the measured-to-goal joint-space paths for all
 eight numerical torso-plus-arm IK solutions. Each path was sampled at 65
 postures and tested against 11,003 reviewed authored convex-hull mesh pairs,

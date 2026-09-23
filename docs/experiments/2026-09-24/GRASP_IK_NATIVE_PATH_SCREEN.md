@@ -1,5 +1,10 @@
 # Grasp IK Native-Cooked Path Screen
 
+**INVALIDATED AS GRASP EVIDENCE 2026-09-24:** the source IK r1 omitted the
+camera-to-base transform and mixed TCP/gripper frames. Neither native-path
+attempt qualifies paths to the actual grasp proposals. See
+`GRASP_FRAME_CORRECTION.md`. Historical counts below remain recorded only.
+
 The corrected Phase 9A follow-up replayed all eight measured-to-IK paths using
 the retained native convex callback representations. It tested 65 postures per
 candidate against 11,003 pairs after applying both the 14 explicit filters and

@@ -86,29 +86,14 @@ qualification for this corridor; a different camera configuration or return
 trajectory is needed. This is a sampled-model limitation, not physical
 impossibility and not permission for exploratory motion.
 The [GraspGen-X torso reach screen](2026-09-24/GRASP_TORSO_REACH_SCREEN.md)
-tests whether torso staging rescues the eight retained grasp proposals. Only
-2/8 enter the conservative arm reach radius, and neither has IK, orientation,
-collision, TCP, or contact qualification. Torso staging is not a general fix;
-keep all proposals shadow-only and require close-range reacquisition plus full
-feasibility checks before Phase 9 execution.
-The follow-up [torso-plus-arm pose IK screen](2026-09-24/GRASP_POSE_IK_SCREEN.md)
-corrects the reach-only interpretation: all 8/8 retained poses have numerical
-joint-limit-valid solutions with the pinned grasp-to-TCP transform. This is
-still not collision-aware IK or a path certificate; the next Phase 9A gate is
-full-body collision/swept-path validation, followed by close-range
-reacquisition.
-The [sampled IK-path collision screen](2026-09-24/GRASP_IK_PATH_COLLISION_SCREEN.md)
-then tested all eight measured-to-goal paths at 65 postures against 11,003
-authored hull pairs each. All were intersection-free with 22.65--22.95 mm
-minimum sampled separation. Native cooked geometry, external scene/floor
-clearance, continuous swept bounds, TCP/contact calibration, and close-range
-reacquisition remain open; no execution is authorized.
-The corrected [native-cooked path screen](2026-09-24/GRASP_IK_NATIVE_PATH_SCREEN.md)
-also finds zero sampled intersections for all eight paths, with 22.65--23.52 mm
-minimum separation after applying the complete explicit and connected-joint
-filter inventory. Its first attempt is superseded because it omitted connected
-exclusions. Wheel spheres, external scene/floor clearance and continuous
-swept-path proof remain open.
+has a corrected count of 1/8 within the radius, not 2/8; candidate 6 has a
+positive excess. The subsequent 8/8 IK claim and both path-collision follow-ups
+are **invalidated as grasp feasibility evidence**: the IK runner omitted the
+source-camera-to-base transform and compared a TCP goal to gripper-link FK.
+Those path tests describe unrelated endpoints, not the intended grasp poses.
+See [the frame correction](2026-09-24/GRASP_FRAME_CORRECTION.md).
+Keep all proposals shadow-only. No grasp, external-clearance, or execution gate
+has passed on these invalidated results.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution

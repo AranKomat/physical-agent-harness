@@ -8,11 +8,15 @@ reach radius.
 
 ## Result
 
-Only 2/8 proposals fall inside the conservative reach-radius screen when all
-four torso joints are allowed to vary. Their residual margins are -23.7 mm and
--12.8 mm. The other six remain outside by 46.0--225.1 mm. The screen therefore
+Only 1/8 proposals falls inside the conservative reach-radius screen when all
+four torso joints are allowed to vary: candidate 2, residual -23.7 mm.
+Candidate 6 has a positive 12.8 mm excess, not a negative margin. The other
+seven remain outside in this numerical search by 12.8--225.1 mm. The screen therefore
 does not support treating torso staging as a general solution for the retained
 proposal set.
+
+Correction: the original report and user-facing summary incorrectly counted
+candidate 6 as inside. The receipt itself was unchanged and has the correct sign.
 
 Receipt: `internal/physical-ai-lab/runs/grasp-torso-reach-20260924-r1-receipt.json`  
 Receipt SHA-256: `4e5bb338882873238882aa2e8c266379e61b3e6a66b3f64fa2ceef5b54b1ca89`

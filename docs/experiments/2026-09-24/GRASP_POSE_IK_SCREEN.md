@@ -1,5 +1,11 @@
 # GraspGen-X Pose IK Screen
 
+**INVALIDATED 2026-09-24:** r1 compared source-camera-frame targets to
+base-frame FK and applied a TCP offset while solving for the gripper link.
+The 8/8 result below does not establish reachability of the actual proposals.
+Do not use r1 solutions for feasibility, collision qualification, or execution.
+See `GRASP_FRAME_CORRECTION.md` for the corrected experiment.
+
 This Phase 9A follow-up evaluates the eight retained GraspGen-X poses with a
 bounded numerical torso-plus-left-arm IK search. It uses the retained measured
 R1Pro posture, URDF joint limits, and the pinned candidate grasp-to-TCP
