@@ -57,6 +57,11 @@ now distinguishes all 10 ramp windows from all 30 stationary windows using the
 existing wrist threshold and position differences. Raw full-window speed rejects
 all 30 stationary windows. This is diagnostic evidence, not a replacement stop
 authority: independent base evidence and measurement uncertainty remain open.
+The [stop-observation audit](2026-09-23/STOP_OBSERVATION_CONTRACT_20260923.md)
+also found and removed unconditional stop acknowledgement in the legacy private
+radio driver. Historical cleanup acknowledgements are not physical stopping
+evidence. The next native protocol needs complete joint/base measurement and
+uncertainty qualification, not an identical wrist-only repeat.
 
 ## 1. Executive Summary
 
