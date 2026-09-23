@@ -38,7 +38,9 @@ Current working choices, not globally qualified winners:
 - GraspGenX and cuRobo have software interfaces, not qualified native R1Pro
   manipulation pipelines. All six compiled capability templates remain unpromoted.
 
-The immediate next experiment is **hard discovery-to-SAM association/loss replay**.
+The perception follow-up is **hard discovery-to-SAM association/loss replay**;
+robot-only collision-model qualification is also in progress under the approved
+isolated cuRobo preparation, without motion.
 Retained discovery -> strict V3 contracts -> inventory -> compact context now
 passes its declared offline scope. Do not restart policy searches or add another
 framework first.
@@ -58,7 +60,7 @@ historical diagnostics are described later in this document.
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial diagnostics; fresh paused recapture consistency passes | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
-| 7. Free-space arm staging and return | GPU robot-only FK passes 37 numerical configurations; execution not done | Conservative collision assets, exact held-joint planning configuration, legal scene, measured endpoint and stop |
+| 7. Free-space arm staging and return | GPU robot-only FK passes 37 configurations; enclosing collision candidate has excessive proxy overlap; execution not done | Tighter qualified collision assets, exact held-joint planning configuration, legal scene, measured endpoint and stop |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
 | 9. Compiler manipulation | Contracts and negative replay only | Positive sensor-grounded candidate, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
@@ -87,6 +89,13 @@ frames using generated asset offsets. Collision/planning remain unqualified;
 the known sphere undercoverage is unresolved. A native-schema parser error in
 attempt r1 was fixed before declared r2; both are retained. Latest private suite:
 687 passed, one skip. No new robot actions or paid calls.
+
+The subsequent [authored collision-envelope audit](2026-09-23/R1PRO_COLLISION_ENVELOPE_20260923.md)
+encloses all 164 meshes / 9,639 vertices, but finds 128 non-exempt sphere overlaps
+across 22 link pairs, all with disjoint authored-mesh AABBs. The candidate is not
+adopted for planning. No exclusions changed; native cooked shapes remain
+unqualified. Latest private suite: 730 passed, one existing skip. CPU-only work,
+no motion or paid calls.
 
 Phase 0's private audit passed 641 checks. All 25 exported PNGs have the same
 decoded pixels as native captures, and the six API image payloads match retained

@@ -31,6 +31,10 @@ The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
 remain unqualified. Latest private suite: 687 passed, one skip.
+The [authored collision-envelope audit](2026-09-23/R1PRO_COLLISION_ENVELOPE_20260923.md)
+encloses all 164 meshes but finds 128 proxy overlaps with disjoint authored mesh
+AABBs. This candidate is not adopted for planning; exclusions are unchanged.
+Native cooking remains unqualified. Latest private suite: 730 passed, one skip.
 
 ## Completed Software And Retained-Data Work
 
@@ -61,7 +65,7 @@ remain unqualified. Latest private suite: 687 passed, one skip.
    and the first 25-step inference diagnostic are now complete; do not repeat them
    as if unstarted. Basic simulator/sensor restoration now passes; frozen-policy
    restoration remains pending; numeric pins are now restored. Latest
-   public suite: 1,481 tests; Linux embodied subset: 204; private: 687 plus one skip.
+   public suite: 1,481 tests; Linux embodied subset: 204; private: 730 plus one skip.
    The strengthened synthetic loss test checks previously valid geometry and journal
    reload. Native loss remains unqualified: retained no-center candidates do not
    exercise that transition.
