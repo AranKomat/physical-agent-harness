@@ -108,6 +108,10 @@ The [offline velocity analysis](2026-09-23/WRIST_VELOCITY_ANALYSIS_20260923.md)
 confirms position/raw-velocity disagreement at 30 Hz but cannot exclude substep
 oscillation. A separately approved, physics-step stationary-hold diagnostic is
 next; no threshold changes or new motion were made by the offline analysis.
+The separately approved [30-action hold diagnostic](2026-09-23/WRIST_HOLD_SUBSTEP_20260923.md)
+is now complete: 120 physics samples confirm raw-versus-position-derived wrist
+velocity disagreement, but final stop acknowledgement still fails. No thresholds
+changed. Moving/braking estimator validation and base stopping remain open.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite

@@ -43,6 +43,10 @@ The [offline velocity follow-up](2026-09-23/WRIST_VELOCITY_ANALYSIS_20260923.md)
 validates all 35 action intervals, but cannot distinguish substep oscillation
 from readback behavior. No new motion or threshold changes; the proposed
 physics-step hold-only diagnostic requires separate approval.
+That approval subsequently arrived; the [30-action diagnostic](2026-09-23/WRIST_HOLD_SUBSTEP_20260923.md)
+completed with 120 physics samples and no callback errors. Raw wrist velocity
+differs substantially from both matching position-derived estimates. Final stop
+still fails; moving/braking estimator validation and base stopping remain open.
 
 ## 1. Executive Summary
 
