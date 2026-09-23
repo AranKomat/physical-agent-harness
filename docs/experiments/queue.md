@@ -91,6 +91,12 @@ tests whether torso staging rescues the eight retained grasp proposals. Only
 collision, TCP, or contact qualification. Torso staging is not a general fix;
 keep all proposals shadow-only and require close-range reacquisition plus full
 feasibility checks before Phase 9 execution.
+The follow-up [torso-plus-arm pose IK screen](2026-09-24/GRASP_POSE_IK_SCREEN.md)
+corrects the reach-only interpretation: all 8/8 retained poses have numerical
+joint-limit-valid solutions with the pinned grasp-to-TCP transform. This is
+still not collision-aware IK or a path certificate; the next Phase 9A gate is
+full-body collision/swept-path validation, followed by close-range
+reacquisition.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
