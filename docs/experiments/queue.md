@@ -103,6 +103,12 @@ authored hull pairs each. All were intersection-free with 22.65--22.95 mm
 minimum sampled separation. Native cooked geometry, external scene/floor
 clearance, continuous swept bounds, TCP/contact calibration, and close-range
 reacquisition remain open; no execution is authorized.
+The corrected [native-cooked path screen](2026-09-24/GRASP_IK_NATIVE_PATH_SCREEN.md)
+also finds zero sampled intersections for all eight paths, with 22.65--23.52 mm
+minimum separation after applying the complete explicit and connected-joint
+filter inventory. Its first attempt is superseded because it omitted connected
+exclusions. Wheel spheres, external scene/floor clearance and continuous
+swept-path proof remain open.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
