@@ -70,6 +70,11 @@ The [authored convex audit](2026-09-23/R1PRO_AUTHORED_CONVEX_20260923.md)
 finds no intersections in 11,259 eligible mesh pairs, but finger/camera gaps are
 only 0.46-0.51 mm. Native cooking/margins and swept-path checks remain required;
 no geometry candidate is promoted to motion authority.
+The [native collision-settings inspection](2026-09-23/R1PRO_NATIVE_COLLISION_SETTINGS_20260923.md)
+now verifies 14 symmetric runtime filters, including both narrow finger/camera
+pairs, and 164 enabled collider approximations. Contact/rest offsets remain
+unresolved: source defaults are not measurements of effective native offsets.
+No exclusions or motion gates changed; both attempts are backed up locally.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite

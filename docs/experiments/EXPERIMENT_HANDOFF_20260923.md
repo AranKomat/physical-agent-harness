@@ -12,6 +12,10 @@ Historical results below retain their original limitations and evaluation scope.
 The latest [stationary SAM join](2026-09-23/STATIONARY_SAM_JOIN_20260923.md)
 records a fresh-capture adapter failure and its bounded correction separately
 from model quality and Phase 5 qualification.
+The subsequent [native collision-settings inspection](2026-09-23/R1PRO_NATIVE_COLLISION_SETTINGS_20260923.md)
+passes its runtime-filter scope after the approved GPU reboot: 14 symmetric
+filters and 164 enabled collider approximations. Effective contact/rest offsets,
+cooked geometry and safe motion remain unqualified. No planner exclusions changed.
 
 ## 1. Executive Summary
 
