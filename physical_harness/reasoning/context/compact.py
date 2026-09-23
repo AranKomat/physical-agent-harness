@@ -16,8 +16,8 @@ from physical_harness.core.actions import (
     strict_loads,
     text,
 )
-from physical_harness.core.discovery import FrameRef, immutable_json
 from physical_harness.core.tasks import FactPacket
+from physical_harness.perception.contracts import FrameRef, immutable_json
 from physical_harness.planning.actions.compiler import Catalog
 
 

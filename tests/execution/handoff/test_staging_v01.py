@@ -3,8 +3,8 @@ from dataclasses import replace
 
 import pytest
 
-from physical_harness.core.handoff import Snapshot
 from physical_harness.execution.handoff.classical import BasePose
+from physical_harness.execution.handoff.contracts import Snapshot
 from physical_harness.planning.staging import (
     StagingConfig,
     resolve_staging_pose,

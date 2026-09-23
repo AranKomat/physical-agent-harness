@@ -12,8 +12,8 @@ import math
 from dataclasses import dataclass
 from typing import Callable
 
-from physical_harness.core.handoff import Snapshot, identifiers, integer, real, text
 from physical_harness.execution.handoff.classical import BasePose
+from physical_harness.execution.handoff.contracts import Snapshot, identifiers, integer, real, text
 
 
 def _vector(values, name, n):

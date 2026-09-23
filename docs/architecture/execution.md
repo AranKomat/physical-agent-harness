@@ -11,6 +11,11 @@
 The lower levels cannot establish higher-level success merely by finishing.
 The graph ledger must verify its declared postconditions independently.
 
+For new task-facing APIs, **capability** is the reusable-behavior term. Existing
+`CapabilityMacro` names an artifact of a capability, not another level in this
+hierarchy. Recorded `skill`, `macro`, `route` and `phase` fields retain their wire
+meaning; routes/phases describe lower-level handoffs, not parallel task planners.
+
 `execution.actions.ActionExecutor` owns admitted programs through the existing
 JobManager. `execution.handoff` retains sequential classical/frozen-policy phases
 for matched experiments; it is a lower-level backend protocol, not another task

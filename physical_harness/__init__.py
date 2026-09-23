@@ -15,8 +15,8 @@ from physical_harness.core.contracts import (
     VerificationVerdict,
 )
 from physical_harness.core.events import EventType, RuntimeEvent
-from physical_harness.core.runtime import HarnessRuntime
 from physical_harness.perception.localization import LocalizationLost, RGBDOdometry
+from physical_harness.reasoning.runtime import HarnessRuntime
 
 __all__ = [
     "RuntimeEvent",

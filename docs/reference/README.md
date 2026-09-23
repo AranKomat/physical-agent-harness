@@ -1,5 +1,8 @@
 # Historical Specifications
 
+> Historical implementation handoffs. Do not use these to determine current
+> module paths or architecture. Start with the canonical overview instead.
+
 These milestone specs, integration reports and the original BUILD_SPEC are
 preserved design/provenance records. They are not parallel active architectures.
 The [canonical overview](../architecture/overview.md) supersedes their directory

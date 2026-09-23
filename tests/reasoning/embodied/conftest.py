@@ -6,8 +6,8 @@ import pytest
 from PIL import Image
 
 from physical_harness.core.actions import Basis, Gripper, Pose
-from physical_harness.core.discovery import DiscoveryRequest, FrameRef, RegionRef
 from physical_harness.integrations.experiment.journal import Journal
+from physical_harness.perception.contracts import DiscoveryRequest, FrameRef, RegionRef
 
 
 def make_basis(seq=0, *, episode='ep', wall=100.0, sim=0.0, domain='fixture', **changes):

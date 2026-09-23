@@ -11,8 +11,8 @@ import time
 from dataclasses import dataclass
 from typing import Callable
 
-from physical_harness.core.handoff import integer, real
 from physical_harness.execution.handoff.classical import JointLimits, vector
+from physical_harness.execution.handoff.contracts import integer, real
 
 
 @dataclass(frozen=True)

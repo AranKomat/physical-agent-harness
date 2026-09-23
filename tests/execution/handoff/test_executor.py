@@ -4,7 +4,7 @@ import pytest
 
 from experiments.fixtures.handoff import FixtureWorld, run_fixture
 from physical_harness.core.contracts import SkillRequest
-from physical_harness.core.handoff import (
+from physical_harness.execution.handoff.contracts import (
     ROBOT_RESOURCES,
     Check,
     Regime,

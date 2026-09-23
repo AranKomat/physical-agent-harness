@@ -12,7 +12,12 @@ import re
 from dataclasses import dataclass
 
 from physical_harness.core.actions import Basis, digest, ids, integer, number, plain, text, unit
-from physical_harness.core.discovery import DiscoveryResult, FrameRef, Retention, frame_from_dict
+from physical_harness.perception.contracts import (
+    DiscoveryResult,
+    FrameRef,
+    Retention,
+    frame_from_dict,
+)
 
 
 @dataclass(frozen=True)

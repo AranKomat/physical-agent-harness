@@ -14,7 +14,7 @@ separates tested software from unqualified native ports.
 
 ```text
 physical_harness/
-  core/          evidence, events, lineage, jobs, coordination
+  core/          evidence, events, lineage, jobs, contracts
   perception/    discovery, identity, geometry, localization
   world/         state, memory, inventory, topology, caches
   planning/      action catalogs, graphs, capabilities, navigation

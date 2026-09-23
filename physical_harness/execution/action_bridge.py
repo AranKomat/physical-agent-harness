@@ -16,7 +16,7 @@ from physical_harness.planning.actions.compiler import Catalog
 def basis_from_snapshot(snapshot, *, execution_epoch: int, robot_fingerprint: str,
                         calibration_fingerprint: str, evidence_ids: tuple[str, ...],
                         domain: str = "behavior_sim") -> Basis:
-    from physical_harness.core.handoff import Snapshot
+    from physical_harness.execution.handoff.contracts import Snapshot
     if not isinstance(snapshot, Snapshot):
         raise ValueError("Use the existing validated Hybrid Snapshot")
     return Basis(snapshot.episode, snapshot.observation_id, snapshot.fingerprint,
@@ -120,7 +120,7 @@ class FrozenPolicyPort:
 
     def __call__(self, program, index, before, deadline, cancelled):
         from physical_harness.core.contracts import SkillRequest
-        from physical_harness.core.handoff import ResetReceipt, ResetRequest
+        from physical_harness.execution.handoff.contracts import ResetReceipt, ResetRequest
         if program.steps[index].kind != Primitive.POLICY:
             raise ValueError("FrozenPolicyPort handles policy steps only")
         if self.current_policy() != self.identity:

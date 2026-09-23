@@ -9,7 +9,7 @@ import math
 from dataclasses import dataclass
 
 from physical_harness.core.actions import Pose, ids, integer, number, plain
-from physical_harness.core.discovery import FrameRef, bounded_tuple
+from physical_harness.perception.contracts import FrameRef, bounded_tuple
 
 
 @dataclass(frozen=True)

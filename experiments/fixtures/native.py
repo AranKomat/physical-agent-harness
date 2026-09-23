@@ -5,10 +5,10 @@ from dataclasses import asdict
 
 from physical_harness.core.contracts import SkillRequest
 from physical_harness.core.events import EventBus, EventType, RuntimeEvent
-from physical_harness.core.ledger import TaskLedger, TaskPredicate
-from physical_harness.core.runtime import HarnessRuntime
+from physical_harness.reasoning.runtime import HarnessRuntime
 from physical_harness.reasoning.selection import ExecutiveLoop
 from physical_harness.reasoning.verification import VerificationRouter
+from physical_harness.world.ledger import TaskLedger, TaskPredicate
 
 
 class UnknownRadioWorld:

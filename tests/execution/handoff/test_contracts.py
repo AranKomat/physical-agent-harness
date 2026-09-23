@@ -4,7 +4,7 @@ from dataclasses import replace
 import pytest
 
 from experiments.fixtures.handoff import FixtureWorld
-from physical_harness.core.handoff import (
+from physical_harness.execution.handoff.contracts import (
     Check,
     GateReport,
     Phase,

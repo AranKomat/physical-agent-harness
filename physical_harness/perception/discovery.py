@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from physical_harness.core.actions import encode, integer, plain, strict_loads, text
-from physical_harness.core.discovery import (
+from physical_harness.perception.contracts import (
     AttentionUpdate,
     DiscoveryRequest,
     DiscoveryResult,
@@ -262,7 +262,7 @@ def recover_completed_results(journal, *, committed_request_ids: frozenset[str] 
     The caller explicitly accepts results on the main writer at recovery-time
     availability. Ambiguous/failed calls are never retried or refunded here.
     """
-    from physical_harness.core.discovery import request_from_dict
+    from physical_harness.perception.contracts import request_from_dict
     values = []
     for row in journal.records(AsyncDiscovery.KIND):
         if row["event"] != "terminal" or row.get("result") is None or row["request_id"] in committed_request_ids:

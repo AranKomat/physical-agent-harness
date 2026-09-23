@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 
 from experiments.fixtures.handoff import run_fixture
-from physical_harness.core.handoff import encoded
+from physical_harness.execution.handoff.contracts import encoded
 
 
 def main():

@@ -8,8 +8,8 @@ import subprocess
 import time
 import uuid
 
-from physical_harness.core.action_serde import proposal_from_dict
 from physical_harness.core.actions import Verb, encode, integer, number, plain, strict_loads
+from physical_harness.integrations.grasp_serde import proposal_from_dict
 
 
 class GraspWorkerClient:

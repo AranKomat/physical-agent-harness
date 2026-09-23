@@ -88,3 +88,33 @@ removed after the source move.
 The full private-lab suite passes: **563 passed, 1 existing skip**, including the
 25 SAM streaming/GLM/LocateAnything checks. Updating import paths does not qualify
 a live V3 pipeline or change any provider/robot permission.
+
+## Follow-Up: Ownership Boundaries
+
+Review of `35bc2b6` identified domain-specific contracts and coordination still in
+core. A follow-up moves discovery contracts to `perception.contracts`, discovery
+coordination to `perception.discovery_coordinator`, the read-only identity view
+to `perception.identity`, and planner qualification wrappers to
+`execution.planner_bridge`. Function behavior and receipt/wire values are unchanged.
+
+The same audit moves the existing runtime to `reasoning.runtime`, the state-backed
+ledger to `world.ledger`, compute accounting to `reasoning.compute`, grasp worker
+serialization to `integrations.grasp_serde`, and handoff contracts to
+`execution.handoff.contracts`. Core is now a source-level leaf domain. This is
+ownership cleanup, not a new composition framework or capability implementation.
+The migration inventory includes these follow-up paths; the earlier table/counts
+above describe the initial consolidation.
+
+The [dependency policy](overview.md#enforced-dependency-boundaries) is enforced by
+AST tests. Its default DAG has no core exceptions. Twelve exact existing bridges
+outside core remain documented debt, not general permission to import upwards.
+Recorded formats, identity authority, actuator gates, provider budgets and the
+experiment queue are unchanged. Root convenience exports remain for now; domain
+code cannot use them to conceal dependencies.
+
+Follow-up validation: **1,451 repository tests pass** locally and on the Linux
+host, including 33 import-boundary tests. Ruff passes on both hosts; the local
+unified validator also passes all five synthetic CLI fixtures. The private-lab
+suite remains **563 passed, 1 existing skip**. The five relocated coordinator
+definitions are AST-identical to their originals. These are software-only checks,
+not evidence of live perception, planner, or robot qualification.

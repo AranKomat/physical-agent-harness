@@ -12,8 +12,8 @@ import sys
 import time
 from pathlib import Path
 
-from physical_harness.core.action_serde import cloud_from_dict, gripper_from_dict
 from physical_harness.core.actions import encode, integer, number, plain, strict_loads, text
+from physical_harness.integrations.grasp_serde import cloud_from_dict, gripper_from_dict
 from physical_harness.integrations.graspgenx import LocalAssets, load_local
 
 MAX_BYTES = 16000000

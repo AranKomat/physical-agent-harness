@@ -1,4 +1,4 @@
-from physical_harness.core.handoff import Regime
+from physical_harness.execution.handoff.contracts import Regime
 from physical_harness.execution.handoff.integration import policy_exposure_diagnostic_routes
 
 

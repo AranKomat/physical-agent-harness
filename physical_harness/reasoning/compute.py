@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from physical_harness.core.actions import digest, ids, integer, number, plain, text
-from physical_harness.core.discovery import FrameRef
+from physical_harness.perception.contracts import FrameRef
 
 
 @dataclass(frozen=True)
@@ -56,7 +56,7 @@ class ComputeReceipt:
             len(self.input_image_ids) == len(self.image_contents) == len(self.image_pixels)
         ):
             raise ValueError("Image IDs/hashes/pixel counts must align")
-        from physical_harness.core.discovery import sha256
+        from physical_harness.perception.contracts import sha256
         for s, p in zip(self.image_contents, self.image_pixels):
             sha256(s)
             integer(p, low=1, high=268435456)

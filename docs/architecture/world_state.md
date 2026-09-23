@@ -13,7 +13,7 @@ kind of evidence treated as equally current:
 
 These are different projections of source evidence. The discovery coordinator
 must not write current metric state or identity merely because GLM names an
-object. `core.coordinator.focus_identity_view` exposes this distinction explicitly.
+object. `perception.identity.focus_identity_view` exposes this distinction explicitly.
 
 `core.evidence.EvidenceStore` and the existing memory media path own artifact
 bytes. Inventory crops retain parent asset/hash/ROI rather than inventing a second

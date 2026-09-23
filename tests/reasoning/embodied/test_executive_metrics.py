@@ -16,7 +16,6 @@ from physical_harness.core.actions import (
     Step,
     Verb,
 )
-from physical_harness.core.compute import ComputeLedger, ComputeReceipt, receipt_images
 from physical_harness.core.events import BoundaryEvent
 from physical_harness.core.tasks import Fact, FactPacket
 from physical_harness.integrations.sensor_contracts import (
@@ -25,6 +24,7 @@ from physical_harness.integrations.sensor_contracts import (
     admitted_sensors,
 )
 from physical_harness.planning.actions.compiler import Catalog, CompiledAction
+from physical_harness.reasoning.compute import ComputeLedger, ComputeReceipt, receipt_images
 from physical_harness.reasoning.context.compact import (
     ContextBudget,
     ContextItem,

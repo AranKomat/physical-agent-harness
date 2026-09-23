@@ -9,7 +9,14 @@ import math
 from dataclasses import asdict
 
 from physical_harness.core.contracts import SkillReceipt, SkillRequest
-from physical_harness.core.handoff import (
+from physical_harness.execution.handoff.classical import (
+    BasePose,
+    HolonomicNavigation,
+    JointLimits,
+    JointTransit,
+    StepPort,
+)
+from physical_harness.execution.handoff.contracts import (
     Check,
     GateReport,
     Phase,
@@ -19,13 +26,6 @@ from physical_harness.core.handoff import (
     ResetReceipt,
     Route,
     Snapshot,
-)
-from physical_harness.execution.handoff.classical import (
-    BasePose,
-    HolonomicNavigation,
-    JointLimits,
-    JointTransit,
-    StepPort,
 )
 from physical_harness.execution.handoff.executor import Backend, HybridExecutor
 

@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from physical_harness.core.discovery import ValueHints, validate_box
+from physical_harness.perception.contracts import ValueHints, validate_box
 from physical_harness.perception.discovery import (
     AsyncDiscovery,
     ExistingModelDiscovery,

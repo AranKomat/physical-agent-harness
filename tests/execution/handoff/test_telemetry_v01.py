@@ -4,7 +4,7 @@ import pytest
 
 from experiments.fixtures.handoff import FixtureWorld
 from physical_harness.core.contracts import SkillRequest
-from physical_harness.core.handoff import Phase, Regime, Route, Snapshot
+from physical_harness.execution.handoff.contracts import Phase, Regime, Route, Snapshot
 from physical_harness.execution.handoff.telemetry import (
     HandoffTelemetry,
     paused_world_compatibility,
@@ -58,7 +58,7 @@ def test_paused_world_allows_new_capture_id_but_not_state_change():
     env["rgb_refs"]["head"] = "fresh-rgb"
     env["depth_refs"]["head"] = "fresh-depth"
     env["estimated_pose"]["evidence_ids"] = ["fresh-capture"]
-    from physical_harness.core.handoff import Snapshot
+    from physical_harness.execution.handoff.contracts import Snapshot
     b = Snapshot.from_envelope(
         env, captured_wall=a.captured_wall + 30,
         frame_epoch=a.frame_epoch, geometry_revision=a.geometry_revision,

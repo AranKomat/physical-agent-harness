@@ -5,12 +5,12 @@ import numpy as np
 import pytest
 
 from physical_harness.core.actions import Check, Pose, Primitive
-from physical_harness.core.coordinator import (
+from physical_harness.execution.actions import StepReview
+from physical_harness.execution.planner_bridge import (
     attach_free_space_planner,
     enforce_embodied_checks,
     with_planner_requirements,
 )
-from physical_harness.execution.actions import StepReview
 from physical_harness.execution.servo import (
     JointSample,
     ServoLimits,

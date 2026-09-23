@@ -7,10 +7,15 @@ import pytest
 
 from experiments.fixtures.embodied import run_demo
 from physical_harness.core.actions import Pose
-from physical_harness.core.coordinator import DiscoveryCoordinator, focus_identity_view
 from physical_harness.integrations.curobo import verify_curobo_checkout
 from physical_harness.perception.discovery import AsyncDiscovery
-from physical_harness.perception.identity import IdentityLedger, SemanticClaim, Tracklet
+from physical_harness.perception.discovery_coordinator import DiscoveryCoordinator
+from physical_harness.perception.identity import (
+    IdentityLedger,
+    SemanticClaim,
+    Tracklet,
+    focus_identity_view,
+)
 from physical_harness.perception.keyframes import SemanticKeyframes, ViewSample
 from physical_harness.planning.map_tools import MapTool, place_destination, rank_frontiers
 from physical_harness.reasoning.executive import ExecutiveCadence

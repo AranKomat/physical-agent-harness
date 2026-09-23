@@ -3,7 +3,7 @@ from dataclasses import replace
 import pytest
 
 from experiments.fixtures.handoff import FixtureWorld
-from physical_harness.core.handoff import Qualification, Regime
+from physical_harness.execution.handoff.contracts import Qualification, Regime
 from physical_harness.execution.handoff.executor import HybridExecutor
 from physical_harness.execution.handoff.integration import (
     ablation_routes,

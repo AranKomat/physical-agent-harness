@@ -294,3 +294,16 @@ class IdentityLedger:
             import json
             world.update(entity, name, json.dumps(value, sort_keys=True), evidence_id,
                          epistemic="inferred")
+
+
+def focus_identity_view(identity, entity: str, current: Basis) -> dict:
+    """Current geometry only through existing IdentityLedger.binding; no label-as-pose."""
+    state = identity.state(entity)
+    try:
+        binding = identity.binding(entity, current)
+        return {"entity": entity, "current_binding": binding, "current_geometry_available": True}
+    except PermissionError:
+        return {"entity": entity, "current_binding": None, "current_geometry_available": False,
+                "remembered_semantics": state["canonical"], "visibility": state["visibility"],
+                "conflicts": state["conflicts"], "association": state["association"],
+                "notice": "Reobserve/reassociate before action; historical coordinates are not current."}

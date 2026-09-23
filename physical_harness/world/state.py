@@ -284,7 +284,7 @@ class WorldState:
         bindings: tuple[tuple[str, str, str], ...] = (),
     ) -> None:
         if dependencies or bindings:
-            from physical_harness.core.ledger import TaskLedger, TaskPredicate
+            from physical_harness.world.ledger import TaskLedger, TaskPredicate
 
             TaskLedger(self).add(TaskPredicate(identifier, goal, dependencies, bindings))
             return

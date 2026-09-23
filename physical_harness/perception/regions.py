@@ -7,7 +7,7 @@ import math
 from dataclasses import dataclass
 
 from physical_harness.core.actions import Basis, digest, ids, number, text
-from physical_harness.core.discovery import FrameRef, validate_box
+from physical_harness.perception.contracts import FrameRef, validate_box
 
 
 @dataclass(frozen=True)

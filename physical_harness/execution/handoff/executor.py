@@ -13,7 +13,8 @@ from dataclasses import asdict, dataclass
 from typing import Callable
 
 from physical_harness.core.contracts import SkillReceipt, SkillRequest
-from physical_harness.core.handoff import (
+from physical_harness.core.jobs import JobManager
+from physical_harness.execution.handoff.contracts import (
     ROBOT_RESOURCES,
     GateReport,
     Phase,
@@ -30,7 +31,6 @@ from physical_harness.core.handoff import (
     real,
     text,
 )
-from physical_harness.core.jobs import JobManager
 from physical_harness.execution.handoff.telemetry import HandoffTelemetry, telemetry_payload
 
 

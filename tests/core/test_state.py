@@ -2,7 +2,7 @@ import sqlite3
 
 import pytest
 
-from physical_harness.core.ledger import TaskLedger, TaskPredicate
+from physical_harness.world.ledger import TaskLedger, TaskPredicate
 from physical_harness.world.state import WorldState
 
 

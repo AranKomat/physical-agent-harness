@@ -3,6 +3,8 @@
 Updated 2026-09-23. Consolidation adds no capability and authorizes no new spend
 or motion. The detailed [earlier qualification queue](qualification_queue.md)
 and dated reports remain evidence; this page is the current entry point.
+For a standalone account of completed trials, caveats and unperformed stages, read
+the [experiment handoff](EXPERIMENT_HANDOFF_20260923.md).
 
 ## Completed Software And Retained-Data Work
 
@@ -16,9 +18,11 @@ and dated reports remain evidence; this page is the current entry point.
 
 ## Next, In Order
 
-1. Consolidation checks complete: 1,418 repository tests on Mac/Linux, Ruff,
-   five fixture CLIs, isolated wheel and source-link checks; private suite
-   563 passed, one existing skip. No model calls.
+1. Consolidation and ownership checks complete: 1,451 repository tests on
+   Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite
+   563 passed, one existing skip. The initial 1,418-test consolidation also
+   passed an isolated wheel check; that check was not rerun after the ownership
+   follow-up. No model calls.
 2. Replay retained discovery through strict deltas, historical inventory and
    compact context. Check old-task attention, out-of-order results, no geometry
    writes, and no authority from semantic confidence.

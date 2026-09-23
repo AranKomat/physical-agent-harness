@@ -21,13 +21,13 @@ from physical_harness.core.actions import (
     Step,
     Verb,
 )
-from physical_harness.core.coordinator import DiscoveryCoordinator
-from physical_harness.core.discovery import FrameRef, RegionRef
 from physical_harness.core.jobs import JobManager
 from physical_harness.core.tasks import Fact, FactPacket
 from physical_harness.execution.actions import ActionExecutor, Driver, StepReceipt, StepReview
 from physical_harness.integrations.experiment.journal import Journal
+from physical_harness.perception.contracts import FrameRef, RegionRef
 from physical_harness.perception.discovery import AsyncDiscovery
+from physical_harness.perception.discovery_coordinator import DiscoveryCoordinator
 from physical_harness.perception.keyframes import (
     SemanticKeyframes,
     ViewSample,

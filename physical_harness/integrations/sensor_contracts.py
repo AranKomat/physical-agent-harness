@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from physical_harness.core.actions import ids, integer, text
-from physical_harness.core.discovery import FrameRef
+from physical_harness.perception.contracts import FrameRef
 
 
 @dataclass(frozen=True)

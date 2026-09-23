@@ -15,8 +15,8 @@ from physical_harness.core.actions import (
     plain,
     strict_loads,
 )
-from physical_harness.core.discovery import fields
 from physical_harness.core.events import BOUNDARY_WAKE_KINDS, BoundaryEvent
+from physical_harness.perception.contracts import fields
 from physical_harness.planning.actions.compiler import Catalog
 from physical_harness.reasoning.context.compact import ExecutivePacket
 

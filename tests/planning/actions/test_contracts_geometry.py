@@ -4,12 +4,12 @@ import numpy as np
 import pytest
 
 from experiments.fixtures.actions import Fixture
-from physical_harness.core.action_serde import (
+from physical_harness.core.actions import Pose, number, plain, strict_loads
+from physical_harness.integrations.grasp_serde import (
     cloud_from_dict,
     gripper_from_dict,
     proposal_from_dict,
 )
-from physical_harness.core.actions import Pose, number, plain, strict_loads
 from physical_harness.perception.geometry import (
     Intrinsics,
     compose_tcp,

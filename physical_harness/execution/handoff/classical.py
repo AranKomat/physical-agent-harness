@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from physical_harness.core.contracts import SkillReceipt, SkillRequest
-from physical_harness.core.handoff import Snapshot, identifiers, integer, real
+from physical_harness.execution.handoff.contracts import Snapshot, identifiers, integer, real
 
 
 def vector(values, name="vector", n=None):

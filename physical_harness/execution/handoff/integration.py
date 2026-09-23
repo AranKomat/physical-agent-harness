@@ -5,7 +5,7 @@ import threading
 import uuid
 from dataclasses import replace
 
-from physical_harness.core.handoff import Phase, Regime, Route, integer, text
+from physical_harness.execution.handoff.contracts import Phase, Regime, Route, integer, text
 
 
 def wrap_native(native, hybrid, *, domain="behavior_sim"):
