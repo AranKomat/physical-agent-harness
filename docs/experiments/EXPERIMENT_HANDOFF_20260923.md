@@ -83,6 +83,10 @@ confirms finite limits become sentinel-scale across evaluator settings. Controll
 output matches PhysX targets exactly, but the same tiny 2.067 micrometre response
 recurs. Command delivery is observed; downstream native physical response remains
 unresolved. No motion qualification or physics-parameter changes follow.
+The expanded r2 pulse records virtual-base positions and reports no sleeping
+samples: the joints themselves also barely move. This argues against sleeping
+or body-pose-only stale readback. Further unchanged repeats are not warranted;
+solver/contact response needs a specific experimental hypothesis.
 
 ## 1. Executive Summary
 
