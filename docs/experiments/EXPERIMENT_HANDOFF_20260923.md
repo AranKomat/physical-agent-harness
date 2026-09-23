@@ -178,7 +178,7 @@ historical diagnostics are described later in this document.
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
 | 7. Free-space arm staging and return | Robot-only FK, native hull containment and 28 frozen joint-path bounds pass their scopes; exploratory wrist motion occurred but return failed its stop gate | External clearance, whole-robot stop qualification and a qualified native stage/return; exploratory motion is not completion |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
-| 9. Compiler manipulation | Contracts and negative replay only | Positive sensor-grounded candidate, safe execution and independent outcome verification |
+| 9. Compiler manipulation | Retained GraspGenX inference and loading/conditioning audit; full-mask contrast gives sparse handle-like support in 4/8 proposals; scene inspection catches wrist-camera intersection in one proposal; all eight exceed held-torso reach; simulator/SAM/GraspGen-X co-residency passes at 17.05 GiB sampled peak; no execution | Closer staging and fresh observations, gripper/TCP calibration, whole-arm collision/IK/contact qualification, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
 | 11. Recovery | Fixture support only | Native detected failure -> bounded recovery -> verified progress |
 | 12. Executed memory benefit | Retained decisions only | Execute M0/M1/routed visual-memory conditions with one frozen backend |
