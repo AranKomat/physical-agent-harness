@@ -70,3 +70,30 @@ suite before analysis: **1032 passed, one existing skip**. Unit tests alone do
 not qualify physical stopping or measurement accuracy.
 The raw run and log are backed up locally; a checksum-based directory comparison
 against the remote run reported no differences.
+
+## Saved-Trace And Source Follow-Up
+
+Projected x-joint force ranges are -42.58 to 18.92 during initial holds,
+-905.14 to -792.85 during the pulse, and -46.63 to 24.90 during braking.
+The command therefore coincides with a substantial change in measured joint
+loading. These are projected joint forces, not isolated drive effort or a
+contact/friction diagnosis. Maximum planar PhysX target magnitude during the
+pulse is 0.0050000003 m/s; holds and braking target zero.
+
+Pinned `robots/robot.py:251` emits a floating-base warning but then forces
+`fixed_base` for holonomic robots. `objects/usd_object.py:303` creates the world
+root joint, and `robots/robot.py:516` sets its anchor. The authored asset has
+driven virtual x/y/yaw joints leading to `base_link`; a fixed virtual root is
+part of this locomotion scheme, not proof that the physical base is locked.
+Do not change fixed-base configuration merely to suppress that warning.
+
+The source default sleep threshold is 0.00005; this is not a directly comparable
+velocity cutoff. Neither its effective post-reset value nor sleeping status was
+measured in this trace. Sleeping, stabilization and contact resistance remain
+hypotheses, not established causes.
+
+The next diagnostic telemetry adds measured virtual x/y/yaw joint positions,
+without changing control. Compare their interval displacement against the
+separate evaluator body-pose stream to distinguish joint motion from body
+motion/readback discrepancy. Existing r1 files are immutable and do not contain
+this additional field. No further native run was issued for this source audit.
