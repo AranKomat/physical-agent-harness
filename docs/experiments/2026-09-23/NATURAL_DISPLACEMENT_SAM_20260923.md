@@ -111,3 +111,44 @@ Script SHA-256:
 `0d0efd524018fc6b983f2e16b7bc800194c336eddfcb179b91a302eee7e9c990`.
 Next useful association test requires denser temporal evidence and robot-pixel
 exclusion or independent reobservation, not another identical sparse replay.
+
+## Intermediate-Observation Optical Flow
+
+A paired Lucas-Kanade follow-up used all retained observations 48-96, comparing
+direct propagation across each original four-observation gap with propagation
+through its three intermediate observations. Source corners are seeded only
+from the starting SAM mask; destination masks score results and never steer
+propagation. Parameters were fixed: up to 100 corners, quality 0.01, spacing
+3 pixels, 21-pixel windows, pyramid level 3, forward/backward error at most
+1 pixel and forward photometric error at most 20. Both conditions start with
+identical points. No replenishment occurs inside a pair.
+
+| Pair | Direct points in target | Via intermediate observations |
+| --- | ---: | ---: |
+| 48 to 52 | 65 | 61 |
+| 52 to 56 | 3 | 3 |
+| 56 to 60 | 4 | 6 |
+| 60 to 64 | 18 | 19 |
+| 64 to 68 | 0 | 9 |
+| 68 to 72 | 13 | 17 |
+| 72 to 76 | 17 | 17 |
+| 76 to 80 | 14 | 15 |
+| 80 to 84 | 16 | 15 |
+| 84 to 88 | 19 | 14 |
+| 88 to 92 | 19 | 14 |
+| 92 to 96 | 12 | 16 |
+
+All translated-mask controls still receive zero points. Intermediate sampling
+helps some pairs but does not repair the main rotation: surviving tracks fall
+from 64 to 7 between observations 53 and 54, and only 3 reach the ending mask.
+These retained observations are approximately 32 control actions apart, not
+full-rate video. Thus this does not establish that high-rate optical flow would
+fail, nor that surviving points necessarily belong to the object rather than
+the gripper. The correspondence calculation took 145 ms locally, excluding
+source decoding and hash checks. No association or motion authority was granted.
+
+Private receipt: `runs/displacement-flow-20260923-r1/receipt.json`.
+Script SHA-256:
+`80b37ca80296590e6072c640decdfe44bf22d81cc3c6670a2543b2c8af28d31f`.
+Do not tune thresholds on these same views to manufacture a positive result;
+the remaining transition needs denser visual evidence or fresh discrimination.
