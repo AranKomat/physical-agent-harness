@@ -8,6 +8,11 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from experiments.behavior.native import BEHAVIOR_COMMIT, RPENT_COMMIT, check_source
 
 PositiveInt = Annotated[int, Field(gt=0, strict=True)]
+MODEL_PRICES = {
+    "openai/gpt-6-sol": ("0.000001", "0.000005"),
+    "openai/gpt-6-luna": ("0.00000005", "0.00000025"),
+    "openai/gpt-6-astra": ("0.000005", "0.000025"),
+}
 
 
 class Config(BaseModel):
@@ -26,12 +31,28 @@ class PolicyRuntime(Runtime):
 
 
 class ModelConfig(Config):
-    # This is the historical experiment route, not a current availability claim.
-    model: Literal["openai/gpt-6-astra"] = "openai/gpt-6-astra"
+    # Explicit Astra remains available for historical cohorts; new runs use Sol.
+    model: Literal["openai/gpt-6-sol", "openai/gpt-6-luna", "openai/gpt-6-astra"] = "openai/gpt-6-sol"
     provider: Literal["openai/flex"] = "openai/flex"
     api_key_env: str = Field(default="OPENROUTER_API_KEY", pattern=r"^[A-Z][A-Z0-9_]*$")
-    expected_prompt_usd_per_token: Literal["0.000005"] = "0.000005"
-    expected_completion_usd_per_token: Literal["0.000025"] = "0.000025"
+    expected_prompt_usd_per_token: Literal["0.000001", "0.00000005", "0.000005"] = "0.000001"
+    expected_completion_usd_per_token: Literal["0.000005", "0.00000025", "0.000025"] = "0.000005"
+
+    @model_validator(mode="before")
+    @classmethod
+    def model_prices(cls, value):
+        if isinstance(value, dict) and isinstance(value.get("model"), str) and value["model"] in MODEL_PRICES:
+            prompt, completion = MODEL_PRICES[value["model"]]
+            value = {"expected_prompt_usd_per_token": prompt,
+                     "expected_completion_usd_per_token": completion, **value}
+        return value
+
+    @model_validator(mode="after")
+    def matching_prices(self):
+        expected = MODEL_PRICES[self.model]
+        if (self.expected_prompt_usd_per_token, self.expected_completion_usd_per_token) != expected:
+            raise ValueError("Expected prices must match the selected model cohort")
+        return self
 
 
 class Campaign(Config):

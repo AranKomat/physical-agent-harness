@@ -110,9 +110,22 @@ model availability or control quality. Those still need live qualification.
 
 ## Budgets And Execution
 
-The example preserves the historical `openai/gpt-6-astra`, `openai/flex` route,
-medium reasoning, and recorded prices. It is not a current availability/pricing
-claim. Execution validates endpoint metadata and refuses unsupported changes.
+New defaults use `openai/gpt-6-sol`, `openai/flex`, and medium reasoning.
+Expected Flex prices are $1 input and $5 output per million tokens, based on
+the [official Sol model documentation](https://developers.openai.com/api/docs/models/gpt-6-sol).
+OpenRouter route availability and pricing still require endpoint qualification;
+the official OpenAI model page does not qualify that third-party route.
+Explicit Astra configurations and recorded fixtures retain their historical prices.
+Sol runs form a separate model cohort: do not pool them with earlier Astra results
+or relabel algorithm-provenance names such as `astra-keypose`.
+Optional explicit `openai/gpt-6-luna` selects a separate, untested Flex comparator
+cohort, not the default and not a replacement for GLM. Its expected rates are
+$0.05 input and $0.25 output per million tokens per the
+[official Luna model documentation](https://developers.openai.com/api/docs/models/gpt-6-luna).
+Its OpenRouter route must independently pass the same qualification gates.
+The verifier's default model label does not configure its injected judge transport;
+the operator must select Sol Flex there as well. No budget or execution approval
+changes accompany this migration. Execution validates endpoint metadata and fails closed.
 Credentials come only from the configured environment variable, never JSON.
 
 The example budget is a **new standalone campaign**, 36 calls and $6 maximum

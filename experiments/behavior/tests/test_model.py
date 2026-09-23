@@ -41,7 +41,7 @@ def setup(tmp_path):
     campaign = Journal(tmp_path / "campaign.sqlite", "campaign",
                        max_calls=36, max_microusd=6_000_000)
     transport = Transport()
-    model = RadioModel(ModelConfig(), endpoint(), local, campaign,
+    model = RadioModel(ModelConfig(model="openai/gpt-6-astra"), endpoint(), local, campaign,
                        allow_paid=True, allow_network=True, transport=transport)
     yield model, transport, local, campaign
     local.close()
@@ -133,7 +133,7 @@ def test_duplicate_call_cannot_retry_paid_dispatch(setup):
 def test_approval_flags_required(setup):
     _, transport, local, campaign = setup
     with pytest.raises(PermissionError):
-        RadioModel(ModelConfig(), endpoint(), local, campaign, transport=transport)
+        RadioModel(ModelConfig(model="openai/gpt-6-astra"), endpoint(), local, campaign, transport=transport)
 
 
 @pytest.mark.parametrize("price", ["0.000006", "NaN", "-1"])
@@ -142,7 +142,7 @@ def test_endpoint_price_change_fails_closed(price):
     e["pricing"]["prompt"] = price
     with pytest.raises(ValueError):
         qualify_endpoint({"architecture": {"input_modalities": ["image"]},
-                          "endpoints": [e]}, ModelConfig())
+                          "endpoints": [e]}, ModelConfig(model="openai/gpt-6-astra"))
 
 
 def test_new_pricing_dimension_rejected():
@@ -150,4 +150,4 @@ def test_new_pricing_dimension_rejected():
     e["pricing"]["request"] = "1"
     with pytest.raises(ValueError):
         qualify_endpoint({"architecture": {"input_modalities": ["image"]},
-                          "endpoints": [e]}, ModelConfig())
+                          "endpoints": [e]}, ModelConfig(model="openai/gpt-6-astra"))

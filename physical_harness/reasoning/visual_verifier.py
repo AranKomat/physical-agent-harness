@@ -104,7 +104,7 @@ class EvidenceVisualVerifier:
 class GPT6EvidenceVerifier(EvidenceVisualVerifier):
     """Qualified tier-3 GPT-6 verifier used at sparse semantic boundaries."""
 
-    def __init__(self, judge, *, before, after, qualified=False, model="gpt-6-astra"):
+    def __init__(self, judge, *, before, after, qualified=False, model="gpt-6-sol"):
         super().__init__(
             judge,
             before=before,

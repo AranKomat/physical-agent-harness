@@ -87,7 +87,7 @@ def test_gpt6_verifier_has_explicit_tier_role_and_model_metadata():
         }
 
     verifier = GPT6EvidenceVerifier(
-        judge, before=[], after=[{"id": "after"}], qualified=True
+        judge, before=[], after=[{"id": "after"}], qualified=True, model="gpt-6-astra"
     )
     result = verifier.verify(
         VerificationRequest("r", "s", ("radio powered",), after_evidence_ids=("after",))
@@ -96,6 +96,12 @@ def test_gpt6_verifier_has_explicit_tier_role_and_model_metadata():
     assert result.metadata["tier"] == 3
     assert result.metadata["role"] == "frontier_semantic_verifier"
     assert result.metadata["model"] == "gpt-6-astra"
+
+
+def test_gpt6_verifier_defaults_to_sol_without_qualification():
+    verifier = GPT6EvidenceVerifier(lambda _: pytest.fail("No calls expected"), before=[], after=[])
+    assert verifier.model == "gpt-6-sol"
+    assert verifier.qualified is False
 
 
 @pytest.mark.parametrize("tier", [True, 0, 1, 4, "3"])

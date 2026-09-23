@@ -27,6 +27,9 @@ from GPT supervision or memory has been demonstrated in the reported trials.
 
 Current working choices, not globally qualified winners:
 
+- New GPT experiments default to Sol Flex; Luna Flex is an optional untested
+  comparator. Historical Astra cohorts remain distinct. See the
+  [migration and proposed comparison](2026-09-23/GPT6_SOL_LUNA_MIGRATION_20260923.md).
 - Behavior-Skill is the frozen reference motor for interpreting short handoffs.
   It approaches and contacts the radio but has not reliably activated it.
 - GLM 5.3 Flash is the leading occasional scene-inventory candidate from a small
@@ -96,6 +99,12 @@ across 22 link pairs, all with disjoint authored-mesh AABBs. The candidate is no
 adopted for planning. No exclusions changed; native cooked shapes remain
 unqualified. Latest private suite: 730 passed, one existing skip. CPU-only work,
 no motion or paid calls.
+
+The [fixed sphere-chain follow-up](2026-09-23/R1PRO_COLLISION_CHAINS_20260923.md)
+passes authored enclosure but retains 77/49/42 overlapping mesh pairs for
+K=2/4/8; none is adopted for planning. Native collision and execution remain
+unqualified. After this and the model-default update, full suites pass:
+1,489 public tests, 818 private tests and one existing private skip.
 
 Phase 0's private audit passed 641 checks. All 25 exported PNGs have the same
 decoded pixels as native captures, and the six API image payloads match retained

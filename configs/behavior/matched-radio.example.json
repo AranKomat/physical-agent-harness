@@ -28,11 +28,11 @@
     "max_microusd": 6000000
   },
   "model": {
-    "model": "openai/gpt-6-astra",
+    "model": "openai/gpt-6-sol",
     "provider": "openai/flex",
     "api_key_env": "OPENROUTER_API_KEY",
-    "expected_prompt_usd_per_token": "0.000005",
-    "expected_completion_usd_per_token": "0.000025"
+    "expected_prompt_usd_per_token": "0.000001",
+    "expected_completion_usd_per_token": "0.000005"
   },
   "simulator_gpu": 0,
   "policy_gpu": 1,

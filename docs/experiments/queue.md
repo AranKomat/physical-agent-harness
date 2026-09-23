@@ -35,6 +35,11 @@ The [authored collision-envelope audit](2026-09-23/R1PRO_COLLISION_ENVELOPE_2026
 encloses all 164 meshes but finds 128 proxy overlaps with disjoint authored mesh
 AABBs. This candidate is not adopted for planning; exclusions are unchanged.
 Native cooking remains unqualified. Latest private suite: 730 passed, one skip.
+The [fixed sphere-chain comparison](2026-09-23/R1PRO_COLLISION_CHAINS_20260923.md)
+reduces proxy-overlapping mesh pairs to 77/49/42 for K=2/4/8, but none is adopted.
+The [model-default update](2026-09-23/GPT6_SOL_LUNA_MIGRATION_20260923.md) uses Sol
+Flex for new GPT runs and adds optional Luna Flex; no paid calls or budget
+extensions were made. Latest public/private suites:1,489 / 818 plus one skip.
 
 ## Completed Software And Retained-Data Work
 
