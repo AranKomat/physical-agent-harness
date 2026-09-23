@@ -66,6 +66,10 @@ was resolved by an approved reboot after package completion and verified backups
 CUDA smoke checks pass in all three environments. The new
 [single-arm FK check](2026-09-23/CUROBO_SINGLE_ARM_FK_20260923.md) passes 870
 upper-body comparisons with measured holds. Collision/planning remain open.
+The [authored convex audit](2026-09-23/R1PRO_AUTHORED_CONVEX_20260923.md)
+finds no intersections in 11,259 eligible mesh pairs, but finger/camera gaps are
+only 0.46-0.51 mm. Native cooking/margins and swept-path checks remain required;
+no geometry candidate is promoted to motion authority.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite
