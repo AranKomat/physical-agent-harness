@@ -18,6 +18,11 @@ filters and 164 enabled collider approximations. Follow-up r4 measures effective
 contact offsets of 1.36-5.04 mm and zero rest offsets, with self-collision enabled
 and all 44 joint collision flags disabled. Cooked geometry and safe motion remain
 unqualified. No planner exclusions changed; private suite: 901 passed, one skip.
+The [native convex-representation follow-up](2026-09-23/R1PRO_NATIVE_CONVEX_20260923.md)
+finds authored hulls conservatively contain all 161 returned native hulls, despite
+only 2 matching bidirectionally at 10 micrometers. Keep the conservative geometry
+for offline changed-posture/swept-path tests. Wheel/active-shape correspondence
+and execution remain open. Latest private suite: 907 passed, one skip.
 
 ## 1. Executive Summary
 

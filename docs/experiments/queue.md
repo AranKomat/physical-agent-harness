@@ -78,6 +78,12 @@ exist for the source's 1 mm assignment to update. All 25 legacy-only exclusions
 are accounted for by disabled connected-joint collision flags. Cooked geometry,
 changed postures and swept paths remain unqualified. No exclusions or motion
 gates changed; all attempts are backed up locally. Private suite: 901 plus one skip.
+The [native convex comparison](2026-09-23/R1PRO_NATIVE_CONVEX_20260923.md) now
+returns all 161 hulls: only 2 match bidirectionally, but all returned hulls are
+contained by the authored hulls to numerical precision. Keep those conservative
+hulls for changed-posture/swept-path diagnostics; do not shrink them to force
+equivalence. Three wheel spheres and active-shape correspondence remain open.
+Private suite: 907 passed, one skip; no paid calls or commanded actions.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite
