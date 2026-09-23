@@ -1,5 +1,10 @@
 # Experiment And Verification Handoff
 
+Latest integration: [scan physics callback](2026-09-24/SCAN_CALLBACK_INTEGRATION_20260924.md)
+connects full-joint logging and failure latching to the native subscription API.
+Injected API tests pass; live execution/timing and braking remain untested.
+Private full suite: 1,192 passed, one skip. No new robot actions or model calls.
+
 Latest: [scan base observer](2026-09-24/SCAN_BASE_OBSERVER_20260924.md) reuses
 legal RGB-D/FK and passes all 26 retained paired-render pulse captures without
 reading evaluator truth. Failure-latching tests pass. Native integration/live
