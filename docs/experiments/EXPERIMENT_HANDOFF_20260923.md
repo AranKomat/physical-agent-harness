@@ -101,6 +101,12 @@ estimates to previous evaluator poses reduces maximum discrepancy from 114 to
 18.6 micrometres. This is not an online correction. Prioritize paired render-only
 recaptures during the bounded moving diagnostic before promoting RGB-D stop
 evidence or attributing all error to registration accuracy.
+The [paired render test](2026-09-23/BASE_RENDER_PAIR_20260923.md) now reduces
+observed localization error from 114 to 16.8 micrometres with two render-only
+updates, unchanged physics and no timestamp shifting. Refreshed estimates detect
+5/5 moving intervals and classify 15/15 braking intervals below the comparison
+threshold. This resolves a concrete freshness issue in the diagnostic, not the
+whole-robot stop/clearance gate or frozen-policy integration.
 
 ## 1. Executive Summary
 
@@ -156,7 +162,7 @@ historical diagnostics are described later in this document.
 | 2. Hard discovery/SAM identity and loss | CPU contracts on 10/14 cases; fresh SAM inference on four bounded cases; physical association unqualified | Native loss/reappearance/crossings, independent association and live timing; basic simulator/sensors now restored |
 | 3. Live shadow GLM discovery | Not done with V3 | Record real observation/publication clocks, current-source associations and asynchronous inventory updates |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
-| 5. Native localization, clearance and stopping | Partial diagnostics; fresh paused recapture consistency passes | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
+| 5. Native localization, clearance and stopping | Partial: measured 0.532 mm base motion, independent evaluator comparison, and paired-render correction reducing observed pose error to 16.8 micrometres; raw stop still fails | Integrate qualified fresh sensing without changing frozen-policy inputs; establish error bounds, whole-robot stopping, positive live fusion and low-body clearance |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
 | 7. Free-space arm staging and return | Robot-only FK, native hull containment and 28 frozen joint-path bounds pass their scopes; exploratory wrist motion occurred but return failed its stop gate | External clearance, whole-robot stop qualification and a qualified native stage/return; exploratory motion is not completion |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
