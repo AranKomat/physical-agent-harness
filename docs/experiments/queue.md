@@ -85,6 +85,12 @@ combined can see at most 2/88 sampled link-1 points. Stop individual-pose
 qualification for this corridor; a different camera configuration or return
 trajectory is needed. This is a sampled-model limitation, not physical
 impossibility and not permission for exploratory motion.
+The [GraspGen-X torso reach screen](2026-09-24/GRASP_TORSO_REACH_SCREEN.md)
+tests whether torso staging rescues the eight retained grasp proposals. Only
+2/8 enter the conservative arm reach radius, and neither has IK, orientation,
+collision, TCP, or contact qualification. Torso staging is not a general fix;
+keep all proposals shadow-only and require close-range reacquisition plus full
+feasibility checks before Phase 9 execution.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
