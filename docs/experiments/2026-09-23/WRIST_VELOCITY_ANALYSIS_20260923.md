@@ -71,5 +71,14 @@ not executed. Sixteen new tests validate action/callback accounting, timestep
 checks, explicit raw fallback, retained cache discrepancies and latched errors.
 The full private suite now passes **954 tests, one existing skip**; focused Ruff
 checks pass. These tests do not qualify native callback ordering or stopping.
-The native subscription and actuator wrapper still need integration and review
-before the separately authorized run. No additional action or paid call occurred.
+The native subscription and fixed-hold actuator wrapper are now prepared and
+compiled on the host, but not executed. Installed PhysX binding documentation
+confirms lower callback numbers execute first; the diagnostic selects order 100
+after upstream order 0. Callback errors are latched and checked before another
+action, and the subscription is removed before simulator teardown.
+
+The updated full private suite passes **966 tests, one existing skip**; 28
+focused diagnostic tests and focused Ruff checks pass. Mock callback tests and
+host compilation do not establish actual runtime timing or stop qualification.
+Separate hold-only approval remains pending. No additional action or paid call
+occurred; native motion and the later experiment phases remain incomplete.
