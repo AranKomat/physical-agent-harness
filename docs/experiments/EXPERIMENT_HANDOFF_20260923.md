@@ -28,6 +28,12 @@ now passes 28 paths using conservative geometric support/arc bounds. An initial
 FCL-distance assumption failed endpoint consistency and is not promoted. Minimum
 revised whole-path bound is 20.91 mm; external clearance, wheel geometry and
 execution remain unqualified. Private suite: 917 passed, one skip.
+The [arm depth-support audit](2026-09-23/ARM_DEPTH_SUPPORT_20260923.md) finds
+96.44% of selected samples outside all views. An explicitly approved
+[exploratory wrist probe](2026-09-23/WRIST_PROBE_20260923.md) followed +0.008 rad
+accurately but failed sustained velocity-based stop checks, so return was not
+attempted. It used 35 actions and was not retried. This is not Phase 7 completion;
+external clearance and stop semantics remain open. Private suite: 931 plus one skip.
 
 ## 1. Executive Summary
 

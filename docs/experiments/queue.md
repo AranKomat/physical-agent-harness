@@ -91,6 +91,13 @@ certificate was rejected after an endpoint contradiction; all attempts remain.
 This is non-wheel self-separation only, not external clearance or execution.
 Latest private suite: 917 passed, one skip. Next address external sensor coverage,
 wheel/active-shape scope and native control/stop qualification.
+The [retained arm depth audit](2026-09-23/ARM_DEPTH_SUPPORT_20260923.md) finds
+96.44% of selected vertex samples outside all camera views; no strict external
+clearance claim is available. The user-approved [one wrist probe](2026-09-23/WRIST_PROBE_20260923.md)
+passed actuator/initial-stop checks and tracked +0.008 rad, but failed sustained
+stop verification. It ended after 35 actions, with no return or automatic retry.
+Next diagnose joint-velocity/substep behavior; do not loosen thresholds or
+repeat motion under the consumed one-attempt scope. Private suite: 931 plus one skip.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite
