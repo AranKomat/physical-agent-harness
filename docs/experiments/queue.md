@@ -34,6 +34,13 @@ The [paused recapture diagnostic](2026-09-23/PAUSED_RECAPTURE_20260923.md)
 restores numeric pins and passes three zero-action native captures. Identical
 paused head depth registers consistently; public odometry rejects equal sim time.
 Neither result qualifies moving localization. Private suite: 648 plus one skip.
+
+The [base-yaw acquisition diagnostic](2026-09-24/PHASE5_BASE_YAW_ACQUISITION_20260924.md)
+confirmed the audited `[vx, vy, wz]` action mapping and a successful measured
+stop acknowledgement, but rejected command tracking and found no radio in the
+initial or final head view. It does not advance Phase 2 or qualify Phase 5.
+Do not rerun SAM on this trace; the next native run must deliberately establish
+a target-bearing online acquisition view with legal pose/provenance evidence.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
