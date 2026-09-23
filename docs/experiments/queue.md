@@ -41,6 +41,16 @@ stop acknowledgement, but rejected command tracking and found no radio in the
 initial or final head view. It does not advance Phase 2 or qualify Phase 5.
 Do not rerun SAM on this trace; the next native run must deliberately establish
 a target-bearing online acquisition view with legal pose/provenance evidence.
+
+The later [interpolated sensing sweep](2026-09-24/SCAN_SERVO_RESPONSE_20260924.md)
+completed its declared `r2` protocol: 20 preflight holds, 482 outbound actions,
+and 60 reserved holds. All 562 actions completed, all reserved holds were
+raw-settled, and fixed-stride depth analysis found improved low-body visual
+support at the endpoint. This remains exploratory evidence with
+`motion_qualified=false`, `stop_qualified=false`, and external clearance
+unknown. The return-path and historical-coverage analyses show that existing
+views do not support arm-return qualification; do not repeat the sweep solely
+for more coverage samples.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
@@ -129,15 +139,22 @@ changed. Moving/braking estimator validation and base stopping remain open.
    passed an isolated wheel check; that check was not rerun after the ownership
    follow-up. No model calls.
 
-**Next phase-level capture requirement.** Do not rerun the retained
-`run_phase2_fresh_sam.py` queue or another easy continuous track. The next GPU
-run must be a fresh native hard-case trace containing, at every selected
-boundary, source-bound RGB/depth, a legal contemporaneous camera pose, and
-the provenance needed to distinguish camera motion from object motion. It
-should target full disappearance/reappearance and a genuine similar-object
-ambiguity/crossing if the simulator scene permits. Without those pose-bound
-artifacts, the run can only produce another descriptive image-space result and
-must not be counted toward Phase 2 completion.
+**Next phase-level capture requirements.** There are now two distinct queues:
+
+- For Phase 2, do not rerun the retained `run_phase2_fresh_sam.py` queue or
+  another easy continuous track. A future native hard-case trace must contain,
+  at every selected boundary, source-bound RGB/depth, a legal contemporaneous
+  camera pose, and provenance sufficient to distinguish camera motion from
+  object motion. It should target full disappearance/reappearance and genuine
+  similar-object ambiguity/crossing if the simulator scene permits.
+- For Phase 5/7, do not repeat the completed sensing sweep. A new motion run
+  requires a changed authority source: calibrated pose uncertainty plus
+  external clearance/stop evidence, or a specifically justified observer-camera
+  strategy. Existing final-view and historical coverage are insufficient for
+  arm return.
+
+Without the respective evidence, another GPU rollout would produce another
+descriptive or exploratory result rather than advance a phase.
 2. Retained replay complete in its declared fixture-clock scope: six saved GLM
    inventories, 67 sightings, 64 checks, no new calls/motion. Corrected public
    suite: 1,471 tests; private snapshot: 581 passed, one skip. The new GLM delta
