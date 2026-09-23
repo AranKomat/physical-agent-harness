@@ -84,6 +84,13 @@ contained by the authored hulls to numerical precision. Keep those conservative
 hulls for changed-posture/swept-path diagnostics; do not shrink them to force
 equivalence. Three wheel spheres and active-shape correspondence remain open.
 Private suite: 907 passed, one skip; no paid calls or commanded actions.
+The [frozen joint-path audit](2026-09-23/R1PRO_JOINT_PATHS_20260923.md) passes
+28 paths using explicit separating-axis/arc-displacement lower bounds, with
+minimum 20.91 mm against an 11.07 mm diagnostic threshold. An initial FCL-distance
+certificate was rejected after an endpoint contradiction; all attempts remain.
+This is non-wheel self-separation only, not external clearance or execution.
+Latest private suite: 917 passed, one skip. Next address external sensor coverage,
+wheel/active-shape scope and native control/stop qualification.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite

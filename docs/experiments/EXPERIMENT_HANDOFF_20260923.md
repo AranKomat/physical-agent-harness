@@ -23,6 +23,11 @@ finds authored hulls conservatively contain all 161 returned native hulls, despi
 only 2 matching bidirectionally at 10 micrometers. Keep the conservative geometry
 for offline changed-posture/swept-path tests. Wheel/active-shape correspondence
 and execution remain open. Latest private suite: 907 passed, one skip.
+The [frozen single-joint path audit](2026-09-23/R1PRO_JOINT_PATHS_20260923.md)
+now passes 28 paths using conservative geometric support/arc bounds. An initial
+FCL-distance assumption failed endpoint consistency and is not promoted. Minimum
+revised whole-path bound is 20.91 mm; external clearance, wheel geometry and
+execution remain unqualified. Private suite: 917 passed, one skip.
 
 ## 1. Executive Summary
 
