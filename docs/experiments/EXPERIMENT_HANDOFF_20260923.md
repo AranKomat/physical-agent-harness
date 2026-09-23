@@ -87,6 +87,10 @@ The expanded r2 pulse records virtual-base positions and reports no sleeping
 samples: the joints themselves also barely move. This argues against sleeping
 or body-pose-only stale readback. Further unchanged repeats are not warranted;
 solver/contact response needs a specific experimental hypothesis.
+The [four-iteration solver variant](2026-09-23/BASE_SOLVER_VARIANT_20260923.md)
+failed the five-hold stop preflight with larger raw wrist-velocity discrepancies.
+It issued no forward command, is not adopted, and cannot answer whether extra
+iterations improve base motion. Original physics defaults and gates stay intact.
 
 ## 1. Executive Summary
 
