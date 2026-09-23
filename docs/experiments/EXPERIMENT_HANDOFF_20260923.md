@@ -15,6 +15,11 @@ The corrected follow-up [positive live fusion run](2026-09-24/PHASE5A_LIVE_FUSIO
 completed 768 policy actions with 97 fresh pose rows and 13/13 fresh fused
 boundaries through sequence 768. This passes bounded positive-fusion evidence,
 not localization accuracy, clearance, transit, or task success.
+The follow-up [target-support analysis](2026-09-24/PHASE5A_TARGET_SUPPORT_ANALYSIS_20260924.md)
+finds internally stable target-bearing local-map support across all 13 fresh
+boundaries (maximum dominant-patch deviation from the window mean: 2.122 cm),
+but every pose remains explicitly shadow-only and no legal staging endpoint is
+emitted. This strengthens evidence lineage without changing the motion gate.
 
 Latest corrected native abort/hold repeat passes its bounded protocol: 100
 dispatches (99 normal returns due to the intentional fault), all 60 reserved
@@ -299,7 +304,7 @@ historical diagnostics are described later in this document.
 | 2. Hard discovery/SAM identity and loss | Partial: natural radio displacement, sofa out-of-view/return, simultaneous chair candidates, delayed-mask handling and durable loss-packet replay | Independent physical association, valid native binding invalidation, true occlusion/crossings, robot-pixel exclusion and uncertainty; correspondence/IDs are not identity |
 | 3. Live shadow GLM discovery | Partial: three fresh paused captures passed the provider/worker/coordinator/inventory chain after a rejected dangling-attention result; 4,145-call ceiling exhausted | Prospective coalescing/context consumer, broader coverage, and separately authorized further paid calls |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
-| 5. Native localization, clearance and stopping | Partial: bounded positive live fusion now passes with fresh 768-window pose/mask lineage; measured base motion and paired-render correction; complete exploratory sensing sweep; retained 60-hold base replay; earlier raw-stop failures remain recorded | Calibrated localization/error bounds, live whole-robot stopping, external clearance, and low-body return coverage; positive fusion alone does not qualify motion |
+| 5. Native localization, clearance and stopping | Partial: bounded positive live fusion and target-support stability now pass with fresh 768-window pose/mask lineage; measured base motion and paired-render correction; complete exploratory sensing sweep; retained 60-hold base replay; earlier raw-stop failures remain recorded | Calibrated localization/error bounds, live whole-robot stopping, external clearance, and low-body return coverage; target-support stability and positive fusion alone do not qualify motion |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
 | 7. Free-space arm staging and return | Partial: FK/hull/path checks plus completed 562-action exploratory one-way sensing sweep; final/historical views fail to support its return corridor | Qualified observed staging/return path and whole-robot stopping; opposite-wrist survey found no sufficient observer candidate in its bounded search |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
