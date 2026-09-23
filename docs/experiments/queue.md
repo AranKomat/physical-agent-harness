@@ -51,6 +51,19 @@ support at the endpoint. This remains exploratory evidence with
 unknown. The return-path and historical-coverage analyses show that existing
 views do not support arm-return qualification; do not repeat the sweep solely
 for more coverage samples.
+
+The [expanded return-observer survey](2026-09-24/OBSERVER_SURVEY_512_20260924.md)
+shows that the earlier 128-sample search was too narrow: candidate 384 has
+6,545 unblocked sampled points. It still sees zero samples on proximal
+left-arm links 1--4 and has no endpoint collision, reach-path, scene-occlusion,
+or native-depth qualification. Candidate 384 merits offline validation, not a
+native observer move.
+
+The [candidate endpoint collision check](2026-09-24/OBSERVER_CANDIDATE_COLLISION_20260924.md)
+found candidate 384 within joint limits with zero authored-hull collisions over
+11,003 checked pairs and a 23.33 mm minimum FCL distance. This makes it a valid
+offline follow-up candidate, not a motion authorization. Reach/path, optical
+geometry, scene occlusion, and native stopping remain open.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
