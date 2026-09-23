@@ -61,6 +61,38 @@ proposed estimator during known moving/stopping behavior, retain raw channels,
 and separately address base speed. Further exploratory motion requires its own
 scope; this approval is consumed. External clearance and out/back remain open.
 
+## Offline Base-Speed Follow-Up
+
+The pinned `robots/robot.py::_get_base_qvel_for_proprioception` reads raw
+articulation velocities for the three virtual-base control joints, then rotates
+the planar components by base yaw. The audited live mapping is joint indices
+0, 1, 5: base_footprint_x_joint, base_footprint_y_joint and
+base_footprint_rz_joint. The eval config places this three-value vector first
+in proprioception; the harness copies it without rescaling.
+
+The planar rotation is orthonormal and preserves speed magnitude. Therefore
+even an incorrect yaw value alone cannot explain these norm threshold crossings.
+This is not evidence of a discovered coordinate-conversion or unit bug.
+
+The offline audit validates 30 zero-base commands, 31 consecutive same-session
+captures and 30 Hz control intervals. Action 9 has 0.002031619 m/s planar speed;
+action 13 has 0.002438690 m/s. Maximum absolute yaw rate is 0.003149396 rad/s,
+below the unchanged 0.005 rad/s limit. Both planar failures coincide with wrist
+failures, but that correlation does not prove a common cause.
+
+The recorded 61-value proprioception does not contain base position. The wrist
+substep callback did not collect independent base motion, either. Do not infer
+stationarity from zero commands, integrate the same raw velocity and call that
+independent evidence, or silently use simulator global/base virtual positions
+as qualified localization. Base validation requires the legal estimated-motion
+path; oracle diagnostics, if ever collected, must stay outside control.
+
+Private analysis: `runs/hold-base-speed-audit-20260923-r2/receipt.json`.
+R1 failed JSON serialization on a NumPy integer before writing its result;
+the explicit scalar conversion was fixed and serialization is now regression
+tested. R1's directory remains; no native run was repeated. Five focused tests
+and Ruff pass. This follow-up adds no actions, paid calls or threshold changes.
+
 ## Evidence And Cleanup
 
 Private run: `runs/wrist-hold-substep-20260923-r1`.
