@@ -68,6 +68,11 @@ base poses. Maximum sampled base displacement was 1.192 micrometres despite two
 raw base speed threshold crossings. Legal RGB-D/FK agreed with evaluator relative
 base poses within 8.323 micrometres on this stationary trace. Original stop still
 failed; deliberate-motion/braking accuracy and external clearance remain open.
+The separately approved [base pulse calibration](2026-09-23/BASE_PULSE_CALIBRATION_20260923.md)
+completed 30 actions but the 0.005 m/s command produced only 2.067 micrometres
+forward displacement, not the nominal 1.667 mm. It therefore did not create a
+useful moving/braking contrast. Next inspect applied control targets/drive
+settings before attributing a dead zone or proposing a stronger pulse.
 
 ## 1. Executive Summary
 
