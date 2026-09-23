@@ -136,6 +136,11 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+New Phase 9 candidate set: [reference geometric branch](2026-09-24/GRASP_REFERENCE_BRANCH.md)
+produces 272 proposals; 176 have retained inner-box support and all eight highest
+scores have support. Same hand/cloud, no fitted translation. Check numerical
+reachability then endpoint feasibility; no motion authority or phase completion.
+
 Latest Phase 9 result: [frame-704 endpoint/convention audit](2026-09-24/GRASP_ENDPOINTS704.md)
 admits none of the eight proposals. All have zero retained inner-box support;
 nearest target points miss the box by 28-41 mm despite consistent algebraic
