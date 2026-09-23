@@ -1,5 +1,11 @@
 # Experiment And Verification Handoff
 
+2026-09-24 update: [scan tracking-envelope experiment](2026-09-24/SCAN_TRACKING_ENVELOPE_20260924.md)
+found the initial 0.02-rad tracking-error allowance was not covered by the
+collision bound. Tightening it to 0.003 rad passes the conditional full-path
+self-separation check and retained hold replay. Native scan/base monitoring and
+braking remain unfinished; no motion was executed for this follow-up.
+
 Latest follow-up: [live discovery and fresh scan preflight](2026-09-23/LIVE_DISCOVERY_SCAN_PREFLIGHT_20260923.md).
 Six approved GLM calls cost $0.00511925. A dangling-attention-ID failure was
 correctly rejected; after prompt clarification, three fresh paused captures
