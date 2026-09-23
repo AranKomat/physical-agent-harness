@@ -98,6 +98,10 @@ passed actuator/initial-stop checks and tracked +0.008 rad, but failed sustained
 stop verification. It ended after 35 actions, with no return or automatic retry.
 Next diagnose joint-velocity/substep behavior; do not loosen thresholds or
 repeat motion under the consumed one-attempt scope. Private suite: 931 plus one skip.
+The [offline velocity analysis](2026-09-23/WRIST_VELOCITY_ANALYSIS_20260923.md)
+confirms position/raw-velocity disagreement at 30 Hz but cannot exclude substep
+oscillation. A separately approved, physics-step stationary-hold diagnostic is
+next; no threshold changes or new motion were made by the offline analysis.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite

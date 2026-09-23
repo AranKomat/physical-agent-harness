@@ -34,6 +34,10 @@ The [arm depth-support audit](2026-09-23/ARM_DEPTH_SUPPORT_20260923.md) finds
 accurately but failed sustained velocity-based stop checks, so return was not
 attempted. It used 35 actions and was not retried. This is not Phase 7 completion;
 external clearance and stop semantics remain open. Private suite: 931 plus one skip.
+The [offline velocity follow-up](2026-09-23/WRIST_VELOCITY_ANALYSIS_20260923.md)
+validates all 35 action intervals, but cannot distinguish substep oscillation
+from readback behavior. No new motion or threshold changes; the proposed
+physics-step hold-only diagnostic requires separate approval.
 
 ## 1. Executive Summary
 
