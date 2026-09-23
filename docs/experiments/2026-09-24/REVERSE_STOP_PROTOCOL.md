@@ -41,6 +41,25 @@ offsets on this trace and call it validation. No new navigation or grasp action
 follows automatically from a passing result. Phase 5 remains partial pending
 broader calibration and external clearance.
 
+## Stop-Failure Attribution
+
+The post-run predicate reconstruction exactly matches all 25 recorded endpoint
+stop flags. Braking actions 11-18 pass consecutively; 19/20 fail the left-wrist
+raw-velocity limit, 21-23 pass, and 24/25 fail both wrist and planar limits.
+The largest rejected wrist reading is 2.527 times the unchanged 0.006 rad/s limit.
+The final two planar readings are 1.016 and 1.013 times the 0.002 m/s limit.
+No other endpoint predicate contributes to these four failures.
+
+Thus final acknowledgement false does NOT mean that every braking endpoint
+failed. It means the final uninterrupted quiet sequence was not retained. Do
+not latch the earlier success to bypass later measurements. The position/RGB-D
+shadow result remains a different measurement with unresolved peak-motion and
+uncertainty requirements, not permission to replace raw authority.
+
+Private artifact: `reverse-raw-stop-attribution-20260924-r1/receipt.json`;
+script: `attribute_raw_stop_failures.py`. It retains source/script hashes and
+all endpoint predicates. No simulator work, paid calls, or gate changes.
+
 ## Completed Result
 
 The one native attempt completed 25/25 actions and 26/26 paired captures, without

@@ -136,6 +136,12 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+The reverse-stop attribution reconstructs all 25 flags: braking 11-18 passed;
+19/20 failed wrist raw velocity; 24/25 failed wrist and planar raw velocity.
+Do not latch an earlier stop pass across later failures or repeat an identical
+pulse. A user clarification is pending on adding bounded exploratory task trials
+alongside strict qualification; no new task-motion scope is assumed meanwhile.
+
 Phase 5 [reverse-direction holdout](2026-09-24/REVERSE_STOP_PROTOCOL.md) completed
 25 native actions and 26 paired captures. Refreshed legal RGB-D/FK max observed
 translation error is 6.59 micrometres; all 5 moving and 15 braking intervals have
