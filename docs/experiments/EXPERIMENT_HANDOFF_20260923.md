@@ -62,6 +62,12 @@ also found and removed unconditional stop acknowledgement in the legacy private
 radio driver. Historical cleanup acknowledgements are not physical stopping
 evidence. The next native protocol needs complete joint/base measurement and
 uncertainty qualification, not an identical wrist-only repeat.
+The approved [full-body hold calibration](2026-09-23/FULL_BODY_STOP_CALIBRATION_20260923.md)
+completed 30 actions with legal joint telemetry and separately isolated evaluator
+base poses. Maximum sampled base displacement was 1.192 micrometres despite two
+raw base speed threshold crossings. Legal RGB-D/FK agreed with evaluator relative
+base poses within 8.323 micrometres on this stationary trace. Original stop still
+failed; deliberate-motion/braking accuracy and external clearance remain open.
 
 ## 1. Executive Summary
 
