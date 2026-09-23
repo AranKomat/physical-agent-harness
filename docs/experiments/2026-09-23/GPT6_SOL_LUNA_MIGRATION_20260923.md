@@ -1,5 +1,9 @@
 # GPT-6 Sol Default And Optional Luna Comparison
 
+Update: the pending scope below was subsequently approved and executed. See
+[matched inventory results](SOL_LUNA_INVENTORY_20260923.md). Preparation-time
+approval descriptions below are historical, not the current authorization state.
+
 User requested GPT-6 Sol Flex for future experiments in place of Astra, plus
 occasional Luna Flex comparisons. Sol is now the active matched-radio model and
 GPT verifier metadata default. Luna is selectable explicitly, not an automatic

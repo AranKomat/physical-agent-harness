@@ -48,6 +48,9 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Completed Software And Retained-Data Work
 
+- [Sol/Luna inventory comparison](2026-09-23/SOL_LUNA_INVENTORY_20260923.md):
+  approved 12 calls complete, $0.02703. Sol 6/6 valid, Luna 4/6; GLM retained
+  as inventory candidate. Call ceiling 4,139 now reached; prior holds unchanged.
 - The V3 overlay passed 1,408 actual-checkout tests before consolidation.
 - [GLM/VLX inventory](2026-09-23/GLM_VLX_MATCHED_INVENTORY_20260923.md): small
   matched scene coverage comparison; not instance recall or general model ranking.

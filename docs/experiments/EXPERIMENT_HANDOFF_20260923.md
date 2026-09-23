@@ -31,7 +31,9 @@ from GPT supervision or memory has been demonstrated in the reported trials.
 Current working choices, not globally qualified winners:
 
 - New GPT experiments default to Sol Flex; Luna Flex is an optional untested
-  comparator. Historical Astra cohorts remain distinct. See the
+  executive comparator. Its [inventory test](2026-09-23/SOL_LUNA_INVENTORY_20260923.md)
+  is complete: 4/6 valid versus Sol's 6/6; GLM remains the inventory candidate.
+  Historical Astra cohorts remain distinct. See the
   [migration and proposed comparison](2026-09-23/GPT6_SOL_LUNA_MIGRATION_20260923.md).
 - Behavior-Skill is the frozen reference motor for interpreting short handoffs.
   It approaches and contacts the radio but has not reliably activated it.
