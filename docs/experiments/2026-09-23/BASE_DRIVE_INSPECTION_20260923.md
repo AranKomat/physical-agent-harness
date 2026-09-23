@@ -106,6 +106,22 @@ but the base stays still, investigate the native physical response rather than
 altering semantic prompts. Any commanded diagnostic needs a new scoped
 approval; earlier single-run approvals are consumed. Strict gates stay intact.
 
+### Follow-Up Preparation
+
+The private pulse diagnostic now wraps the existing evaluator settings,
+reset and task-load calls with read-only snapshots and records the prepared
+drive telemetry at substeps. It preserves the original 30-action schedule,
+0.005 m/s maximum requested forward speed, preflight, abort and braking checks.
+Exceptions are persisted inside the evaluator context before shutdown can
+obscure them. No native repeat has been launched by this preparation.
+
+Local verification: **1031 passed, one existing skip**, plus focused Ruff checks.
+Four new lifecycle tests check order/arguments/return values, exactly one call
+per operation, and persistence without retry for failures before, during or after
+an operation. These unit tests do not prove native telemetry correctness.
+The protocol explicitly requires preserving the user's unrelated CPU workload
+on the shared GPU host and a fresh single-attempt motion approval.
+
 ## Interpretation And Next Step
 
 This eliminates an unsupported explanation based on a 100-unit effort cap. It
