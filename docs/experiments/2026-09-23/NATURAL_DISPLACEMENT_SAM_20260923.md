@@ -242,3 +242,22 @@ This is not a live two-rate pipeline latency or Phase 3 pass.
 
 Private result: `runs/contact-continuity-long-20260923-r1/receipt.json`.
 No new GPU work, model calls or robot actions were performed.
+
+## Consistency Monitor Correction
+
+The shadow adapter now propagates its previous points into the current image
+before every mask refresh and records the inside/outside counts, fraction and
+pre-refresh low-support status. Reseeding cannot hide disagreement. No comparison
+is made across camera/session/gap resets, and stale mask sources remain rejected.
+The values are descriptive, not a newly fitted identity-confidence threshold.
+
+A regression replay of the same 1,537 frames matches the independently computed
+counts at all 12 refresh boundaries. The lowest consistency is 14/27 (51.85%),
+which the point-count-only monitor would miss. Final consistency is 16/17.
+This is implementation verification on existing evidence, not a new independent
+performance trial. Full private suite with isolated OpenCV: 1,085 passed and one
+existing skip. Receipt: `runs/contact-continuity-monitor-20260923-r1/receipt.json`.
+
+The next meaningful integration must handle actual asynchronous mask arrival;
+the idealized source-aligned replay does not qualify that behavior. No further
+identical offline repetitions are indicated.
