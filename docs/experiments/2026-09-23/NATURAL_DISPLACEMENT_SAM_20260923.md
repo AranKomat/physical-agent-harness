@@ -261,3 +261,26 @@ existing skip. Receipt: `runs/contact-continuity-monitor-20260923-r1/receipt.jso
 The next meaningful integration must handle actual asynchronous mask arrival;
 the idealized source-aligned replay does not qualify that behavior. No further
 identical offline repetitions are indicated.
+
+## Delayed-Mask Catch-Up Preparation
+
+The CPU shadow now has a separate bounded arrived-frame history (default 32
+grayscale frames, maximum 720x720 each). A delayed mask is applied to its exact
+stored source and propagated through already-arrived frames. It is never stamped
+as a current mask. Missing/expired/future/pre-reset sources are refused, and an
+older result cannot overwrite a newer accepted mask. Catch-up swaps the active
+candidate only after successful completion; failures leave prior state intact.
+Camera/session/gap resets clear incompatible history. The SAM inference buffer
+and native policy stream are unchanged.
+
+On the real 129-frame video interval, a synthetic 15-frame (0.5-second video-time)
+mask delay catches up from frame 1663 to 1678 and finishes with 17 points, 14 in
+the ending mask, matching source-aligned propagation. No candidate is supplied
+before the delayed mask arrives. The delay is injected, not a measured model
+latency, and the clock remains video presentation time. This prepares the
+asynchronous boundary but does not complete live Phase 3 or physical association.
+
+Private receipt: `runs/contact-deferred-shadow-20260923-r1/receipt.json`.
+Seven added tests cover delayed propagation, expired/future/reset sources,
+superseded results and failure atomicity. Full private suite with isolated OpenCV:
+1,092 passed, one existing skip. No GPU work, paid calls or robot actions.
