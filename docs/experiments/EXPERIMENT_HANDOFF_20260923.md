@@ -41,6 +41,10 @@ Phase 2 [similar-chair candidate test](2026-09-24/NATURAL_CHAIR_CANDIDATES_20260
 completed 13 frozen natural-view steps: multiple chair masks initially, candidates
 on all seven chair-visible frames and empty outputs on all six absent frames.
 This adds simultaneous similar-object evidence, not identity/crossing qualification.
+The [N11 displacement audit](2026-09-24/PHASE2_N11_DISPLACEMENT_AUDIT_20260924.md)
+also confirms 13 native image-space displacement masks, but all source camera
+poses are absent, so it cannot establish motion relative to the background or
+physical identity.
 Warm median is 145 ms; all outputs are local; no robot actions or paid calls.
 
 Independent correspondence follow-up: [posed features](2026-09-24/POSED_FEATURE_ASSOCIATION_20260924.md)
