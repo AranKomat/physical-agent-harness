@@ -212,3 +212,33 @@ Private receipt: `runs/contact-video-streaming-20260923-r1/receipt.json`.
 Six additional unit tests cover continuity, camera/session/gap resets and stale
 seeds. Live sensor publication, robot-pixel exclusion, independent association
 and natural loss/reacquisition still need qualification.
+
+## Longer Continuity And Refresh Comparison
+
+The adapter was then run over all 1,537 video frames from 1535 through 3071,
+comparing a single initial seed against refreshes at all 13 existing SAM source
+frames. All 13 video/capture mappings satisfy the same predeclared pixel-error
+limit; observed mean absolute differences range from 1.992 to 2.050/255.
+Destination-mask membership is evaluated before each refresh, not immediately
+after reseeding. Both conditions share every video frame and fixed parameters.
+
+Neither condition falls below four surviving points. However, at the final
+anchor the single-seed condition has 15 survivors with only 9 inside the SAM
+mask; periodic refresh has 17 survivors with 16 inside. After the major rotation,
+the corresponding counts are 12/16 versus 14/17. All translated-mask controls
+remain zero. These mask-relative measurements are not ground-truth identity or
+accuracy, particularly because some SAM masks include the gripper.
+
+This identifies a monitoring limitation: surviving point count alone does not
+detect candidate drift/contamination. The adapter's low-count reacquisition
+request cannot be interpreted as comprehensive tracking health. Periodic
+current-source mask consistency and robot-pixel exclusion remain necessary;
+no identity or motion authority is added.
+
+Tracking time totals 1.316 seconds for single-seed and 1.285 seconds for refresh,
+excluding video decoding, integrity checks and actual SAM inference. Refreshes
+are idealized at their exact source frame, not measured asynchronous arrivals.
+This is not a live two-rate pipeline latency or Phase 3 pass.
+
+Private result: `runs/contact-continuity-long-20260923-r1/receipt.json`.
+No new GPU work, model calls or robot actions were performed.
