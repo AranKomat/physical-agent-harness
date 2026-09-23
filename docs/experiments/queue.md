@@ -10,10 +10,12 @@ Latest follow-up: [Phase 0/1 retained V3 replay](2026-09-23/V3_RETAINED_REPLAY_2
 passes its declared offline integration scope after fixing future identity
 projection, pixel-ROI roundoff and compact omission budgeting. GPU/live timing
 preflight remains separate; hard association/loss replay is next.
-The Phase 2 private r2 protocol now freezes 14 scenarios and 670 files with
-4,329 successful preparation checks. No association replay or new inference has
-run against it. Partial hand occlusion is available; natural full loss and
-similar-object crossings remain coverage gaps.
+The [Phase 2 CPU contract replay](2026-09-23/ASSOCIATION_CONTRACT_REPLAY_20260923.md)
+exercises 10/14 frozen scenarios with 987 checks and zero identity bindings.
+This is not physical association qualification; four cases lack suitable evidence.
+Three source/session/consumer validation gaps were fixed. SAM runtime versions and
+CUDA now check out, but checkpoint authentication/restoration remains unresolved.
+Partial hand occlusion is available; natural full loss and crossings remain gaps.
 
 ## Completed Software And Retained-Data Work
 
@@ -41,6 +43,11 @@ similar-object crossings remain coverage gaps.
    Qualify delayed identity-claim availability explicitly; observation-time guards
    do not reconstruct publication-time history. Restore the approved SAM weights
    or authenticated download access before fresh GPU inference.
+   Runtime restoration is done; no SAM inference has run on this host. Latest
+   public suite: 1,481 tests; Linux embodied subset: 204; private: 604 plus one skip.
+   The strengthened synthetic loss test checks previously valid geometry and journal
+   reload. Native loss remains unqualified: retained no-center candidates do not
+   exercise that transition.
 4. With a separately approved call budget, compare delta versus inventory prompts
    on held-out views and compact versus rich executive context on frozen boundaries.
 5. Resume native localization/clearance/stopping qualification. Preserve strict

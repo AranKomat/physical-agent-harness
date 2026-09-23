@@ -57,6 +57,8 @@ class DiscoveryCoordinator:
                 continue
             if result.request.current.sim_time > current.sim_time or result.completed_wall > now:
                 raise PermissionError("Result isn't available at this consumer cutoff")
+            for frame in result.request.frames:
+                frame.available(current, now)
             item_ids = self.inventory.accept(result, received_wall=now, current_task_revision=task_revision)
             if result.request.task_revision == task_revision:
                 for a in result.attention:

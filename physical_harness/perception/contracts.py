@@ -154,6 +154,10 @@ class DiscoveryRequest:
             raise ValueError("Semantic batch must include a current image")
         if any(r.frame_id not in {f.asset_id for f in self.frames} for r in self.regions):
             raise ValueError("Region outside supplied images")
+        frames = {f.asset_id: f for f in self.frames}
+        if any(r.scoped_track is not None and r.scoped_track[0] != frames[r.frame_id].camera
+               for r in self.regions):
+            raise PermissionError("Scoped track camera differs from source frame camera")
         from physical_harness.core.actions import strict_loads
         obj = strict_loads('{"items":' + self.known_summary_json + '}', max_bytes=12000)
         if type(obj["items"]) is not list or any(type(x) is not dict or x.get("id") not in self.known_ids for x in obj["items"]):

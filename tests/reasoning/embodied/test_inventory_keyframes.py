@@ -219,6 +219,10 @@ def test_current_tracking_does_not_claim_metric_or_identity_authority():
     b = make_basis(1, wall=101, sim=1)
     kwargs = dict(source_hash=f.content_sha256, session_id='session', mask_basis=b, mask_evidence='mask')
     with pytest.raises(PermissionError):
-        require_current_tracking(seed, b, association_check=lambda *a: None, **kwargs)
-    out = require_current_tracking(seed, b, association_check=lambda *a: True, **kwargs)
+        require_current_tracking(seed, b, association_check=lambda s, basis, evidence, *, session_id: None, **kwargs)
+
+    def check(s, basis, evidence, *, session_id):
+        return s == seed and basis == b and evidence == 'mask' and session_id == 'session'
+
+    out = require_current_tracking(seed, b, association_check=check, **kwargs)
     assert out['motion_authority'] is False and 'xyz' not in out

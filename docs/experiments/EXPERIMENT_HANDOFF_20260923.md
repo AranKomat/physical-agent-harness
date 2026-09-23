@@ -3,7 +3,7 @@
 As of 2026-09-23. Repository: https://github.com/AranKomat/physical-agent-harness.
 This self-contained snapshot covers Embodied Runtime V3, responsibility-based
 consolidation at `35bc2b6`, ownership cleanup at `4aa1b47`, the corrected Phase 1
-retained replay, and Phase 2 scenario preparation. Use the commit containing this
+retained replay, and Phase 2 CPU contract replay. Use the commit containing this
 file as the code snapshot. No new model inference or robot trials were run for
 the Phase 0/1 follow-up; retained responses and pixels were replayed through code.
 Historical results below retain their original limitations and evaluation scope.
@@ -51,7 +51,7 @@ historical diagnostics are described later in this document.
 | --- | --- | --- |
 | 0. Preflight | Software and retained-evidence audit passed | Restore and qualify GPU/model/simulator environments; recover missing native timing/version provenance where possible |
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
-| 2. Hard discovery/SAM identity and loss | Protocol frozen; no new association/model replay executed | Run the frozen cases; collect natural full loss/reappearance and similar-object crossings |
+| 2. Hard discovery/SAM identity and loss | CPU contracts exercised on 10/14 frozen cases; no new inference or physical association qualification | Restore SAM checkpoint, test inherited geometry invalidation, collect natural full loss/reappearance and crossings |
 | 3. Live shadow GLM discovery | Not done with V3 | Record real observation/publication clocks, current-source associations and asynchronous inventory updates |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial diagnostics only | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
@@ -79,7 +79,7 @@ or task truth. Earlier development runs are not final qualification evidence.
 
 Three demonstrated runtime defects were fixed with 20 public regression tests:
 future/foreign identity projection, one-pixel ROI roundoff, and compact-context
-omission metadata exceeding its byte budget. Latest validation: 1,471 public tests,
+omission metadata exceeding its byte budget. Phase 1 validation: 1,471 public tests,
 Ruff, five synthetic CLIs; private snapshot 581 passed/one existing skip; 194
 embodied tests on the synchronized Linux host. No motion gates were relaxed.
 
@@ -94,10 +94,30 @@ images can test abstention but cannot qualify natural full disappearance or
 physical reidentification. Evaluator labels and scripted identities are excluded
 from model inputs; no independent physical association proof is established.
 
-The current host has CPU code/evidence but no restored SAM/policy/simulator
-environment. The approved official SAM 3.1 download returned HTTP 401 without
-authentication. Restore an authorized checkpoint/login before fresh inference;
-CPU contract replay can continue. The paid count ceiling is exhausted at 4,127.
+Follow-up CPU replay `phase2-association-contracts-20260923-r2` now exercises
+10/14 cases: 987 checks (mostly provenance), 36 archive visits, 30 positive-mask
+visits, zero identity bindings. Four scripted scenarios lack suitable mask or
+association evidence and remain unexecuted. This is not a recognition accuracy
+score. Existing candidates have no metric center, so their binding failures do
+not test invalidation of previously valid geometry on loss. A separate strengthened
+synthetic loss regression verifies valid-before/blocked-after binding and journal
+reload, not native perception. A matched lineage
+control accepts metadata for the recorded session and rejects a session-only
+change, without establishing physical identity. See the
+[Phase 2 report](2026-09-23/ASSOCIATION_CONTRACT_REPLAY_20260923.md).
+
+Three more demonstrated gaps are fixed: proposed tracking session now reaches
+the evidence-aware callback; discovery checks source/consumer robot, domain and
+availability before writes; scoped region camera must match its source image.
+Ten added public regressions pass. Latest validation is 1,481 public tests, Ruff,
+five CLIs, 204 Linux embodied tests and 604 private tests with one existing skip.
+Phase 1 r5 repeats all 64 successful checks against these fixes.
+
+The current host has restored pinned SAM source and all 59 recorded dependency
+versions; builder import, CUDA arithmetic and dependency checks pass. The SAM
+checkpoint and policy/simulator environments remain absent. The approved official
+SAM 3.1 download returned HTTP 401 without authentication. Restore an authorized
+checkpoint/login before fresh inference. The paid count ceiling is exhausted at 4,127.
 Do not issue more paid requests or reuse consumed exploratory motion permission.
 
 Detailed Phase 0/1 sources, hashes and reproduction command are in the
@@ -413,6 +433,7 @@ retired; use the migration inventory rather than reapplying old installers.
 | Ownership follow-up | 1,451 repository tests on Mac/Linux, including 33 boundary tests; Ruff; five local synthetic CLIs |
 | Private lab after import migration | 563 passed, one existing skip |
 | Corrected Phase 1 follow-up | 1,471 public tests, Ruff, five synthetic CLIs; 194 embodied Linux tests; private snapshot 581 passed, one existing skip |
+| Phase 2 boundary follow-up | 1,481 public tests, Ruff, five synthetic CLIs; 204 embodied Linux tests; private 604 passed, one existing skip; Phase 1 replay still passes |
 | Relocated coordinator behavior | Five definitions AST-identical to originals |
 | Repository hygiene | Ownership/local-link checker and whitespace checks passed |
 
@@ -528,12 +549,15 @@ Private result directories worth locating before resuming:
 | Phase 0 source/accounting audit | `runs/phase0-evidence-20260923-r1/` |
 | Authoritative Phase 1 replay / software validation | `runs/v3-retained-discovery-20260923-r4/` / `runs/phase1-fixed-validation-20260923-r1/` |
 | Phase 2 protocol only, not execution | `runs/phase2-association-protocol-20260923-r2/`; r1 preserved as superseded draft |
+| Phase 2 CPU contract replay, not inference | `runs/phase2-association-contracts-20260923-r2/`; r1 retained with superseded explanatory wording |
+| SAM runtime restoration, no weights | `runs/sam31-runtime-restore-20260923-r1/` |
 
 The latest host was bootstrapped with code, CPU environment and selected
 checksum-verified evidence, not all GPU weights, simulator assets or policy runtimes.
 See private `docs/HOST_BOOTSTRAP_20260923.md` for connection/provisioning details.
-Mac/Linux follow-up tests passed after source synchronization; that is not GPU
-restoration. Some full historical every-action sensor traces are not local; do not
+Mac/Linux follow-up tests passed after source synchronization. The later SAM
+runtime restoration is described above; weights and simulator are still absent.
+Some full historical every-action sensor traces are not local; do not
 assume any old stopped disk is disposable based on Git or summary reports alone.
 
 From the public repo root in the existing parent workspace, software-only checks:

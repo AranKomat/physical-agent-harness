@@ -89,6 +89,8 @@ def require_current_tracking(seed: BoxSeed, current: Basis, *, source_hash: str,
     """Validate lineage before a trusted adapter considers current association.
 
     This returns metadata, not an IdentityLedger proof, XYZ or a motion approval.
+    association_check(seed, mask_basis, mask_evidence, *, session_id) must bind
+    the proposed session to independently retained mask/seed provenance.
     """
     text(session_id)
     text(mask_evidence)
@@ -97,7 +99,7 @@ def require_current_tracking(seed: BoxSeed, current: Basis, *, source_hash: str,
     current.require_same(mask_basis)
     if current.episode != seed.source.basis.episode:
         raise PermissionError("Foreign tracking episode")
-    if association_check(seed, mask_basis, mask_evidence) is not True:
+    if association_check(seed, mask_basis, mask_evidence, session_id=session_id) is not True:
         raise PermissionError("Current mask cannot be uniquely associated with original sighting")
     return {"seed_id": seed.id, "sighting_id": seed.sighting_id, "session": session_id,
             "current_mask": mask_evidence, "current_basis": current.fingerprint,

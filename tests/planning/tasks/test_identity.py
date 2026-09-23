@@ -8,6 +8,7 @@ from physical_harness.perception.identity import (
     IdentityLedger,
     SemanticClaim,
     Tracklet,
+    focus_identity_view,
     geometric_candidates,
 )
 from tests.planning.tasks.conftest import make_basis
@@ -78,11 +79,21 @@ def test_contradiction_requires_new_evidence_to_resolve(journal):
 def test_not_observed_retains_label_but_blocks_actions(journal):
     mem = IdentityLedger(journal)
     entity = mem.new_entity(track(), claim())
+    # Synthetic positive control: subsequent denials must invalidate a valid binding.
+    assert mem.binding(entity, make_basis(0))['geometry']['center'] == [0.4, 0.2, 0.7]
     mem.mark_not_observed(entity, make_basis(1), ('fresh-side-camera',))
     assert mem.state(entity)['canonical']['label'] == 'radio'
     assert mem.state(entity)['last_track']['center'] == [0.4, 0.2, 0.7]
     with pytest.raises(PermissionError):
         mem.binding(entity, make_basis(1))
+    for restored in (mem, IdentityLedger(journal)):
+        for cutoff in (make_basis(0), make_basis(1)):
+            with pytest.raises(PermissionError):
+                restored.binding(entity, cutoff)
+        view = focus_identity_view(restored, entity, make_basis(1))
+        assert not view['current_geometry_available']
+        assert view['remembered_semantics']['label'] == 'radio'
+        assert view['visibility'] == 'not_observed'
 
 def test_cross_camera_local_ids_never_merge_automatically(journal):
     mem = IdentityLedger(journal)
