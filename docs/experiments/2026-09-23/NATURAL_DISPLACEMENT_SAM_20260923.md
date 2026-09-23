@@ -71,3 +71,43 @@ more tracker-ID persistence. It needs evidence for uniqueness, temporal support
 and geometric support before transferring a remembered semantic label to current
 geometry. SAM continuity and visual overlay review alone do not supply that proof.
 Further repeats of this negative contract test are not the next experiment.
+
+## Independent Feature-Correspondence Diagnostic
+
+An offline SIFT test then measured appearance support on the same frozen 13
+images, independent of SAM's numeric IDs. OpenCV 4.10.0.84 was installed in an
+isolated local dependency directory, not the shared GPU host or existing runtime.
+Parameters were fixed before running: 2,000 image features, reciprocal nearest
+neighbors with a 0.75 ratio test, and a 3-pixel RANSAC homography threshold.
+Features are extracted on whole images; source-mask membership and destination
+candidate membership are checked after matching. Two translated destination
+masks, left/right by 180 pixels, are artificial wrong-region controls.
+
+| Pair | Matches into radio candidate | Homography inliers |
+| --- | ---: | ---: |
+| 48 to 52 | 21 | 13 |
+| 52 to 56 | 1 | 0 |
+| 56 to 60 | 6 | 6 |
+| 60 to 64 | 4 | 4 |
+| 64 to 68 | 2 | 0 |
+| 68 to 72 | 3 | 0 |
+| 72 to 76 | 7 | 7 |
+| 76 to 80 | 3 | 0 |
+| 80 to 84 | 9 | 9 |
+| 84 to 88 | 6 | 6 |
+| 88 to 92 | 5 | 5 |
+| 92 to 96 | 3 | 0 |
+
+All 24 wrong-region controls had zero destination matches. However, five actual
+pairs had fewer than four matches, including the large rotation at 52 to 56.
+The full local analysis took 1.12 seconds excluding imports. This is evidence
+against promoting sparse SIFT matching alone into the missing association
+producer. Matches can also come from included gripper pixels, and a fitted
+homography is neither rigid 3D identity nor uniqueness among similar objects.
+No thresholds were relaxed and no positive association was written.
+
+Private result: `runs/displacement-features-20260923-r1/receipt.json`.
+Script SHA-256:
+`0d0efd524018fc6b983f2e16b7bc800194c336eddfcb179b91a302eee7e9c990`.
+Next useful association test requires denser temporal evidence and robot-pixel
+exclusion or independent reobservation, not another identical sparse replay.
