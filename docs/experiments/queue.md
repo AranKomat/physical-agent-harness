@@ -136,6 +136,13 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+Latest grasp correction: [dense-target closure support](2026-09-24/GRASP_CLOSURE_SUPPORT.md)
+rejects candidate 1, whose open finger overlaps two full-resolution target points
+missed by stride-four scene sampling. The endpoint screen now always includes
+the complete retained target cloud. Candidates 0/2 retain no endpoint intrusions
+and have observed support on both fingers during a static closure sweep; no
+physical contact/lift or dense-target path qualification follows.
+
 The reverse-stop attribution reconstructs all 25 flags: braking 11-18 passed;
 19/20 failed wrist raw velocity; 24/25 failed wrist and planar raw velocity.
 Do not latch an earlier stop pass across later failures or repeat an identical

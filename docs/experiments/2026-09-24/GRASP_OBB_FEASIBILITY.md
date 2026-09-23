@@ -2,6 +2,10 @@
 
 ## Outcome
 
+Subsequent [dense-target closure audit](GRASP_CLOSURE_SUPPORT.md) rejects
+candidate 1 at its open endpoint. Only 0 and 2 remain endpoint candidates.
+The following table is the original coarse-depth result, not the latest admission.
+
 Three of the eight highest-scored reference geometric candidates survive the
 bounded offline endpoint and sampled joint-path rejection checks. This advances
 candidate feasibility, not Phase 9 completion or motion authorization.
