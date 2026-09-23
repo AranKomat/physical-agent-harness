@@ -9,6 +9,9 @@ Use the commit containing this
 file as the code snapshot. No new model inference or robot trials were run for
 the Phase 0/1 follow-up; retained responses and pixels were replayed through code.
 Historical results below retain their original limitations and evaluation scope.
+The latest [stationary SAM join](2026-09-23/STATIONARY_SAM_JOIN_20260923.md)
+records a fresh-capture adapter failure and its bounded correction separately
+from model quality and Phase 5 qualification.
 
 ## 1. Executive Summary
 

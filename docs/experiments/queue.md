@@ -40,6 +40,11 @@ reduces proxy-overlapping mesh pairs to 77/49/42 for K=2/4/8, but none is adopte
 The [model-default update](2026-09-23/GPT6_SOL_LUNA_MIGRATION_20260923.md) uses Sol
 Flex for new GPT runs and adds optional Luna Flex; no paid calls or budget
 extensions were made. Latest public/private suites:1,489 / 818 plus one skip.
+The [stationary native SAM join](2026-09-23/STATIONARY_SAM_JOIN_20260923.md)
+first failed before inference on a private NumPy scalar conversion. After the
+adapter correction, a separately recorded zero-action attempt passes: one mask,
+29,710 depth samples, 1.3032-second publication age. This does not qualify moving
+or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Completed Software And Retained-Data Work
 

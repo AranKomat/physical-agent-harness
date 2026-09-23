@@ -62,3 +62,18 @@ Compare semantic identification separately from precise localization. This is
 retained-image discovery, not online identity tracking or task success, and the
 historical GLM timing is not a contemporaneous provider-speed control. Do not
 select a robotics model from general language benchmark rankings alone.
+
+### Frozen Preparation
+
+The 12 matched requests are now prepared locally in
+`internal/physical-ai-lab/runs/sol-luna-inventory-inputs-20260923-r1`.
+Sequences are 0,288,352,384,512,768; Sol-first/Luna-first ordering alternates
+across views. Exact original image bytes, messages, schema and the low reasoning
+effort used by GLM are retained; only model/provider/Flex routing differs.
+The 50,000-input / 2,048-output bound includes cache-write rates and 20% price
+headroom, giving a total estimate of **$0.5499144**, not a billing reservation.
+
+The preparation tool has no execution, network, credential or ledger access.
+All source hashes remained unchanged; 14 focused synthetic tests pass. Approval
+is recorded as pending and no calls were sent. Frozen plan SHA-256:
+`52b328a659dd097ac3c4acceca34dd44f95e2a6f35c61339adc9f4603a64d6dd`.
