@@ -97,6 +97,12 @@ joint-limit-valid solutions with the pinned grasp-to-TCP transform. This is
 still not collision-aware IK or a path certificate; the next Phase 9A gate is
 full-body collision/swept-path validation, followed by close-range
 reacquisition.
+The [sampled IK-path collision screen](2026-09-24/GRASP_IK_PATH_COLLISION_SCREEN.md)
+then tested all eight measured-to-goal paths at 65 postures against 11,003
+authored hull pairs each. All were intersection-free with 22.65--22.95 mm
+minimum sampled separation. Native cooked geometry, external scene/floor
+clearance, continuous swept bounds, TCP/contact calibration, and close-range
+reacquisition remain open; no execution is authorized.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
