@@ -3,7 +3,8 @@
 As of 2026-09-23. Repository: https://github.com/AranKomat/physical-agent-harness.
 This self-contained snapshot covers Embodied Runtime V3, responsibility-based
 consolidation at `35bc2b6`, ownership cleanup at `4aa1b47`, the corrected Phase 1
-retained replay, Phase 2 CPU contract replay and a fresh 25-frame SAM diagnostic.
+retained replay, Phase 2 CPU contract replay, a fresh 25-frame SAM diagnostic,
+and native sensor restoration on the new single-GPU host.
 Use the commit containing this
 file as the code snapshot. No new model inference or robot trials were run for
 the Phase 0/1 follow-up; retained responses and pixels were replayed through code.
@@ -50,9 +51,9 @@ historical diagnostics are described later in this document.
 
 | Phase | Status at this snapshot | Remaining work |
 | --- | --- | --- |
-| 0. Preflight | Software and retained-evidence audit passed | Restore and qualify GPU/model/simulator environments; recover missing native timing/version provenance where possible |
+| 0. Preflight | Software/retained audit, SAM restoration and native sensor smoke passed | Restore policy/geometry-specific environments; qualify live timing and recover missing provenance where possible |
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
-| 2. Hard discovery/SAM identity and loss | CPU contracts on 10/14 cases; fresh SAM inference on four bounded cases; physical association unqualified | Native loss/reappearance/crossings, independent association and live timing; simulator environment still needs restoration |
+| 2. Hard discovery/SAM identity and loss | CPU contracts on 10/14 cases; fresh SAM inference on four bounded cases; physical association unqualified | Native loss/reappearance/crossings, independent association and live timing; basic simulator/sensors now restored |
 | 3. Live shadow GLM discovery | Not done with V3 | Record real observation/publication clocks, current-source associations and asynchronous inventory updates |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial diagnostics only | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
@@ -65,6 +66,12 @@ historical diagnostics are described later in this document.
 | 12. Executed memory benefit | Retained decisions only | Execute M0/M1/routed visual-memory conditions with one frozen backend |
 | 13. Robustness | Component negatives only | End-to-end seeds, placements, distractors, delays and forced failures |
 | 14. Efficiency | Component timings only | End-to-end latency/cost/duty-cycle comparison after correctness |
+
+The [native sensor restoration](2026-09-23/NATIVE_SENSOR_RESTORATION_20260923.md)
+passed on reserved development instance 301, with zero commanded actions/API
+calls and clean process exit. Three RGB-D cameras and the 61-D/23-D/30-Hz robot
+interface work. This does not qualify geometry, physical association or motion.
+All sensor evidence is backed up locally; the old host remains stopped.
 
 Phase 0's private audit passed 641 checks. All 25 exported PNGs have the same
 decoded pixels as native captures, and the six API image payloads match retained

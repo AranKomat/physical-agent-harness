@@ -19,6 +19,10 @@ now completes 25 steps after restoring the approved checkpoint: box tracking,
 two resets and partial occlusion retain candidates; three negative frames stay
 empty. All 1,589 learned parameters match the checkpoint. This does not establish
 physical reidentification; natural full loss and crossings remain gaps.
+The [native sensor restoration](2026-09-23/NATIVE_SENSOR_RESTORATION_20260923.md)
+also passed on the new 4090: three RGB-D cameras, 61-D proprioception, 23-D
+action interface at 30 Hz, zero commanded actions. This is sensor readiness,
+not localization, identity or motion qualification.
 
 ## Completed Software And Retained-Data Work
 
@@ -47,7 +51,8 @@ physical reidentification; natural full loss and crossings remain gaps.
    do not reconstruct publication-time history. Restore the approved SAM weights
    or authenticated download access before fresh GPU inference. This restoration
    and the first 25-step inference diagnostic are now complete; do not repeat them
-   as if unstarted. Simulator/sensor/policy restoration remains pending. Latest
+   as if unstarted. Basic simulator/sensor restoration now passes; policy and
+   geometry-specific runtime restoration remain pending. Latest
    public suite: 1,481 tests; Linux embodied subset: 204; private: 629 plus one skip.
    The strengthened synthetic loss test checks previously valid geometry and journal
    reload. Native loss remains unqualified: retained no-center candidates do not
