@@ -12,7 +12,10 @@ projection, pixel-ROI roundoff and compact omission budgeting. GPU/live timing
 preflight remains separate; hard association/loss replay is next.
 The [Phase 2 CPU contract replay](2026-09-23/ASSOCIATION_CONTRACT_REPLAY_20260923.md)
 exercises 10/14 frozen scenarios with 987 checks and zero identity bindings.
-This is not physical association qualification; four cases lack suitable evidence.
+The [N11 displacement audit](2026-09-24/PHASE2_N11_DISPLACEMENT_AUDIT_20260924.md)
+adds native image-space motion evidence, but its source observations have no
+camera pose, so it does not close the continuous-motion scenario. This is not
+physical association qualification; four cases still lack suitable evidence.
 Three source/session/consumer validation gaps were fixed. The
 [fresh SAM diagnostic](2026-09-23/FRESH_SAM_ASSOCIATION_DIAGNOSTIC_20260923.md)
 now completes 25 steps after restoring the approved checkpoint: box tracking,
@@ -118,6 +121,16 @@ changed. Moving/braking estimator validation and base stopping remain open.
    563 passed, one existing skip. The initial 1,418-test consolidation also
    passed an isolated wheel check; that check was not rerun after the ownership
    follow-up. No model calls.
+
+**Next phase-level capture requirement.** Do not rerun the retained
+`run_phase2_fresh_sam.py` queue or another easy continuous track. The next GPU
+run must be a fresh native hard-case trace containing, at every selected
+boundary, source-bound RGB/depth, a legal contemporaneous camera pose, and
+the provenance needed to distinguish camera motion from object motion. It
+should target full disappearance/reappearance and a genuine similar-object
+ambiguity/crossing if the simulator scene permits. Without those pose-bound
+artifacts, the run can only produce another descriptive image-space result and
+must not be counted toward Phase 2 completion.
 2. Retained replay complete in its declared fixture-clock scope: six saved GLM
    inventories, 67 sightings, 64 checks, no new calls/motion. Corrected public
    suite: 1,471 tests; private snapshot: 581 passed, one skip. The new GLM delta
