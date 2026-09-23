@@ -136,6 +136,13 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+Critical-path update: [candidate-2 coverage and reach](2026-09-24/GRASP_COVERAGE_STAGING.md)
+show 44,033/116,020 exposed vertex samples outside all current views. Torso motion
+carries the idle right arm into unseen space. Locking the torso cannot reach any
+of the three surviving targets (0.327-0.354 m beyond the optimistic arm bound).
+Retain these proposals and return to Phase 5-7 stopping/sensing/closer staging.
+Do not spend another grasp batch or tighten path sampling before resolving this.
+
 Latest Phase 9 [geometric feasibility screen](2026-09-24/GRASP_OBB_FEASIBILITY.md):
 candidates 0/1/2 retain target support with no tested endpoint or 17-posture path
 hits. Candidate 3 is rejected on-path; 4-7 at endpoints. Candidate 2 minimizes
