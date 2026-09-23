@@ -190,3 +190,25 @@ Private artifacts: `runs/contact-video-flow-20260923-r1/receipt.json` and
 `review.png`; script `scripts/replay_contact_video_flow.py`.
 Video SHA-256:
 `38a2f21ce2213d19617d8233a1a8f620815548ce0ea543d212235b92db10c52e`.
+
+## Streaming Shadow Integration
+
+A private `ContinuityShadow` now carries candidate feature points across ordered
+frames. It requires a typed camera/session/observation identity, consecutive
+sequence numbers and a bounded capture-time gap. Camera/session changes, gaps
+or resolution changes discard the old points. Repeated/regressed frames and
+historical mask seeds are rejected. New masks can seed only their named current
+observation; reseeding starts a new tracker generation.
+
+It reports point count and a diagnostic reacquisition request below four points.
+That threshold is not a physical-association or geometry-confidence threshold.
+Every output explicitly withholds association, current geometry and motion
+authority. It is not connected to the native actuator or frozen-policy inputs.
+
+On all 129 video frames in order, the streaming adapter matches the prior batch
+result: 17 final surviving points, 14 inside the ending mask. This replay uses
+video presentation time, explicitly not qualified native sensor capture time.
+Private receipt: `runs/contact-video-streaming-20260923-r1/receipt.json`.
+Six additional unit tests cover continuity, camera/session/gap resets and stale
+seeds. Live sensor publication, robot-pixel exclusion, independent association
+and natural loss/reacquisition still need qualification.
