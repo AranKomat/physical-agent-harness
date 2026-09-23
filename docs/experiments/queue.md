@@ -136,6 +136,12 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+Latest Phase 9 [geometric feasibility screen](2026-09-24/GRASP_OBB_FEASIBILITY.md):
+candidates 0/1/2 retain target support with no tested endpoint or 17-posture path
+hits. Candidate 3 is rejected on-path; 4-7 at endpoints. Candidate 2 minimizes
+maximum joint excursion among survivors. Next combine continuous self-separation
+and coverage assessment; do not spend another grasp batch. No execution authority.
+
 New Phase 9 candidate set: [reference geometric branch](2026-09-24/GRASP_REFERENCE_BRANCH.md)
 produces 272 proposals; 176 have retained inner-box support and all eight highest
 scores have support. Same hand/cloud, no fitted translation. Check numerical
