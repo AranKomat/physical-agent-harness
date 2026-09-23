@@ -73,6 +73,11 @@ completed 30 actions but the 0.005 m/s command produced only 2.067 micrometres
 forward displacement, not the nominal 1.667 mm. It therefore did not create a
 useful moving/braking contrast. Next inspect applied control targets/drive
 settings before attributing a dead zone or proposing a stronger pulse.
+The [zero-command drive inspection](2026-09-23/BASE_DRIVE_INSPECTION_20260923.md)
+confirmed native damping of 1e7 and sentinel-scale raw effort/velocity limits.
+Joint-wrapper limits (100 effort, 1/15 velocity) are fallbacks, not measured
+physical caps. One adapter error was corrected and retained as a failed attempt.
+Audit the reset/limit lifecycle and applied targets before escalating motion.
 
 ## 1. Executive Summary
 
@@ -130,7 +135,7 @@ historical diagnostics are described later in this document.
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial diagnostics; fresh paused recapture consistency passes | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
-| 7. Free-space arm staging and return | GPU robot-only FK passes 37 configurations; enclosing collision candidate has excessive proxy overlap; execution not done | Tighter qualified collision assets, exact held-joint planning configuration, legal scene, measured endpoint and stop |
+| 7. Free-space arm staging and return | Robot-only FK, native hull containment and 28 frozen joint-path bounds pass their scopes; exploratory wrist motion occurred but return failed its stop gate | External clearance, whole-robot stop qualification and a qualified native stage/return; exploratory motion is not completion |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
 | 9. Compiler manipulation | Contracts and negative replay only | Positive sensor-grounded candidate, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
