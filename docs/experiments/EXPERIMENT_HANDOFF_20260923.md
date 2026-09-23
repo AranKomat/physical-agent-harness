@@ -91,6 +91,11 @@ The [four-iteration solver variant](2026-09-23/BASE_SOLVER_VARIANT_20260923.md)
 failed the five-hold stop preflight with larger raw wrist-velocity discrepancies.
 It issued no forward command, is not adopted, and cannot answer whether extra
 iterations improve base motion. Original physics defaults and gates stay intact.
+The [equal-travel command-size diagnostic](2026-09-23/BASE_EQUAL_TRAVEL_20260923.md)
+then produced 0.532 mm forward motion using five 0.01 m/s commands, compared with
+0.002067 mm for ten 0.005 m/s commands. Initial state and preflight match. This
+provides a moving/braking contrast for Phase 5, but final raw stop still fails
+and strict navigation remains unqualified. It is not an adopted controller gain.
 
 ## 1. Executive Summary
 
