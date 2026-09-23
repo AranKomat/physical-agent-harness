@@ -27,6 +27,14 @@ when the detector missed something. Boxes are proposals, not precise geometry.
 Do not output metric coordinates, trajectories, robot actions or success claims.
 Preserve the entire task description; never silently drop a color/subtype/relationship.
 Return attention and memory deltas together, within the declared caps. No prose.
+Each updates entry describes a visible object or inspectable image region, not
+a task-status statement. Do not turn "no target seen" into a full-image object
+sighting; use scene_summary for that limited observation, without claiming absence.
+Give each update a unique local_id. Every attention.local_id must exactly copy
+one updates.local_id from THIS response, not a known ID or a newly invented ID.
+For example, an update with local_id "cabinet" can receive attention with
+local_id "cabinet", never "cabinet_top" unless that update is also returned.
+Return empty updates and attention arrays when there are no supported changes.
 A named known ID is only an association HYPOTHESIS; it cannot refresh that entity.
 """
 
@@ -36,7 +44,8 @@ def response_schema(request: DiscoveryRequest) -> dict:
     update = {
         "type": "object", "additionalProperties": False,
         "properties": {
-            "local_id": {"type": "string", "maxLength": 128},
+            "local_id": {"type": "string", "maxLength": 128,
+                         "description": "Unique ID for this returned visible-object or region update; attention references this exact ID."},
             "frame_id": {"type": "string", "enum": [f.asset_id for f in request.frames]},
             "region_id": nullable_string,
             "box": {"anyOf": [{"type": "null"}, {"type": "array", "minItems": 4, "maxItems": 4,
@@ -54,7 +63,7 @@ def response_schema(request: DiscoveryRequest) -> dict:
     }
     update["required"] = list(update["properties"])
     attention = {"type": "object", "additionalProperties": False,
-                 "properties": {"local_id": {"type": "string"}, "reason": {"type": "string", "maxLength": 320},
+                 "properties": {"local_id": {"type": "string", "description": "Exact local_id of an entry in this response's updates array."}, "reason": {"type": "string", "maxLength": 320},
                                 "significance": {"type": "string", "enum": ["low", "normal", "high"]}},
                  "required": ["local_id", "reason", "significance"]}
     return {"type": "object", "additionalProperties": False,

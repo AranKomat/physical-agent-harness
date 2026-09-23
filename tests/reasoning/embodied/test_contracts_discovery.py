@@ -9,6 +9,7 @@ from jsonschema import Draft202012Validator
 
 from physical_harness.perception.contracts import ValueHints, validate_box
 from physical_harness.perception.discovery import (
+    INSTRUCTION,
     AsyncDiscovery,
     ExistingModelDiscovery,
     model_packet,
@@ -48,6 +49,18 @@ def test_request_and_response_contract():
     assert out.attention[0].local_id == 'new-0'
     assert 'actions' not in model_packet(r)
     assert model_packet(r)['episode'] == 'ep'
+
+def test_attention_prompt_explains_cross_reference_without_relaxing_validation():
+    r = make_request()
+    assert 'Every attention.local_id must exactly copy' in INSTRUCTION
+    assert 'use scene_summary' in INSTRUCTION
+    schema = response_schema(r)
+    assert 'Exact local_id' in schema['properties']['attention']['items']['properties']['local_id']['description']
+    raw = response(r)
+    raw['attention'][0]['local_id'] = 'mantel_view'
+    Draft202012Validator(schema).validate(raw)
+    with pytest.raises(PermissionError, match='Attention must refer'):
+        parse_response(raw, r, model='configured-glm', completed_wall=104.)
 
 @pytest.mark.parametrize('mutation', ['extra', 'request', 'fingerprint', 'many', 'duplicate', 'frame', 'region', 'box_and_region', 'known', 'attention', 'nan', 'action', 'missing_value', 'status', 'missing_box'])
 def test_invalid_semantic_replies_are_rejected_atomically(mutation):

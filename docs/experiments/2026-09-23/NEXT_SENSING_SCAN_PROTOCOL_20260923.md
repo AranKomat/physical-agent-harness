@@ -1,7 +1,11 @@
 # Proposed Exploratory Sensing Scan
 
-Status: **awaiting explicit authorization for this larger scope**. No native
-scan has run. Earlier 0.01-rad wrist-probe results do not authorize this motion.
+Status: **explicitly approved by the user on 2026-09-23 ("both approved")**.
+Fresh captured-posture geometric checks now pass; see the
+[preflight report](LIVE_DISCOVERY_SCAN_PREFLIGHT_20260923.md). Native monitored
+execution remains pending, and those receipts are not live motion authority.
+No native scan has run yet. Approval covers one exploratory scan within the
+bounds below; earlier 0.01-rad wrist-probe results do not qualify this motion.
 
 ## Question
 
@@ -49,7 +53,8 @@ Six tests pass for continuous-profile-derived command-rate bounds, acceleration
 differences, held endpoints, straight-path preservation, zero/tiny/full-range
 departures and rejected inputs. Ruff passes. This does not establish measured
 tracking, physical acceleration, stopping or clearance, and is not a native
-experiment. Fresh-state admission and the larger-scan authorization remain open.
+experiment. Fresh-state admission remains open; the larger-scan authorization
+has now been received.
 
 ## Required Preparation
 

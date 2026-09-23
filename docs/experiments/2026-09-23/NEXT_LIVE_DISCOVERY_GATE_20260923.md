@@ -1,5 +1,11 @@
 # Next Live Discovery Gate
 
+Update: [live attempt results](LIVE_DISCOVERY_SCAN_PREFLIGHT_20260923.md).
+All six approved calls were used. The first batch published two responses and
+rejected the third for dangling attention IDs. After prompt clarification, all
+three new captures passed. Phase 3 remains partial; no paid calls remain in this
+scope. Budget numbers below describe the pre-experiment state.
+
 ## Verified Budget State
 
 Read-only campaign-ledger inspection after the remote SAM test:
@@ -14,7 +20,7 @@ Unused dollars do not authorize new calls. No ledger entries, holds or limits
 were changed by this check. Local SAM inference does not consume this paid-call
 budget, and it cannot substitute for the planned GLM discovery test.
 
-Proposed next scope, **not approved or dispatched**: up to six GLM calls, at most
+Scope **approved on 2026-09-23 ("both approved")**: up to six GLM calls, at most
 $1 reserved exposure, cumulative call ceiling 4,145, with the $75 ceiling and
 all existing holds unchanged. Endpoint/model/pricing validation and conservative
 per-call reservations must fit within that scope before any request is sent.

@@ -1,5 +1,15 @@
 # Experiment And Verification Handoff
 
+Latest follow-up: [live discovery and fresh scan preflight](2026-09-23/LIVE_DISCOVERY_SCAN_PREFLIGHT_20260923.md).
+Six approved GLM calls cost $0.00511925. A dangling-attention-ID failure was
+correctly rejected; after prompt clarification, three fresh paused captures
+passed the real provider/worker/coordinator/inventory chain. Phase 3 remains
+partial: no prospective coalescing/context-consumer or broad coverage test.
+Fresh scan self-separation and sampled depth checks pass, but the arm scan has
+not run; native monitoring and fresh-episode binding remain. Public tests:
+1,490 passed; private: 1,149 passed, one skipped. Full details and retained
+limitations are in the linked report.
+
 As of 2026-09-23. Repository: https://github.com/AranKomat/physical-agent-harness.
 This self-contained snapshot covers Embodied Runtime V3, responsibility-based
 consolidation at `35bc2b6`, ownership cleanup at `4aa1b47`, the corrected Phase 1
