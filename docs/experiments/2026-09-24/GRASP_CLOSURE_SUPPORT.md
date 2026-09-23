@@ -48,3 +48,17 @@ Scripts: `grasp704_closure_support.py`, `grasp_endpoint_batch.py`.
 The pinned proposal archive and hand annotation are unchanged. No inferred
 grasp translation, box expansion or allowed-contact exclusion was introduced.
 Zero robot actions, new model inference or paid calls. Phase 9 remains partial.
+
+## Dense-Target Path Follow-Up
+
+`grasp704-obb-dense-paths-20260924-r1` applies the corrected dense-target input
+to the same 17-fraction joint interpolation. Candidate 0 has no sampled hits.
+Candidate 2 is rejected at fraction 0.9375 with nine observed point intrusions
+outside the ambiguous start body. Its clean endpoint does not rescue that path.
+All other candidates remain endpoint-rejected and receive no path screening.
+
+Candidate 0 is now the sole retained offline survivor. Freeze the proposal set:
+no further proposal batches or sampling refinements before addressing the
+staging/coverage/stop prerequisites. A 17-posture no-hit result is still not
+continuous clearance, an executable trajectory, or successful manipulation.
+The complete receipt is backed up locally under the private lab runs directory.

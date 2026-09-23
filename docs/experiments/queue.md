@@ -1,12 +1,47 @@
 # Current Experiment Queue
 
-Updated 2026-09-23. Consolidation adds no capability and authorizes no new spend
+Updated 2026-09-24. Consolidation adds no capability and authorizes no new spend
 or motion. The detailed [earlier qualification queue](qualification_queue.md)
 and dated reports remain evidence; this page is the current entry point.
 For a standalone account of completed trials, caveats and unperformed stages, read
 the [experiment handoff](EXPERIMENT_HANDOFF_20260923.md).
 
-Latest follow-up: [Phase 0/1 retained V3 replay](2026-09-23/V3_RETAINED_REPLAY_20260923.md)
+## Current Decisions
+
+This summary supersedes earlier next-step wording below; dated receipts remain
+immutable evidence, including failed and subsequently invalidated attempts.
+
+| Phase | Current scope and remaining work |
+| --- | --- |
+| 0-1 | Software and retained replay passed within their declared offline scope |
+| 2 | Partial: 10/14 scenarios; genuine crossing, full loss/reappearance and motion gaps |
+| 3 | Partial: live prospective inventory coverage incomplete; new paid calls need budget |
+| 4 | Not completed; paid comparison needs budget |
+| 5 | Partial: refreshed forward/reverse localization and shadow stop evidence; uncertainty/clearance unresolved |
+| 6-7 | Strict base transit and arm staging/return unqualified |
+| 8 | Exploratory comparisons only; no qualified causal benefit |
+| 9 | One retained offline grasp candidate, no executed grasp/lift |
+| 10-14 | No qualifying end-to-end studies completed |
+
+1. Freeze the frame-704 grasp batch. [Dense-target path screening](2026-09-24/GRASP_CLOSURE_SUPPORT.md)
+   leaves candidate 0 only. Candidate 1 overlaps at its open endpoint; candidate
+   2 overlaps nine points at path fraction 0.9375. Do not revive coarse-depth passes.
+2. Return the execution critical path to staging/sensing/stopping. The surviving
+   target exceeds fixed-torso reach; current views cannot qualify whole-body motion.
+   [Coverage/reach evidence](2026-09-24/GRASP_COVERAGE_STAGING.md) remains a blocker.
+3. Keep the [reverse-stop result](2026-09-24/REVERSE_STOP_PROTOCOL.md) as directional
+   validation only. Do not latch earlier raw passes across later failures or
+   replace runtime authority with uncalibrated shadow output.
+4. Await the user's pending scope choice on bounded exploratory task trials
+   alongside strict qualification. Such trials would not complete strict phases.
+   No expanded task-motion permission is inferred from automatic continuations.
+5. Do not repeat easy association tests, the blind observer sweep, identical
+   calibration pulses, or more grasp batches. Phase 2 needs genuinely new causal
+   hard-case evidence; paid stages need an explicit budget extension.
+
+## Evidence History
+
+Earlier follow-up: [Phase 0/1 retained V3 replay](2026-09-23/V3_RETAINED_REPLAY_20260923.md)
 passes its declared offline integration scope after fixing future identity
 projection, pixel-ROI roundoff and compact omission budgeting. GPU/live timing
 preflight remains separate; hard association/loss replay is next.
@@ -134,7 +169,10 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 - [LocateAnything](2026-09-23/LOCATEANYTHING_SMOKE_20260923.md): description grounding
   evaluated; not a replacement for category inventory.
 
-## Next, In Order
+## Decision History
+
+The notes below record decisions at their respective times. The Current Decisions
+section above takes precedence where later evidence changes admission or priority.
 
 Latest grasp correction: [dense-target closure support](2026-09-24/GRASP_CLOSURE_SUPPORT.md)
 rejects candidate 1, whose open finger overlaps two full-resolution target points
