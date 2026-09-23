@@ -64,6 +64,12 @@ found candidate 384 within joint limits with zero authored-hull collisions over
 11,003 checked pairs and a 23.33 mm minimum FCL distance. This makes it a valid
 offline follow-up candidate, not a motion authorization. Reach/path, optical
 geometry, scene occlusion, and native stopping remain open.
+
+The [candidate 384 sampled path](2026-09-24/OBSERVER384_PATH.md) has zero
+authored-hull intersections at 65 postures, but requires a 2.966-rad maximum
+joint excursion and still lacks proximal-corridor visibility. This is not
+continuous clearance. Establish useful proximal coverage before spending more
+on this candidate's motion qualification; do not execute it on this evidence.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution

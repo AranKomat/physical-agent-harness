@@ -1,0 +1,49 @@
+{
+  "scope": "offline_observer_candidate_joint_path_authored_hull_check",
+  "input_sha256": {
+    "asset": "6029617cdd3aefce981428058a1c82cffe6af20ae61dc5be1da7334342c3bc52",
+    "urdf": "b0d76760cbedfbcbe1ddc280380dd5f497bbca380313bc096d7239a2c50dae61",
+    "config": "d3eb97811138d00edd83bc2be23f8d1d2e2b17c1bbea237a7cf2f9f89752524e",
+    "receipt": "28b7bce267d4bf0cbfafc992052c778c31b3eca809835eb952f263a4c15b5d75",
+    "native": "a738034692ab7c75309ad56c7a6ac1bf6da06e80008888a7b2b0241029932ba3",
+    "script": "0123000fc9015d845a1502a16541343cdbd9facbe4247dba6238726357d1ba60"
+  },
+  "candidate_index": 384,
+  "motion_authorized": false,
+  "actions": 0,
+  "paid_calls": 0,
+  "source_survey_sha256": "03a1fde6930780554be1af0126a65a7e694289dfd96a7e3b0ef272f4943b2285",
+  "source_sweep_sha256": "28b7bce267d4bf0cbfafc992052c778c31b3eca809835eb952f263a4c15b5d75",
+  "native_receipt_sha256": "a738034692ab7c75309ad56c7a6ac1bf6da06e80008888a7b2b0241029932ba3",
+  "changed_joints": {
+    "right_arm_joint1": 0.4910743983702499,
+    "right_arm_joint2": -2.966166361792917,
+    "right_arm_joint3": -0.3662144327234076,
+    "right_arm_joint4": -0.6456495326608187,
+    "right_arm_joint5": 1.872747245143739,
+    "right_arm_joint6": 0.8664248946144717,
+    "right_arm_joint7": -1.471794327690188
+  },
+  "max_abs_joint_delta_rad": 2.966166361792917,
+  "joint_l2_delta_rad": 4.001790370015497,
+  "sampled_fractions": 65,
+  "checked_pairs": 715195,
+  "joint_limits_valid": true,
+  "invalid_joints": [],
+  "path_collision_count": 0,
+  "collision_list_truncated": false,
+  "path_collisions": [],
+  "minimum_fcl_distance_m": 0.023328383471138605,
+  "minimum_pair": [
+    "/r1pro/left_arm_link3/collisions/left_arm_link3_col_6",
+    "/r1pro/left_arm_link5/collisions/left_arm_link5_col_0",
+    0.0
+  ],
+  "camera_transform_valid": true,
+  "limitations": [
+    "Authored convex hulls only",
+    "Discrete 65-point path, not continuous swept volume",
+    "No reachability, actuation, scene occlusion or native stopping",
+    "No motion authority"
+  ]
+}
