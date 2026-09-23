@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from .observations import array
+from experiments.behavior.observations import array
 
 
 def verify_native_preprocessing(robot, actions):

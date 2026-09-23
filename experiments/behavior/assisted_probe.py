@@ -5,9 +5,8 @@ import time
 
 import numpy as np
 
-from physical_harness.hybrid_v0.classical import BodyTwist
-
-from .base_hold import base_hold, settled
+from experiments.behavior.base_hold import base_hold, settled
+from physical_harness.execution.handoff.classical import BodyTwist
 
 
 def validate_selection(selection, observation, store):

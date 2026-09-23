@@ -2,10 +2,10 @@
 
 import json
 
-from .behavior_skill import HF_REPO, HF_REVISION, sha256
-from .behavior_skill import verify_checkpoint as verify_skill
-from .corvid_server import PREFIX, REVISION
-from .corvid_server import verify_checkpoint as verify_corvid
+from experiments.behavior.behavior_skill import HF_REPO, HF_REVISION, sha256
+from experiments.behavior.behavior_skill import verify_checkpoint as verify_skill
+from experiments.behavior.corvid_server import PREFIX, REVISION
+from experiments.behavior.corvid_server import verify_checkpoint as verify_corvid
 
 
 def create_manifest(candidate, checkpoint, output):

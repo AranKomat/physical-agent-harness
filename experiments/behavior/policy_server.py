@@ -7,7 +7,7 @@ from rpent.utils.rpc import http_rpc
 from rpent.utils.rpc.http_rpc import HttpRpcClient
 from rpent.utils.rpc.rpc_facade import RpcFacade
 
-from .native import RPENT_COMMIT, check_source
+from experiments.behavior.native import RPENT_COMMIT, check_source
 
 root = Path(os.environ["BEHAVIOR_RPC_SOURCE"]).resolve(strict=True)
 check_source(root, RPENT_COMMIT)

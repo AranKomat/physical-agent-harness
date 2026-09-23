@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 
-from .behavior_skill import load_backend
+from experiments.behavior.behavior_skill import load_backend
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8011)
     args = parser.parse_args()
-    from .policy_server import PolicyFacade
+    from experiments.behavior.policy_server import PolicyFacade
 
     PolicyFacade(load_backend(args.source, args.checkpoint, args.manifest, args.receipt)).serve(
         transport="http", host="127.0.0.1", port=args.port,

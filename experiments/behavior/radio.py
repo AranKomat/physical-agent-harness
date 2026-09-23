@@ -15,15 +15,14 @@ from pathlib import Path
 
 import numpy as np
 
-from physical_harness.experiment.journal import Journal
-
-from .config import load_config
-from .contracts import Stamp
-from .model import RadioModel, open_campaign, qualify_endpoint
-from .native import BEHAVIOR_COMMIT, check_source, native_config
-from .observations import BehaviorObservationFilter, EvidenceStore
-from .preprocessing import verify_native_preprocessing
-from .supervisor import BLOCK, MATCHED_EXECUTIVE, STEPS, SkillSupervisor
+from experiments.behavior.config import load_config
+from experiments.behavior.contracts import Stamp
+from experiments.behavior.model import RadioModel, open_campaign, qualify_endpoint
+from experiments.behavior.native import BEHAVIOR_COMMIT, check_source, native_config
+from experiments.behavior.observations import BehaviorObservationFilter, EvidenceStore
+from experiments.behavior.preprocessing import verify_native_preprocessing
+from experiments.behavior.supervisor import BLOCK, MATCHED_EXECUTIVE, STEPS, SkillSupervisor
+from physical_harness.integrations.experiment.journal import Journal
 
 
 def supervised_prefix(candidate):
@@ -147,7 +146,7 @@ def main():
         from omnigibson.eval.utils.eval_utils import seed_everything
         from omnigibson.macros import gm
 
-        from .policy_server import HttpPolicyTransport
+        from experiments.behavior.policy_server import HttpPolicyTransport
 
         if config.native.source not in Path(og.__file__).resolve().parents:
             raise ValueError("Imported simulator differs from pinned source")

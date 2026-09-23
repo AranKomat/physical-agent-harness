@@ -13,14 +13,17 @@ from pathlib import Path
 
 import numpy as np
 
-from physical_harness.hybrid_v0.classical import BodyTwist
-
-from .base_hold import base_hold, settled
-from .contracts import Observation
-from .feedback_diagnostic import PINNED_REVISION, FeedbackDiagnostic
-from .grounding_manifest import validate_online_identity
-from .head_depth_shadow import point_to_plane
-from .target_grounding import RobotSelfCheck, read_grounding_packet, validate_packet
+from experiments.behavior.base_hold import base_hold, settled
+from experiments.behavior.contracts import Observation
+from experiments.behavior.feedback_diagnostic import PINNED_REVISION, FeedbackDiagnostic
+from experiments.behavior.grounding_manifest import validate_online_identity
+from experiments.behavior.head_depth_shadow import point_to_plane
+from experiments.behavior.target_grounding import (
+    RobotSelfCheck,
+    read_grounding_packet,
+    validate_packet,
+)
+from physical_harness.execution.handoff.classical import BodyTwist
 
 CONTROL_DT = 1 / 30
 WORK_WALL_S = 600.

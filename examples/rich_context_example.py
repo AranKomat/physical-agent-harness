@@ -7,8 +7,8 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 
-from physical_harness.context_rich import CoverageNote, RichContextBuilder
-from physical_harness.navigation import PlaceEdge, PlaceNode, TopologicalMap
+from physical_harness.reasoning.context.rich import CoverageNote, RichContextBuilder
+from physical_harness.world.topology import PlaceEdge, PlaceNode, TopologicalMap
 
 
 class ExampleState:

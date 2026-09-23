@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from experiments.behavior.base_hold import base_hold, settled
-from physical_harness.hybrid_v0.classical import BodyTwist
+from physical_harness.execution.handoff.classical import BodyTwist
 
 
 def sample():

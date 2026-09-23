@@ -6,8 +6,11 @@ from pathlib import Path
 # Allow direct execution from an unpacked overlay; an installed repo does not need this.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from physical_harness.memory.spatial_views import SpatialViewIndex, keyframes_from_legal_envelope
-from physical_harness.spatial_scene import SceneAuthority, request_from_spatial_memory
+from physical_harness.world.memory.spatial_views import (
+    SpatialViewIndex,
+    keyframes_from_legal_envelope,
+)
+from physical_harness.world.spatial_scene import SceneAuthority, request_from_spatial_memory
 
 
 def main():

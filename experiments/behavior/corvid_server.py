@@ -8,9 +8,9 @@ from pathlib import Path
 
 import numpy as np
 
-from .behavior_skill import sha256
-from .ensemble_backend import EnsembleBackend
-from .native import check_source
+from experiments.behavior.behavior_skill import sha256
+from experiments.behavior.ensemble_backend import EnsembleBackend
+from experiments.behavior.native import check_source
 
 SOURCE_COMMIT = "cc60a469a376397f6fb579087150d9e987b7e34e"
 REVISION = "b627f22777d9babc6d4b06d7f088266dc484dd8c"
@@ -84,7 +84,7 @@ def main():
     from openpi.shared import normalize
     from openpi.shared.eval_b1k_wrapper import B1KPolicyWrapper
 
-    from .policy_server import PolicyFacade
+    from experiments.behavior.policy_server import PolicyFacade
 
     source = args.source.resolve() / "b1k-baselines/baselines/openpi"
     if source not in Path(model.__file__).resolve().parents:

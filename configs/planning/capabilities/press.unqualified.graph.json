@@ -1,0 +1,187 @@
+{
+  "id": "macro.press.1",
+  "entry": "n0",
+  "nodes": [
+    {
+      "id": "n0",
+      "kind": "observe",
+      "capability": "macro.locate_part",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [],
+      "transitions": [
+        [
+          "ok",
+          "n1"
+        ],
+        [
+          "unknown",
+          "repair"
+        ],
+        [
+          "failed",
+          "repair"
+        ],
+        [
+          "blocked",
+          "repair"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 2,
+      "purpose": "Late-bind live evidence; no stored scene coordinates."
+    },
+    {
+      "id": "n1",
+      "kind": "act",
+      "capability": "macro.stage",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [],
+      "transitions": [
+        [
+          "ok",
+          "n2"
+        ],
+        [
+          "unknown",
+          "repair"
+        ],
+        [
+          "failed",
+          "repair"
+        ],
+        [
+          "blocked",
+          "repair"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 2,
+      "purpose": "Late-bind live evidence; no stored scene coordinates."
+    },
+    {
+      "id": "n2",
+      "kind": "observe",
+      "capability": "macro.compile_press",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [],
+      "transitions": [
+        [
+          "ok",
+          "n3"
+        ],
+        [
+          "unknown",
+          "repair"
+        ],
+        [
+          "failed",
+          "repair"
+        ],
+        [
+          "blocked",
+          "repair"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 2,
+      "purpose": "Late-bind live evidence; no stored scene coordinates."
+    },
+    {
+      "id": "n3",
+      "kind": "act",
+      "capability": "macro.press",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [],
+      "transitions": [
+        [
+          "ok",
+          "n4"
+        ],
+        [
+          "unknown",
+          "repair"
+        ],
+        [
+          "failed",
+          "repair"
+        ],
+        [
+          "blocked",
+          "repair"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 2,
+      "purpose": "Late-bind live evidence; no stored scene coordinates."
+    },
+    {
+      "id": "n4",
+      "kind": "observe",
+      "capability": "macro.verify_outcome",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [],
+      "transitions": [
+        [
+          "ok",
+          "done"
+        ],
+        [
+          "unknown",
+          "repair"
+        ],
+        [
+          "failed",
+          "repair"
+        ],
+        [
+          "blocked",
+          "repair"
+        ]
+      ],
+      "max_wall_s": 30.0,
+      "max_visits": 2,
+      "purpose": "Late-bind live evidence; no stored scene coordinates."
+    },
+    {
+      "id": "repair",
+      "kind": "reason",
+      "capability": "executive.repair",
+      "roles": [
+        "target"
+      ],
+      "required_facts": [],
+      "transitions": [],
+      "max_wall_s": 30.0,
+      "max_visits": 1,
+      "purpose": "Return control to the embodied executive; no automatic native retry."
+    },
+    {
+      "id": "done",
+      "kind": "done",
+      "capability": "existing_task_ledger",
+      "roles": [],
+      "required_facts": [],
+      "transitions": [],
+      "max_wall_s": 30.0,
+      "max_visits": 3,
+      "purpose": ""
+    }
+  ],
+  "budget": {
+    "max_nodes": 32,
+    "max_visits": 32,
+    "max_repairs": 1,
+    "max_wall_s": 300
+  },
+  "schema_version": "situated-graph/1"
+}

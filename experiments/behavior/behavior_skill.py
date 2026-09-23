@@ -9,8 +9,8 @@ from pathlib import Path
 
 import numpy as np
 
-from .contracts import Stamp
-from .native import check_source
+from experiments.behavior.contracts import Stamp
+from experiments.behavior.native import check_source
 
 SOURCE_COMMIT = "7ca6eace02aaba2d8ce19af600b85dd04a60d720"
 HF_REVISION = "98941096c94b0f978391d8a0accc699c32ec8b2a"

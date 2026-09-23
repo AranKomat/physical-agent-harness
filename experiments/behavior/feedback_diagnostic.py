@@ -36,10 +36,9 @@ import time
 
 import numpy as np
 
-from physical_harness.hybrid_v0.classical import BodyTwist
-
-from .base_hold import base_hold, settled
-from .contracts import Observation
+from experiments.behavior.base_hold import base_hold, settled
+from experiments.behavior.contracts import Observation
+from physical_harness.execution.handoff.classical import BodyTwist
 
 PINNED_REVISION = "b1979916ec1549b10a4e65e630bc6504a9af1b00"
 JOINT_NAMES = (

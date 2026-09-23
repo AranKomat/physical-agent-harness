@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from physical_harness.experiment.media import ImageInput, image_geometry
-from physical_harness.experiment.validation import validate_schema
+from physical_harness.integrations.experiment.media import ImageInput, image_geometry
+from physical_harness.integrations.experiment.validation import validate_schema
 
 STEPS = 3224
 BLOCK = 384

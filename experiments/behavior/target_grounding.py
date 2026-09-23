@@ -9,15 +9,15 @@ from pathlib import Path
 
 import numpy as np
 
-from .contracts import Observation
-from .grounding_manifest import (
+from experiments.behavior.contracts import Observation
+from experiments.behavior.grounding_manifest import (
     MODEL,
     REVISION,
     ROBOT_FILES,
     validate_detector_identity,
     verify_files,
 )
-from .observations import EvidenceStore
+from experiments.behavior.observations import EvidenceStore
 
 PROMPT = "a radio."
 TARGET_CANDIDATE_LIMIT = 4
@@ -246,7 +246,7 @@ def main():
     args = parser.parse_args()
     backend = GroundingBackend(args.checkpoint, args.prompt, args.robot_assets)
     if args.serve_port:
-        from .policy_server import PolicyFacade
+        from experiments.behavior.policy_server import PolicyFacade
         PolicyFacade(backend).serve(transport="http", host="127.0.0.1", port=args.serve_port,
                                    parent_watch=False, session_sweep_s=None)
         return

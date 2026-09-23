@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from physical_harness.adapters.behavior import LegalObservation
-from physical_harness.localization import LocalizationLost, RGBDOdometry
+from physical_harness.integrations.sensors.behavior import LegalObservation
+from physical_harness.perception.localization import LocalizationLost, RGBDOdometry
 
 
 def point_to_plane(previous_rgb, previous_depth, rgb, depth, calibration):

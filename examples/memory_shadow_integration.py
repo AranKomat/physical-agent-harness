@@ -12,12 +12,11 @@ from pathlib import Path
 
 from PIL import Image
 
-from physical_harness.adapters.behavior import BehaviorAdapter
-from physical_harness.contracts import EventType, RuntimeEvent
-from physical_harness.events import EventBus
-from physical_harness.evidence import EvidenceStore
-from physical_harness.memory.integration import DecisionCutoffLog, MemorySidecar
-from physical_harness.memory.store import MemoryStore
+from physical_harness.core.events import EventBus, EventType, RuntimeEvent
+from physical_harness.core.evidence import EvidenceStore
+from physical_harness.integrations.sensors.behavior import BehaviorAdapter
+from physical_harness.world.memory.integration import DecisionCutoffLog, MemorySidecar
+from physical_harness.world.memory.store import MemoryStore
 
 
 def png(width, height, rgb):

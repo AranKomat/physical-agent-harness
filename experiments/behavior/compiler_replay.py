@@ -18,26 +18,17 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from physical_harness.action_compiler.compiler import ReviewEngine, compile_catalog
-from physical_harness.action_compiler.geometry import (
+from experiments.behavior.contracts import Evidence, Stamp
+from physical_harness.core.actions import Basis, Gripper, Intent, Pose, Verb, digest, plain
+from physical_harness.perception.geometry import (
     Intrinsics,
     deproject_masked_depth,
     fit_surface,
     pose_from_approach,
 )
-from physical_harness.action_compiler.primitives import TemplateConfig
-from physical_harness.action_compiler.proposals import inspect_candidate, pose_candidate
-from physical_harness.action_compiler.types import (
-    Basis,
-    Gripper,
-    Intent,
-    Pose,
-    Verb,
-    digest,
-    plain,
-)
-
-from .contracts import Evidence, Stamp
+from physical_harness.planning.actions.compiler import ReviewEngine, compile_catalog
+from physical_harness.planning.actions.primitives import TemplateConfig
+from physical_harness.reasoning.action_proposals import inspect_candidate, pose_candidate
 
 CAMERAS = ("head", "left_wrist", "right_wrist")
 MISSING_PREREQUISITES = (

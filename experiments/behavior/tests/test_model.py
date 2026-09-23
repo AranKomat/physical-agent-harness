@@ -4,8 +4,8 @@ import pytest
 
 from experiments.behavior.config import ModelConfig
 from experiments.behavior.model import RadioModel, qualify_endpoint, require_headroom
-from physical_harness.experiment.journal import BudgetExceeded, Journal
-from physical_harness.experiment.transport import TransportFailure
+from physical_harness.integrations.experiment.journal import BudgetExceeded, Journal
+from physical_harness.integrations.experiment.transport import TransportFailure
 
 
 def endpoint():

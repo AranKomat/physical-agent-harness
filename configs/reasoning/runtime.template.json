@@ -1,0 +1,47 @@
+{
+  "schema": "embodied-v3-integration-template/1",
+  "template_only": true,
+  "discovery": {
+    "enabled": false,
+    "model_binding": "INJECT_EXISTING_GUARDED_GLM",
+    "max_jobs": 128,
+    "timeout_s": 20
+  },
+  "keyframes": {
+    "image_difference": 0.12,
+    "translation_m": 0.2,
+    "rotation_rad": 0.35,
+    "min_interval_s": 0.25,
+    "buffer_seconds": 5.0,
+    "buffer_frames": 48,
+    "cameras": 8,
+    "batch_images": 3
+  },
+  "inventory": {
+    "hot": 16,
+    "warm": 128,
+    "total_records": 2048,
+    "views_per_item": 4
+  },
+  "executive": {
+    "model_binding": "INJECT_EXISTING_GUARDED_GPT",
+    "minimum_gap_s": 0.1,
+    "max_pending": 64,
+    "context": {
+      "metadata_bytes": 20000,
+      "input_tokens": 8192,
+      "images": 4,
+      "pixels": 4000000,
+      "optional_items": 24
+    }
+  },
+  "policy": {
+    "glm_actions_allowed": false,
+    "native_motion_enabled": false,
+    "semantic_rebind_requires_external_review": true,
+    "frozen_policy_recipe_changed": false,
+    "download_weights": false,
+    "training": false
+  },
+  "note": "Configuration template, not an autorun plan. Existing host owns provider approvals, budgets and native qualifications."
+}

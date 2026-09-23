@@ -9,7 +9,7 @@ import math
 
 import numpy as np
 
-from physical_harness.hybrid_v0.classical import BodyTwist
+from physical_harness.execution.handoff.classical import BodyTwist
 
 
 def base_hold(proprio, twist: BodyTwist, *, gripper_ranges):

@@ -13,10 +13,10 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 
-from .config import check_runtime
-from .model import endpoint_preflight, open_campaign, require_headroom
-from .radio import supervised_prefix
-from .supervisor import MATCHED_EXECUTIVE, SKILLS, VERIFIER
+from experiments.behavior.config import check_runtime
+from experiments.behavior.model import endpoint_preflight, open_campaign, require_headroom
+from experiments.behavior.radio import supervised_prefix
+from experiments.behavior.supervisor import MATCHED_EXECUTIVE, SKILLS, VERIFIER
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[2]
 

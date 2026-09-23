@@ -7,9 +7,9 @@ from pathlib import Path
 
 import numpy as np
 
-from .behavior_skill import CAMERAS, extract_state
-from .contracts import Observation
-from .observations import EvidenceStore
+from experiments.behavior.behavior_skill import CAMERAS, extract_state
+from experiments.behavior.contracts import Observation
+from experiments.behavior.observations import EvidenceStore
 
 
 def difference(a, b):

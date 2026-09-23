@@ -1,0 +1,13 @@
+{
+  "schema": "embodied-v3-planner-template/1",
+  "enabled": false,
+  "backend": "curobo_v2_plan_pose",
+  "source_revision": "78fd485fa82d9b9a063fb4985e371814587e666a",
+  "source_checkout": null,
+  "robot_configuration_digest": null,
+  "tool_frame": null,
+  "joint_limits": null,
+  "scene_installer": "INJECT_LEGAL_CURRENT_FULL_ROBOT_PAYLOAD_SCENE",
+  "native_port": "INJECT_REVIEWED_NATIVE_PORT",
+  "note": "No example Franka config is substituted for R1Pro. No empty collision world, implicit resampling or finger-collision disable."
+}

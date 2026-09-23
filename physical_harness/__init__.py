@@ -5,19 +5,18 @@ contracts and orchestration glue; perception, navigation, policy inference,
 and robot control remain adapters.
 """
 
-from .contracts import (
-    EventType,
+from physical_harness.core.contracts import (
     NavigationReceipt,
     NavigationRequest,
-    RuntimeEvent,
     SkillReceipt,
     SkillRequest,
     VerificationRequest,
     VerificationResult,
     VerificationVerdict,
 )
-from .localization import LocalizationLost, RGBDOdometry
-from .runtime import HarnessRuntime
+from physical_harness.core.events import EventType, RuntimeEvent
+from physical_harness.core.runtime import HarnessRuntime
+from physical_harness.perception.localization import LocalizationLost, RGBDOdometry
 
 __all__ = [
     "RuntimeEvent",

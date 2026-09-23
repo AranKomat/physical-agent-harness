@@ -10,10 +10,10 @@ import time
 import urllib.request
 from decimal import Decimal
 
-from physical_harness.experiment.journal import BudgetExceeded, Journal
-from physical_harness.experiment.media import validate_images
-from physical_harness.experiment.transport import HttpTransport
-from physical_harness.experiment.validation import validate_schema
+from physical_harness.integrations.experiment.journal import BudgetExceeded, Journal
+from physical_harness.integrations.experiment.media import validate_images
+from physical_harness.integrations.experiment.transport import HttpTransport
+from physical_harness.integrations.experiment.validation import validate_schema
 
 INPUT_BOUND = 24_000
 OUTPUT_BOUND = 512

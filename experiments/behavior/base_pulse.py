@@ -2,9 +2,8 @@
 
 import numpy as np
 
-from physical_harness.hybrid_v0.classical import BodyTwist
-
-from .base_hold import base_hold, settled
+from experiments.behavior.base_hold import base_hold, settled
+from physical_harness.execution.handoff.classical import BodyTwist
 
 PULSES = (("forward", .03, 0., 0.), ("backward", -.03, 0., 0.),
           ("left", 0., .03, 0.), ("right", 0., -.03, 0.),

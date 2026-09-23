@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from .contracts import Evidence, Observation, Stamp
+from experiments.behavior.contracts import Evidence, Observation, Stamp
 
 CAMERAS = {
     "head": "robot_r1::robot_r1:zed_link:Camera:0",

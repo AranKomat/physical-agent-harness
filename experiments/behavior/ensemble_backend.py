@@ -7,7 +7,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .contracts import Stamp
+from experiments.behavior.contracts import Stamp
 
 
 class EnsembleBackend:

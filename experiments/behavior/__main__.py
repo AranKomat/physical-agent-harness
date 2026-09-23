@@ -4,9 +4,9 @@ import argparse
 import json
 from pathlib import Path
 
-from .config import check_runtime, load_config
-from .launcher import commands, protocol, run_pair
-from .manifest import create_manifest
+from experiments.behavior.config import check_runtime, load_config
+from experiments.behavior.launcher import commands, protocol, run_pair
+from experiments.behavior.manifest import create_manifest
 
 
 def main():

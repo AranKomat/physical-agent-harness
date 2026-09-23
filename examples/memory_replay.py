@@ -15,7 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from physical_harness.memory import (  # noqa: E402
+from physical_harness.world.memory import (
     Asset,
     AsyncAnnotator,
     Boundary,
@@ -28,7 +28,10 @@ from physical_harness.memory import (  # noqa: E402
     Retriever,
     attach_memory,
 )
-from physical_harness.memory.media import make_crop, storyboard  # noqa: E402
+from physical_harness.world.memory.media import (
+    make_crop,  # noqa: E402
+    storyboard,
+)
 
 
 class DemoBlobs:

@@ -16,17 +16,20 @@ from pathlib import Path
 
 import numpy as np
 
-from physical_harness.localization import RGBDOdometry
-
-from .base_hold_audit import inspect
-from .base_pulse import run_pulses
-from .behavior_skill import HF_REVISION, SOURCE_COMMIT
-from .contracts import Observation, Stamp
-from .head_depth_shadow import HeadDepthShadow
-from .native import BEHAVIOR_COMMIT, check_source, native_config
-from .observations import BehaviorObservationFilter, EvidenceStore, capture_intrinsics
-from .preprocessing import verify_native_preprocessing
-from .radio import selected_prefix
+from experiments.behavior.base_hold_audit import inspect
+from experiments.behavior.base_pulse import run_pulses
+from experiments.behavior.behavior_skill import HF_REVISION, SOURCE_COMMIT
+from experiments.behavior.contracts import Observation, Stamp
+from experiments.behavior.head_depth_shadow import HeadDepthShadow
+from experiments.behavior.native import BEHAVIOR_COMMIT, check_source, native_config
+from experiments.behavior.observations import (
+    BehaviorObservationFilter,
+    EvidenceStore,
+    capture_intrinsics,
+)
+from experiments.behavior.preprocessing import verify_native_preprocessing
+from experiments.behavior.radio import selected_prefix
+from physical_harness.perception.localization import RGBDOdometry
 
 INSTRUCTION = "Move to the radio receiver on the table."
 POLICY_ACTIONS = 384
@@ -252,7 +255,7 @@ def main(*, capture_observer=None, dense_capture_observer=None):
         from omnigibson.eval.utils.eval_utils import seed_everything
         from omnigibson.macros import gm
 
-        from .policy_server import HttpPolicyTransport
+        from experiments.behavior.policy_server import HttpPolicyTransport
 
         if source not in Path(og.__file__).resolve().parents:
             raise ValueError("Imported simulator source mismatch")
@@ -295,7 +298,7 @@ def main(*, capture_observer=None, dense_capture_observer=None):
                 report["captures"].append(row)
                 save()
                 if args.grounding_port:
-                    from .target_grounding import ground_capture
+                    from experiments.behavior.target_grounding import ground_capture
 
                     row["target_grounding"] = ground_capture(
                         row, store, HttpPolicyTransport(args.grounding_port, timeout_s=30),
@@ -348,7 +351,7 @@ def main(*, capture_observer=None, dense_capture_observer=None):
             save()
             policy_feedback = None
             if args.feedback_hold_diagnostic:
-                from .feedback_diagnostic import FeedbackDiagnostic
+                from experiments.behavior.feedback_diagnostic import FeedbackDiagnostic
 
                 policy_feedback = FeedbackDiagnostic(og.sim, evaluator.robot, source_revision=BEHAVIOR_COMMIT)
 
@@ -374,7 +377,7 @@ def main(*, capture_observer=None, dense_capture_observer=None):
                     or len(packet["rows"]) != 4 * report["policy_actions"]):
                 raise RuntimeError("Policy-motion feedback capture incomplete")
             if args.feedback_hold_diagnostic:
-                from .feedback_diagnostic import run_feedback_hold
+                from experiments.behavior.feedback_diagnostic import run_feedback_hold
 
                 def save_feedback(packet):
                     (output / "feedback.json").write_text(json.dumps(packet, indent=2) + "\n")
@@ -388,7 +391,7 @@ def main(*, capture_observer=None, dense_capture_observer=None):
                 if not feedback_report["feedback_complete"]:
                     raise RuntimeError("Substep feedback diagnostic incomplete: " + str(feedback_report["error"]))
             if args.assisted_target_probe:
-                from .assisted_probe import run_assisted_probe
+                from experiments.behavior.assisted_probe import run_assisted_probe
 
                 report["scope"] = "policy_approach_then_assisted_target_probe_not_ab_comparison"
 
@@ -399,7 +402,7 @@ def main(*, capture_observer=None, dense_capture_observer=None):
                 final = run_assisted_probe(final, store, report["codec"]["gripper_ranges"],
                                            step, capture, output, save_probe)
             if target_experiment:
-                from .exploratory_transit import run_exploratory_transit
+                from experiments.behavior.exploratory_transit import run_exploratory_transit
 
                 if report.get("native_end"):
                     raise RuntimeError("Episode ended before exploratory transit")

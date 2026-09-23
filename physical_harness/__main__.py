@@ -1,8 +1,8 @@
 import argparse
 import json
 
-from .adapters.recorded import audit_archive
-from .demo import run_demo
+from experiments.fixtures.basic import run_demo
+from physical_harness.integrations.sensors.recorded import audit_archive
 
 
 def main():

@@ -6,7 +6,7 @@ supervisor, native action preprocessing, worker ownership, and durable model
 accounting. It does not upload the lab or make it a dependency.
 
 **Status:** offline-tested migration, not yet live-requalified. Original live
-results in [the progress report](../../docs/EXPERIMENT_PROGRESS_20260921.md)
+results in [the progress report](../../docs/experiments/2026-09-21/EXPERIMENT_PROGRESS_20260921.md)
 were obtained with the private runner. Passing software tests does not establish
 task success, checkpoint competence, or reproduction of those results.
 

@@ -14,11 +14,11 @@ from pathlib import Path
 
 import numpy as np
 
-from .base_hold_audit import inspect
-from .base_pulse import PULSES, run_pulses
-from .contracts import Stamp
-from .native import BEHAVIOR_COMMIT, check_source, native_config
-from .observations import (
+from experiments.behavior.base_hold_audit import inspect
+from experiments.behavior.base_pulse import PULSES, run_pulses
+from experiments.behavior.contracts import Stamp
+from experiments.behavior.native import BEHAVIOR_COMMIT, check_source, native_config
+from experiments.behavior.observations import (
     CAMERAS,
     BehaviorObservationFilter,
     EvidenceStore,
@@ -107,7 +107,7 @@ def main():
             if args.head_depth_shadow:
                 from importlib import import_module
 
-                from .head_depth_shadow import HeadDepthShadow
+                from experiments.behavior.head_depth_shadow import HeadDepthShadow
                 # Load the optional backend before timestamping the first capture.
                 import_module("open3d")
                 shadow = HeadDepthShadow(store)

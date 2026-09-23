@@ -9,12 +9,16 @@ from pathlib import Path
 
 import numpy as np
 
-from physical_harness.hybrid_v0.classical import BodyTwist
-
-from .base_hold import base_hold, settled
-from .contracts import Stamp
-from .native import BEHAVIOR_COMMIT, check_source, native_config
-from .observations import BehaviorObservationFilter, EvidenceStore, array, capture_intrinsics
+from experiments.behavior.base_hold import base_hold, settled
+from experiments.behavior.contracts import Stamp
+from experiments.behavior.native import BEHAVIOR_COMMIT, check_source, native_config
+from experiments.behavior.observations import (
+    BehaviorObservationFilter,
+    EvidenceStore,
+    array,
+    capture_intrinsics,
+)
+from physical_harness.execution.handoff.classical import BodyTwist
 
 LAYOUT = {
     "base": (0, 3, "HolonomicBaseJointController"),

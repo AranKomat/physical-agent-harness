@@ -9,10 +9,10 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from .base_hold_audit import inspect
-from .base_pulse import run_pulses
-from .native import BEHAVIOR_COMMIT, check_source
-from .observations import array
+from experiments.behavior.base_hold_audit import inspect
+from experiments.behavior.base_pulse import run_pulses
+from experiments.behavior.native import BEHAVIOR_COMMIT, check_source
+from experiments.behavior.observations import array
 
 
 def fixture_posture(audit):

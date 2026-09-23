@@ -5,7 +5,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .native import BEHAVIOR_COMMIT, RPENT_COMMIT, check_source
+from experiments.behavior.native import BEHAVIOR_COMMIT, RPENT_COMMIT, check_source
 
 PositiveInt = Annotated[int, Field(gt=0, strict=True)]
 
@@ -80,8 +80,8 @@ def load_config(path):
 
 
 def check_runtime(config):
-    from .behavior_skill import SOURCE_COMMIT as SKILL_COMMIT
-    from .corvid_server import SOURCE_COMMIT as CORVID_COMMIT
+    from experiments.behavior.behavior_skill import SOURCE_COMMIT as SKILL_COMMIT
+    from experiments.behavior.corvid_server import SOURCE_COMMIT as CORVID_COMMIT
 
     for runtime, pin in ((config.native, BEHAVIOR_COMMIT),
                          (config.corvid, CORVID_COMMIT),

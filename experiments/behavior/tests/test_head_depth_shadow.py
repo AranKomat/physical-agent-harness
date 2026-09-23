@@ -4,7 +4,7 @@ import pytest
 from experiments.behavior import head_depth_shadow
 from experiments.behavior.contracts import Observation, Stamp
 from experiments.behavior.observations import EvidenceStore
-from physical_harness.localization import LocalizationLost
+from physical_harness.perception.localization import LocalizationLost
 
 
 def capture(store, sequence, at):
