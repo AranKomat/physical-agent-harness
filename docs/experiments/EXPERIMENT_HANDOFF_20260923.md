@@ -9,6 +9,11 @@ Use the commit containing this
 file as the code snapshot. No new model inference or robot trials were run for
 the Phase 0/1 follow-up; retained responses and pixels were replayed through code.
 Historical results below retain their original limitations and evaluation scope.
+The [seven-frame scripted SAM follow-up](2026-09-23/SCRIPTED_SAM_LOSS_20260923.md)
+finds two pumpkin candidates, empty off-target frames and a returning local ID
+across changed views. Identity remains unknown; this does not qualify natural
+loss/reidentification. No new robot actions or paid calls; private suite 968 plus
+one existing skip.
 The latest [stationary SAM join](2026-09-23/STATIONARY_SAM_JOIN_20260923.md)
 records a fresh-capture adapter failure and its bounded correction separately
 from model quality and Phase 5 qualification.

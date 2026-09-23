@@ -19,6 +19,10 @@ now completes 25 steps after restoring the approved checkpoint: box tracking,
 two resets and partial occlusion retain candidates; three negative frames stay
 empty. All 1,589 learned parameters match the checkpoint. This does not establish
 physical reidentification; natural full loss and crossings remain gaps.
+The [scripted loss diagnostic](2026-09-23/SCRIPTED_SAM_LOSS_20260923.md) adds
+seven fresh frames: two pumpkin candidates, two empty off-target views, then
+local ID 0 reappearing across changed views. This does not establish physical
+identity continuity or close the natural-loss gap. No actions or paid calls.
 The [native sensor restoration](2026-09-23/NATIVE_SENSOR_RESTORATION_20260923.md)
 also passed on the new 4090: three RGB-D cameras, 61-D proprioception, 23-D
 action interface at 30 Hz, zero commanded actions. This is sensor readiness,
