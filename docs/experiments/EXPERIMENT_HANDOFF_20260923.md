@@ -113,6 +113,12 @@ braking windows are shadow stop candidates; all motion-containing windows and
 the initial five-hold window are rejected. The final planar error tolerance is
 only 32.93 micrometres per endpoint, not a calibrated bound. Runtime stop gates
 remain unchanged and Phase 5 remains partial.
+The [natural displacement SAM follow-up](2026-09-23/NATURAL_DISPLACEMENT_SAM_20260923.md)
+adds 13 frozen chronological views from an older native radio-contact rollout.
+SAM follows the radio through rotation/displacement with masks on 13/13 views
+and a warm median of 140 ms, but includes some gripper pixels. This advances
+Phase 2's S11 evidence; physical identity and natural full-loss/reappearance
+remain unqualified. No new robot actions or paid calls.
 
 ## 1. Executive Summary
 
