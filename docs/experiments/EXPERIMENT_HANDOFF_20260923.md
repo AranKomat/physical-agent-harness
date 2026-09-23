@@ -107,6 +107,12 @@ updates, unchanged physics and no timestamp shifting. Refreshed estimates detect
 5/5 moving intervals and classify 15/15 braking intervals below the comparison
 threshold. This resolves a concrete freshness issue in the diagnostic, not the
 whole-robot stop/clearance gate or frozen-policy integration.
+The [combined full-window replay](2026-09-23/FULL_STOP_WINDOWS_20260923.md)
+joins refreshed base estimates with all 22 joint-position streams. Eleven late
+braking windows are shadow stop candidates; all motion-containing windows and
+the initial five-hold window are rejected. The final planar error tolerance is
+only 32.93 micrometres per endpoint, not a calibrated bound. Runtime stop gates
+remain unchanged and Phase 5 remains partial.
 
 ## 1. Executive Summary
 
