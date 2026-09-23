@@ -57,8 +57,16 @@ def crop_source(source: FrameRef, box: tuple[float, float, float, float], data: 
     with Image.open(io.BytesIO(data)) as im:
         if im.size != (source.width, source.height):
             raise ValueError("Image dimensions differ from evidence")
-        pixels = (math.floor(box[0]*source.width), math.floor(box[1]*source.height),
-                  math.ceil(box[2]*source.width), math.ceil(box[3]*source.height))
+        scaled = []
+        for coordinate, size in zip(box, (source.width, source.height) * 2):
+            pixel = coordinate * size
+            nearest = round(pixel)
+            # Undo only division/multiplication roundoff at integer pixel edges.
+            if abs(pixel - nearest) <= 2 * math.ulp(pixel):
+                pixel = nearest
+            scaled.append(pixel)
+        pixels = (math.floor(scaled[0]), math.floor(scaled[1]),
+                  math.ceil(scaled[2]), math.ceil(scaled[3]))
         crop = im.convert("RGB").crop(pixels)
         out = io.BytesIO()
         crop.save(out, format="PNG")

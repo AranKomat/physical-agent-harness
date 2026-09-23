@@ -1,10 +1,12 @@
 # Experiment And Verification Handoff
 
 As of 2026-09-23. Repository: https://github.com/AranKomat/physical-agent-harness.
-This snapshot covers the work through Embodied Runtime V3, responsibility-based
-consolidation at `35bc2b6`, and the subsequent ownership-boundary cleanup committed
-with this document. It summarizes existing records; no new model or robot trials
-were run to prepare it. Use the commit containing this file as the code snapshot.
+This self-contained snapshot covers Embodied Runtime V3, responsibility-based
+consolidation at `35bc2b6`, ownership cleanup at `4aa1b47`, the corrected Phase 1
+retained replay, and Phase 2 scenario preparation. Use the commit containing this
+file as the code snapshot. No new model inference or robot trials were run for
+the Phase 0/1 follow-up; retained responses and pixels were replayed through code.
+Historical results below retain their original limitations and evaluation scope.
 
 ## 1. Executive Summary
 
@@ -34,9 +36,73 @@ Current working choices, not globally qualified winners:
 - GraspGenX and cuRobo have software interfaces, not qualified native R1Pro
   manipulation pipelines. All six compiled capability templates remain unpromoted.
 
-The immediate next experiment is **retained discovery -> strict V3 result/delta
-contracts -> historical inventory -> compact executive context**, without motion
-or paid inference. Do not restart policy searches or add another framework first.
+The immediate next experiment is **hard discovery-to-SAM association/loss replay**.
+Retained discovery -> strict V3 contracts -> inventory -> compact context now
+passes its declared offline scope. Do not restart policy searches or add another
+framework first.
+
+### Latest Progress And Full Remaining Sequence
+
+This table uses the current 0-14 sequence, not the original eight-stage numbering.
+"Not done" means the intended qualified experiment remains unperformed; related
+historical diagnostics are described later in this document.
+
+| Phase | Status at this snapshot | Remaining work |
+| --- | --- | --- |
+| 0. Preflight | Software and retained-evidence audit passed | Restore and qualify GPU/model/simulator environments; recover missing native timing/version provenance where possible |
+| 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
+| 2. Hard discovery/SAM identity and loss | Protocol frozen; no new association/model replay executed | Run the frozen cases; collect natural full loss/reappearance and similar-object crossings |
+| 3. Live shadow GLM discovery | Not done with V3 | Record real observation/publication clocks, current-source associations and asynchronous inventory updates |
+| 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
+| 5. Native localization, clearance and stopping | Partial diagnostics only | Positive live target fusion, independent motion accuracy, low-body coverage and whole-robot stop qualification |
+| 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
+| 7. Free-space arm staging and return | Not done | Robot/TCP/collision assets, independent FK checks, measured endpoint and stop |
+| 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
+| 9. Compiler manipulation | Contracts and negative replay only | Positive sensor-grounded candidate, safe execution and independent outcome verification |
+| 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
+| 11. Recovery | Fixture support only | Native detected failure -> bounded recovery -> verified progress |
+| 12. Executed memory benefit | Retained decisions only | Execute M0/M1/routed visual-memory conditions with one frozen backend |
+| 13. Robustness | Component negatives only | End-to-end seeds, placements, distractors, delays and forced failures |
+| 14. Efficiency | Component timings only | End-to-end latency/cost/duty-cycle comparison after correctness |
+
+Phase 0's private audit passed 641 checks. All 25 exported PNGs have the same
+decoded pixels as native captures, and the six API image payloads match retained
+inputs. Missing native simulation time, original GLM local publication time and
+immutable endpoint weight revision remain explicit gaps, not reconstructed facts.
+
+The authoritative Phase 1 run is `v3-retained-discovery-20260923-r4`. It exercises
+the real parser, async worker, coordinator, inventory, delta projection and compact
+context using retained callbacks. A declared fixture ordering clock and injected
+delivery schedule substitute for unavailable live timing. All 67 crops match
+original integer ROIs. Discovery does not write authoritative identity, geometry
+or task truth. Earlier development runs are not final qualification evidence.
+
+Three demonstrated runtime defects were fixed with 20 public regression tests:
+future/foreign identity projection, one-pixel ROI roundoff, and compact-context
+omission metadata exceeding its byte budget. Latest validation: 1,471 public tests,
+Ruff, five synthetic CLIs; private snapshot 581 passed/one existing skip; 194
+embodied tests on the synchronized Linux host. No motion gates were relaxed.
+
+Phase 2 protocol `phase2-association-protocol-20260923-r2` freezes 14 scenarios
+and 670 files; 4,329 preparation checks pass. These are artifact/protocol checks,
+**not association success results**. Scenarios include wrong labels/regions,
+similar candidates, stale seeds, reset-ID reuse, camera/session mismatch, partial
+hand occlusion and artificial scene switches. The 131-frame native sequence
+contains actual partial hand occlusion at action 924 and clearer visibility at
+956; repeated sequence IDs are preserved as distinct captures. Scripted pumpkin
+images can test abstention but cannot qualify natural full disappearance or
+physical reidentification. Evaluator labels and scripted identities are excluded
+from model inputs; no independent physical association proof is established.
+
+The current host has CPU code/evidence but no restored SAM/policy/simulator
+environment. The approved official SAM 3.1 download returned HTTP 401 without
+authentication. Restore an authorized checkpoint/login before fresh inference;
+CPU contract replay can continue. The paid count ceiling is exhausted at 4,127.
+Do not issue more paid requests or reuse consumed exploratory motion permission.
+
+Detailed Phase 0/1 sources, hashes and reproduction command are in the
+[retained replay report](2026-09-23/V3_RETAINED_REPLAY_20260923.md). The sections
+below provide the historical context needed to interpret the remaining work.
 
 ## 2. How To Interpret Status
 
@@ -346,6 +412,7 @@ retired; use the migration inventory rather than reapplying old installers.
 | Initial consolidation | 1,418 repository tests on Mac/Linux; Ruff; isolated wheel imports, packaged config and synthetic demo |
 | Ownership follow-up | 1,451 repository tests on Mac/Linux, including 33 boundary tests; Ruff; five local synthetic CLIs |
 | Private lab after import migration | 563 passed, one existing skip |
+| Corrected Phase 1 follow-up | 1,471 public tests, Ruff, five synthetic CLIs; 194 embodied Linux tests; private snapshot 581 passed, one existing skip |
 | Relocated coordinator behavior | Five definitions AST-identical to originals |
 | Repository hygiene | Ownership/local-link checker and whitespace checks passed |
 
@@ -400,13 +467,10 @@ Its present state, by experiment name rather than ambiguous historical numbering
 
 ## 10. Next Experiments And Pass Evidence
 
-1. **Strict V3 retained replay, no motion or new calls.** Convert saved GLM pixels
-   into source-bound regions; replay discovery into inventory and compact context.
-   Test out-of-order availability, old-task attention, duplicate/stale results,
-   historical versus current identity, explicit omissions and token bounds. Pass
-   means no future leakage, no semantic geometry/task-truth writes, and auditable
-   correspondence from saved evidence to the generated context. Existing synthetic
-   unit coverage does not substitute for this retained-packet exercise.
+1. **Strict V3 retained replay: completed within fixture-clock scope.** Preserve
+   frozen r4 evidence and its 64 passing checks. Do not repeat this as if unstarted
+   or treat it as a live timing/model-quality result. Delayed identity-claim
+   publication remains unqualified; observation-time guards cannot reconstruct it.
 2. **Discovery-to-SAM association/loss test.** Restore only the required local GPU
    environment. Include mismatched semantics, similar objects, full disappearance,
    reset, reappearance and source/session mismatches, not another easy continuous
@@ -461,6 +525,9 @@ Private result directories worth locating before resuming:
 | Box-seeded SAM | `runs/sam-box-handoff-20260923-r1/` |
 | LocateAnything success / failed startup | `runs/locateanything-inventory-20260923-r2/` / `r1/` |
 | Ownership validation / final pre-commit rerun | `runs/ownership-validation-20260923-r2/` / `runs/ownership-handoff-validation-20260923-r1/` |
+| Phase 0 source/accounting audit | `runs/phase0-evidence-20260923-r1/` |
+| Authoritative Phase 1 replay / software validation | `runs/v3-retained-discovery-20260923-r4/` / `runs/phase1-fixed-validation-20260923-r1/` |
+| Phase 2 protocol only, not execution | `runs/phase2-association-protocol-20260923-r2/`; r1 preserved as superseded draft |
 
 The latest host was bootstrapped with code, CPU environment and selected
 checksum-verified evidence, not all GPU weights, simulator assets or policy runtimes.

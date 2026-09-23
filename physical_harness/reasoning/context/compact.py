@@ -189,18 +189,30 @@ def build_context(*, basis: Basis, task: str, task_revision: str, subtask: str,
         raise ValueError("Bounded context candidates required")
     ids(tuple(i.id for i in items), limit=256)
     ordered = sorted(items, key=lambda i: (not i.mandatory, -i.importance, i.id))
-    for item in ordered:
-        addition = {"id": item.id, "kind": item.kind, "data": strict_loads(item.json_payload)}
-        meta["items"].append(addition)
-        over = len(encode(meta)) > budget.metadata_bytes or (
-            not item.mandatory and len(meta["items"]) > budget.optional_items + sum(i.mandatory for i in ordered))
-        if over:
-            if item.mandatory:
-                raise ValueError("Critical context cannot fit; do not truncate it")
-            meta["items"].pop()
-            meta["omitted_items"].append(item.id)
+    mandatory = [i for i in ordered if i.mandatory]
+    optional = [i for i in ordered if not i.mandatory]
+    meta["items"] = [
+        {"id": i.id, "kind": i.kind, "data": strict_loads(i.json_payload)}
+        for i in mandatory
+    ]
+    meta["omitted_items"] = [i.id for i in optional]
     if len(encode(meta)) > budget.metadata_bytes:
         raise ValueError("Required context/candidate catalog exceeds budget")
+    # Start with every omission accounted for, then admit fitting items in
+    # priority order. An oversized item does not consume a slot or block others.
+    kept_optional = 0
+    for item in optional:
+        if kept_optional >= budget.optional_items:
+            break
+        omission_index = meta["omitted_items"].index(item.id)
+        meta["omitted_items"].pop(omission_index)
+        meta["items"].append({"id": item.id, "kind": item.kind,
+                              "data": strict_loads(item.json_payload)})
+        if len(encode(meta)) <= budget.metadata_bytes:
+            kept_optional += 1
+        else:
+            meta["items"].pop()
+            meta["omitted_items"].insert(omission_index, item.id)
     count = None
     if token_counter is not None:
         count = token_counter(meta, frames)

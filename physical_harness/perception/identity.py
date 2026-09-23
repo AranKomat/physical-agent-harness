@@ -297,8 +297,24 @@ class IdentityLedger:
 
 
 def focus_identity_view(identity, entity: str, current: Basis) -> dict:
-    """Current geometry only through existing IdentityLedger.binding; no label-as-pose."""
+    """Fail closed on future/foreign latest state; never reconstruct past identity.
+
+    Capture clocks bound observation history only. The identity schema has no
+    publication/availability clock, so this cannot certify when a claim arrived.
+    """
     state = identity.state(entity)
+    if not isinstance(current, Basis):
+        raise PermissionError("Identity view requires a current Basis")
+    for source in (state["last_basis"], state["last_track"]["basis"]):
+        source = basis_from_dict(source)
+        if any(getattr(source, key) != getattr(current, key)
+               for key in ("episode", "robot_fingerprint", "domain")):
+            raise PermissionError("Foreign identity view")
+        if source.sim_time > current.sim_time or source.captured_wall > current.captured_wall:
+            raise PermissionError("Future identity state cannot be projected historically")
+    claims = state["conflicts"] + ([state["canonical"]] if state["canonical"] else [])
+    if any(claim["observed_at"] > current.sim_time for claim in claims):
+        raise PermissionError("Future identity semantics cannot be projected historically")
     try:
         binding = identity.binding(entity, current)
         return {"entity": entity, "current_binding": binding, "current_geometry_available": True}
