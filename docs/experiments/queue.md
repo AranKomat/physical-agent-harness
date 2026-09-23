@@ -13,9 +13,12 @@ preflight remains separate; hard association/loss replay is next.
 The [Phase 2 CPU contract replay](2026-09-23/ASSOCIATION_CONTRACT_REPLAY_20260923.md)
 exercises 10/14 frozen scenarios with 987 checks and zero identity bindings.
 This is not physical association qualification; four cases lack suitable evidence.
-Three source/session/consumer validation gaps were fixed. SAM runtime versions and
-CUDA now check out, but checkpoint authentication/restoration remains unresolved.
-Partial hand occlusion is available; natural full loss and crossings remain gaps.
+Three source/session/consumer validation gaps were fixed. The
+[fresh SAM diagnostic](2026-09-23/FRESH_SAM_ASSOCIATION_DIAGNOSTIC_20260923.md)
+now completes 25 steps after restoring the approved checkpoint: box tracking,
+two resets and partial occlusion retain candidates; three negative frames stay
+empty. All 1,589 learned parameters match the checkpoint. This does not establish
+physical reidentification; natural full loss and crossings remain gaps.
 
 ## Completed Software And Retained-Data Work
 
@@ -42,9 +45,10 @@ Partial hand occlusion is available; natural full loss and crossings remain gaps
    Test source binding, distractors, loss and reacquisition before motion.
    Qualify delayed identity-claim availability explicitly; observation-time guards
    do not reconstruct publication-time history. Restore the approved SAM weights
-   or authenticated download access before fresh GPU inference.
-   Runtime restoration is done; no SAM inference has run on this host. Latest
-   public suite: 1,481 tests; Linux embodied subset: 204; private: 604 plus one skip.
+   or authenticated download access before fresh GPU inference. This restoration
+   and the first 25-step inference diagnostic are now complete; do not repeat them
+   as if unstarted. Simulator/sensor/policy restoration remains pending. Latest
+   public suite: 1,481 tests; Linux embodied subset: 204; private: 629 plus one skip.
    The strengthened synthetic loss test checks previously valid geometry and journal
    reload. Native loss remains unqualified: retained no-center candidates do not
    exercise that transition.
