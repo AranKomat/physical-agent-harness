@@ -171,8 +171,8 @@ historical diagnostics are described later in this document.
 | --- | --- | --- |
 | 0. Preflight | Software/retained audit, SAM restoration, numeric pins and native sensor smoke passed | Restore policy environment; qualify live integration and recover missing provenance where possible |
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
-| 2. Hard discovery/SAM identity and loss | CPU contracts on 10/14 cases; fresh SAM inference on four bounded cases; physical association unqualified | Native loss/reappearance/crossings, independent association and live timing; basic simulator/sensors now restored |
-| 3. Live shadow GLM discovery | Not done with V3 | Record real observation/publication clocks, current-source associations and asynchronous inventory updates |
+| 2. Hard discovery/SAM identity and loss | Partial: contract cases, natural radio displacement masks, full-rate continuity shadow and delayed-mask tests; physical association unqualified | Natural loss/reappearance/crossings, robot-pixel exclusion and independent association; correspondence/IDs are not identity |
+| 3. Live shadow GLM discovery | Not done with V3; 4,139-call authorization exhausted | New paid-call scope, then real observation/publication clocks, bounded asynchronous inventory updates and no control changes |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial: measured 0.532 mm base motion, independent evaluator comparison, and paired-render correction reducing observed pose error to 16.8 micrometres; raw stop still fails | Integrate qualified fresh sensing without changing frozen-policy inputs; establish error bounds, whole-robot stopping, positive live fusion and low-body clearance |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
