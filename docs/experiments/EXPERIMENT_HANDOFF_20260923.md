@@ -1,5 +1,96 @@
 # Experiment And Verification Handoff
 
+2026-09-24 follow-up: [Phase 1 retained replay](2026-09-24/PHASE1_REPLAY_20260924.md)
+passes 64 checks with zero new calls and zero actions. The current Phase 2
+contract replay also passes its exercised checks, but remains partial at 10/14
+scenarios; see [the dated Phase 2 report](2026-09-24/PHASE2_ASSOCIATION_REPLAY_20260924.md).
+The [radio positive-fusion attempt](2026-09-24/PHASE5A_RADIO_JOIN_20260924.md)
+was rejected cleanly because the legal stationary capture had zero radio mask
+support; it produced no motion or target geometry and does not qualify Phase 5A.
+The [dense target-window preparation](2026-09-24/PHASE5A_DENSE_WINDOW_20260924.md)
+extends pose capture to the retained target-bearing window. Its first run was
+blocked before simulation because the frozen-policy virtual environment is
+missing on the current host; no actions or observations occurred.
+The corrected follow-up [positive live fusion run](2026-09-24/PHASE5A_LIVE_FUSION_20260924.md)
+completed 768 policy actions with 97 fresh pose rows and 13/13 fresh fused
+boundaries through sequence 768. This passes bounded positive-fusion evidence,
+not localization accuracy, clearance, transit, or task success.
+
+Latest corrected native abort/hold repeat passes its bounded protocol: 100
+dispatches (99 normal returns due to the intentional fault), all 60 reserved
+holds raw-settled, 240 joint substeps and 61 source-bound base observations.
+Maximum estimated hold-base displacement is 2.412 micrometres; maximum result
+age is 0.893 seconds. This verifies fresh post-exception capture and hold feedback,
+not calibrated stopping or external clearance. The failed preceding attempt
+remains recorded. See
+[hold evidence and failure](2026-09-24/SCAN_HOLD_BASE_20260924.md).
+
+Phase 5D follow-up: [reserved-hold base evidence](2026-09-24/SCAN_HOLD_BASE_20260924.md).
+All 61 retained anchor/hold captures pass legal RGB-D/FK observation, with maximum
+estimated displacement 1.987 micrometres. Future native holds now use a separate
+freshly anchored base observer while preserving any outbound failure. Full private
+suite: 1,265 passed, one existing skip. Live execution of the corrected hold path
+and calibrated stop authority remain unqualified; no new motion or paid calls.
+
+Phase 2 [similar-chair candidate test](2026-09-24/NATURAL_CHAIR_CANDIDATES_20260924.md)
+completed 13 frozen natural-view steps: multiple chair masks initially, candidates
+on all seven chair-visible frames and empty outputs on all six absent frames.
+This adds simultaneous similar-object evidence, not identity/crossing qualification.
+Warm median is 145 ms; all outputs are local; no robot actions or paid calls.
+
+Independent correspondence follow-up: [posed features](2026-09-24/POSED_FEATURE_ASSOCIATION_20260924.md)
+finds 5-7 unique pixel correspondences per retained radio pair, with 4-9 mm
+median fixed-pose depth residuals and zero translated-control matches. This is
+correlated internal consistency, not calibrated identity support or a genuine
+similar-object test. No association authority or new phase completion follows.
+
+Phase 2 follow-up: [natural sofa loss and return](2026-09-24/NATURAL_SOFA_LOSS_20260924.md)
+uses 13 frozen chronological views from a retained Corvid rollout. SAM produces
+nonempty masks on all nine pre-reviewed visible frames and empty outputs on all
+four absent frames across two natural camera-turn loss/return segments. Warm
+median inference is 145 ms. Local IDs change 0 -> 1 -> 2 -> 3; identity is not
+qualified. This supplies a missing natural out-of-view tracking case, not the
+full association/loss-invalidation gate. No new robot actions or paid calls.
+All 13 packets now also pass the fixture-clock durable identity replay: four
+empty outputs mark `not_observed`, returns stay `identity_uncertain`, and no
+binding is granted. Journal reload agrees at each step. This is not deployed
+live consumption or invalidation of previously qualified native geometry.
+
+Latest terminal result: `native-interpolated-sweep-20260924-r2` completed all
+562 actions: 20 preflight holds, 482 scan actions, and 60 reserved holds. All
+60 final holds were raw-settled; outbound and hold monitors report no errors.
+The run retained 565 capture boundaries. Fixed-stride analysis of 24 captures
+confirms low-body depth support increased 92 -> 408 of 1,020 samples, while
+outside-view samples decreased 623 -> 302. This completes the bounded exploratory
+sensing sweep, not Phase 5 or 7. External clearance and strict stopping remain
+unqualified; there was no return trajectory or contact action. A checksum-verified
+85.5 MB metadata/RGB-D subset is local; full raw data remains on the GPU host.
+The subsequent final-view return-path check finds 6,033/7,106 exposed samples
+out of view at the first sampled return posture and all 11,290 out of view at
+the endpoint. Final-view evidence cannot qualify this return; this is unknown
+clearance, not a detected collision. A subsequent 20-capture legal-pose historical
+union still leaves all sampled proximal arm geometry unseen at the first return
+fraction and 11,005/11,289 samples unseen at its endpoint. Stop repeating this
+scan; next assess an observer-camera posture or a different observed staging
+path. Historical visibility union is not current free-space authority.
+
+Current follow-up: [servo response and interpolation](2026-09-24/SCAN_SERVO_RESPONSE_20260924.md).
+No additional full phase is complete. Native no-robot tests verified callback
+ordering and exposed swallowed callback exceptions; paused robot testing verified
+unsmoothed float32 arm-goal readback. Interpolation is now connected to the runner
+behind explicit flags. Its declared 100-action abort/hold diagnostic completed:
+injected cancellation at action40/substep2, no resumed outbound targets, and 60
+raw-settled reserved holds. Initial-segment peak speed was 0.0633 rad/s and tracking
+error below 0.000415 rad. Local private suite: 1,260 passed, one existing skip. Phase 5/7
+remain partial. The subsequent full interpolated sweep reached its endpoint and
+recorded 539 legal captures, but was censored during reserved holds by the owner
+timeout (34/60 holds); it is not a completed sweep. Fixed-stride depth analysis
+nevertheless showed low-body beyond-support samples increasing 92 -> 408 and
+outside-view samples decreasing 623 -> 302. This is useful sensing coverage,
+not clearance or task success.
+The dated entries below retain their original scope and may describe prerequisites
+that were subsequently addressed; use this update and the phase table for status.
+
 Latest native result: [sensing scan integration](2026-09-24/NATIVE_SCAN_INTEGRATION_20260924.md).
 After zero-action integration failures, r3 completed 20 preflight holds and
 dispatched 20 scan actions, then aborted on a 0.151005-rad/s physics-substep
@@ -205,12 +296,12 @@ historical diagnostics are described later in this document.
 | --- | --- | --- |
 | 0. Preflight | Software/retained audit, SAM restoration, numeric pins and native sensor smoke passed | Restore policy environment; qualify live integration and recover missing provenance where possible |
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
-| 2. Hard discovery/SAM identity and loss | Partial: contract cases, natural radio displacement masks, full-rate continuity shadow and delayed-mask tests; physical association unqualified | Natural loss/reappearance/crossings, robot-pixel exclusion and independent association; correspondence/IDs are not identity |
-| 3. Live shadow GLM discovery | Not done with V3; 4,139-call authorization exhausted | New paid-call scope, then real observation/publication clocks, bounded asynchronous inventory updates and no control changes |
+| 2. Hard discovery/SAM identity and loss | Partial: natural radio displacement, sofa out-of-view/return, simultaneous chair candidates, delayed-mask handling and durable loss-packet replay | Independent physical association, valid native binding invalidation, true occlusion/crossings, robot-pixel exclusion and uncertainty; correspondence/IDs are not identity |
+| 3. Live shadow GLM discovery | Partial: three fresh paused captures passed the provider/worker/coordinator/inventory chain after a rejected dangling-attention result; 4,145-call ceiling exhausted | Prospective coalescing/context consumer, broader coverage, and separately authorized further paid calls |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
-| 5. Native localization, clearance and stopping | Partial: measured 0.532 mm base motion, independent evaluator comparison, and paired-render correction reducing observed pose error to 16.8 micrometres; raw stop still fails | Integrate qualified fresh sensing without changing frozen-policy inputs; establish error bounds, whole-robot stopping, positive live fusion and low-body clearance |
+| 5. Native localization, clearance and stopping | Partial: bounded positive live fusion now passes with fresh 768-window pose/mask lineage; measured base motion and paired-render correction; complete exploratory sensing sweep; retained 60-hold base replay; earlier raw-stop failures remain recorded | Calibrated localization/error bounds, live whole-robot stopping, external clearance, and low-body return coverage; positive fusion alone does not qualify motion |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
-| 7. Free-space arm staging and return | Robot-only FK, native hull containment and 28 frozen joint-path bounds pass their scopes; exploratory wrist motion occurred but return failed its stop gate | External clearance, whole-robot stop qualification and a qualified native stage/return; exploratory motion is not completion |
+| 7. Free-space arm staging and return | Partial: FK/hull/path checks plus completed 562-action exploratory one-way sensing sweep; final/historical views fail to support its return corridor | Qualified observed staging/return path and whole-robot stopping; opposite-wrist survey found no sufficient observer candidate in its bounded search |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
 | 9. Compiler manipulation | Retained GraspGenX inference and loading/conditioning audit; full-mask contrast gives sparse handle-like support in 4/8 proposals; scene inspection catches wrist-camera intersection in one proposal; all eight exceed held-torso reach; simulator/SAM/GraspGen-X co-residency passes at 17.05 GiB sampled peak; no execution | Closer staging and fresh observations, gripper/TCP calibration, whole-arm collision/IK/contact qualification, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
@@ -700,8 +791,8 @@ Its present state, by experiment name rather than ambiguous historical numbering
    context on frozen causal boundaries. Predeclare accuracy/abstention, box/schema
    validity, identity errors, tokens, cost and end-to-end latency. Do not assume the
    older inventory accuracy applies to the untested delta prompt.
-4. **Native geometry, localization, clearance and stop qualification.** Reestablish
-   fresh sensor/pose/feedback bindings and positive target-bearing fusion. Resolve
+4. **Native geometry, localization, clearance and stop qualification.** Positive
+   target-bearing fusion is now established in the bounded shadow window. Resolve
    low-body unknown coverage and conservative swept geometry. Exercise moving and
    stopped cases plus failures. Keep strict gates; old exploratory authorization
    is not open-ended. A timing pass alone is not an accuracy pass.
