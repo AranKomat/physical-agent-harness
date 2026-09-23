@@ -62,8 +62,10 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 ## Next, In Order
 
 Infrastructure prerequisite: [automatic GPU driver update](2026-09-23/GPU_DRIVER_UPDATE_20260923.md)
-currently prevents new GPU work. Reboot is approved after package completion
-and verified backups; recovery checks remain pending. No motion gates change.
+was resolved by an approved reboot after package completion and verified backups.
+CUDA smoke checks pass in all three environments. The new
+[single-arm FK check](2026-09-23/CUROBO_SINGLE_ARM_FK_20260923.md) passes 870
+upper-body comparisons with measured holds. Collision/planning remain open.
 
 1. Consolidation and ownership checks complete: 1,451 repository tests on
    Mac/Linux, Ruff, five fixture CLIs and source-link checks; private suite

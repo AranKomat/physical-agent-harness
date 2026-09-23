@@ -28,3 +28,20 @@ Pending recovery: wait for the active package process to exit, inspect dpkg
 health, recheck backups, perform the approved reboot, and verify a changed boot
 ID, functioning NVML and CUDA in the restored environments before GPU trials.
 This incident is an infrastructure interruption, not a model or controller failure.
+
+## Recovery Completed
+
+Unattended upgrades reported all upgrades installed at 07:07:05 UTC and completed
+cleanup. No updater/dpkg processes remained; `dpkg --audit` was empty. Rechecked
+remote run backups: content matched, with only timestamp differences. The approved
+`systemctl reboot` completed without stopping or destroying the Vast rental.
+
+New boot ID: `c4ee625f-8142-4eb4-9a60-f4116d4e84bb`; kernel
+`6.8.0-138-generic`; loaded and user-space NVIDIA driver `580.178.04`.
+NVML works. CUDA tensor creation/reduction/synchronization passes separately in
+SAM (Torch 2.7.1+cu126), cuRobo and native (both Torch 2.7.0+cu128) environments.
+This is not a fresh simulator-render or SAM accuracy qualification after upgrade.
+The read-only environment guard is synchronized to the host. No security-update
+settings were changed. The subsequent single-arm FK run passes under unchanged
+pre/post source and driver/library fingerprints; GPU compute workers are absent
+after exit. See [single-arm FK results](CUROBO_SINGLE_ARM_FK_20260923.md).
