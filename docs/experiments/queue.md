@@ -79,6 +79,12 @@ continuous-clearance, pose-uncertainty, or stopping authority. Candidate 366's
 65-posture offline path audit is recorded in
 [its receipt](2026-09-24/OBSERVER366_PATH_RECEIPT.json); do not execute either
 candidate on this evidence.
+The [temporal observer analysis](2026-09-24/OBSERVER_TEMPORAL_COVERAGE.md)
+now rules out the sampled set as complete return support: even all 513 poses
+combined can see at most 2/88 sampled link-1 points. Stop individual-pose
+qualification for this corridor; a different camera configuration or return
+trajectory is needed. This is a sampled-model limitation, not physical
+impossibility and not permission for exploratory motion.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
