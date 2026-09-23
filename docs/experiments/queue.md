@@ -70,6 +70,15 @@ authored-hull intersections at 65 postures, but requires a 2.966-rad maximum
 joint excursion and still lacks proximal-corridor visibility. This is not
 continuous clearance. Establish useful proximal coverage before spending more
 on this candidate's motion qualification; do not execute it on this evidence.
+The corrected [all-candidate observer survey](2026-09-24/OBSERVER_SURVEY_ALL_512_20260924.md)
+evaluated all 513 candidates rather than only the earlier top-three shortlist.
+Candidate 384 remains best in total visibility (6,545 samples), while candidate
+366 is the strongest proximal follow-up (1,462 samples, 1,239/2,459 proximal
+samples). Neither covers the return corridor or supplies scene-depth,
+continuous-clearance, pose-uncertainty, or stopping authority. Candidate 366's
+65-posture offline path audit is recorded in
+[its receipt](2026-09-24/OBSERVER366_PATH_RECEIPT.json); do not execute either
+candidate on this evidence.
 The [cuRobo R1Pro FK check](2026-09-23/CUROBO_R1PRO_FK_20260923.md) now passes
 37 numerical configurations on the pinned GPU backend. Tool offsets and native
 schema mismatch are resolved for this diagnostic; collision/planning/execution
