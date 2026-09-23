@@ -4,6 +4,9 @@ Status: **explicitly approved by the user on 2026-09-23 ("both approved")**.
 Fresh captured-posture geometric checks now pass; see the
 [preflight report](LIVE_DISCOVERY_SCAN_PREFLIGHT_20260923.md). Native monitored
 execution remains pending, and those receipts are not live motion authority.
+The [joint-monitor follow-up](GLM_ROUTING_SCAN_MONITOR_20260923.md) passes a
+120-sample retained hold replay; native base monitoring and geometric allowance
+for tracking error remain open. No stop qualification follows from that replay.
 No native scan has run yet. Approval covers one exploratory scan within the
 bounds below; earlier 0.01-rad wrist-probe results do not qualify this motion.
 

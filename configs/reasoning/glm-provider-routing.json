@@ -1,0 +1,9 @@
+{
+  "model": "z-ai/glm-5.3-flash",
+  "priority": ["together", "baseten/fp8", "fireworks", "parasail/fp8", "coreweave/nvfp4"],
+  "required_parameters": ["max_tokens", "response_format", "structured_outputs", "reasoning_effort"],
+  "unlisted_fallback": false,
+  "retry_after_dispatch": false,
+  "last_resort": null,
+  "note": "Select the first eligible endpoint before dispatch; pin its route and price reservation. AutoExact is not yet an identified/qualified route. No additional spending authorized."
+}

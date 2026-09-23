@@ -4,6 +4,7 @@
   "discovery": {
     "enabled": false,
     "model_binding": "INJECT_EXISTING_GUARDED_GLM",
+    "host_provider_policy": "configs/reasoning/glm-provider-routing.json",
     "max_jobs": 128,
     "timeout_s": 20
   },
