@@ -52,6 +52,11 @@ completed 35 actions and 140 physics samples. Position-derived velocity detected
 the commanded +0.006 rad motion, but sustained raw stop checks failed; no return
 was attempted. Next is offline whole-window stop analysis, not another identical
 probe. Base stopping, braking and external clearance remain unqualified.
+The [offline stop-window replay](2026-09-23/WRIST_STOP_WINDOWS_20260923.md)
+now distinguishes all 10 ramp windows from all 30 stationary windows using the
+existing wrist threshold and position differences. Raw full-window speed rejects
+all 30 stationary windows. This is diagnostic evidence, not a replacement stop
+authority: independent base evidence and measurement uncertainty remain open.
 
 ## 1. Executive Summary
 
