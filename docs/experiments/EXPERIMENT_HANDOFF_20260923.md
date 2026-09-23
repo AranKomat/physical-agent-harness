@@ -45,6 +45,10 @@ The [N11 displacement audit](2026-09-24/PHASE2_N11_DISPLACEMENT_AUDIT_20260924.m
 also confirms 13 native image-space displacement masks, but all source camera
 poses are absent, so it cannot establish motion relative to the background or
 physical identity.
+The [native capture preflight](2026-09-24/PHASE2_NATIVE_CAPTURE_PREFLIGHT_20260924.md)
+then retained 16 pose-reconstructable RGB-D frames, but shadow motion was only
+0.465 mm / 0.0824 degrees and fixed-prompt SAM returned zero radio objects in
+all 16 frames. It is a clean negative preflight, not Phase 2 evidence.
 Warm median is 145 ms; all outputs are local; no robot actions or paid calls.
 
 Independent correspondence follow-up: [posed features](2026-09-24/POSED_FEATURE_ASSOCIATION_20260924.md)
