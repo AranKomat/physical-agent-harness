@@ -47,6 +47,11 @@ That approval subsequently arrived; the [30-action diagnostic](2026-09-23/WRIST_
 completed with 120 physics samples and no callback errors. Raw wrist velocity
 differs substantially from both matching position-derived estimates. Final stop
 still fails; moving/braking estimator validation and base stopping remain open.
+The subsequent approved [instrumented motion diagnostic](2026-09-23/WRIST_MOTION_SUBSTEP_20260923.md)
+completed 35 actions and 140 physics samples. Position-derived velocity detected
+the commanded +0.006 rad motion, but sustained raw stop checks failed; no return
+was attempted. Next is offline whole-window stop analysis, not another identical
+probe. Base stopping, braking and external clearance remain unqualified.
 
 ## 1. Executive Summary
 
