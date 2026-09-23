@@ -136,6 +136,12 @@ or multi-view fusion. Latest private suite: 867 passed, one existing skip.
 
 ## Next, In Order
 
+Latest Phase 9 result: [frame-704 endpoint/convention audit](2026-09-24/GRASP_ENDPOINTS704.md)
+admits none of the eight proposals. All have zero retained inner-box support;
+nearest target points miss the box by 28-41 mm despite consistent algebraic
+transforms. Resolve the hand annotation/reference convention before another
+proposal batch. No path or motion authorization; Phase 9 stays partial.
+
 Infrastructure prerequisite: [automatic GPU driver update](2026-09-23/GPU_DRIVER_UPDATE_20260923.md)
 was resolved by an approved reboot after package completion and verified backups.
 CUDA smoke checks pass in all three environments. The new

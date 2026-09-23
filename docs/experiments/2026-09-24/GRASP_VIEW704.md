@@ -44,6 +44,10 @@ There is no implied contact support or calibrated TCP. The invalidated old
 
 ## Artifacts And Next Gate
 
+Update: the subsequent [endpoint and convention audit](GRASP_ENDPOINTS704.md)
+rejects this set: all eight lack retained target support in the annotated inner
+box. Do not advance these numerical IK matches to path planning or motion.
+
 All directories are backed up under the parent workspace's private lab `runs/`:
 
 | Run | Receipt SHA-256 |
