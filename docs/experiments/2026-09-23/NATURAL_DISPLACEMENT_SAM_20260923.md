@@ -50,3 +50,24 @@ Worker-status SHA-256:
 No new robot actions or paid calls. The worker ran at low priority on CPU cores
 19-22 with thread caps; no instance lifecycle, package or unrelated-process
 changes were made. Complete output was copied locally.
+
+## Identity-Ledger Integration Follow-Up
+
+The 13 actual mask artifacts were subsequently replayed through `Tracklet`,
+`IdentityLedger`, `AssociationProof` and `focus_identity_view`, backed by a real
+SQLite journal. Every input mask hash, source-image hash, index and mask summary
+was checked. Because this RGB-only plan does not attest native simulation times
+or metric calibration, the replay explicitly uses fixture-order clocks and no
+metric centers; it is not presented as a live native association test.
+
+All 13 masks remained candidates without canonical labels or action bindings.
+Later local-ID continuity, supplied with unknown independent association support,
+did not replace the first track's historical geometry. Reloading the journal
+produced identical identity state. Private result:
+`runs/displacement-identity-20260923-r1/receipt.json`.
+
+The unresolved positive requirement is an independent association producer, not
+more tracker-ID persistence. It needs evidence for uniqueness, temporal support
+and geometric support before transferring a remembered semantic label to current
+geometry. SAM continuity and visual overlay review alone do not supply that proof.
+Further repeats of this negative contract test are not the next experiment.
