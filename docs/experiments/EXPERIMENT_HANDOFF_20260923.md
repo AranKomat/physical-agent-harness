@@ -1,5 +1,13 @@
 # Experiment And Verification Handoff
 
+Latest native result: [sensing scan integration](2026-09-24/NATIVE_SCAN_INTEGRATION_20260924.md).
+After zero-action integration failures, r3 completed 20 preflight holds and
+dispatched 20 scan actions, then aborted on a 0.151005-rad/s physics-substep
+speed (limit 0.15). All 60 reserved holds completed; no automatic rerun. Position
+tracking stayed below 0.001 rad, but no full sweep or strict stopping qualification
+is established. Phase 5/7 remains partial. Private tests: 1,224 passed, one skip;
+zero paid calls. The report includes the r1 setup-archive limitation and r2 failure.
+
 Latest integration: [scan physics callback](2026-09-24/SCAN_CALLBACK_INTEGRATION_20260924.md)
 connects full-joint logging and failure latching to the native subscription API.
 Injected API tests pass; live execution/timing and braking remain untested.
