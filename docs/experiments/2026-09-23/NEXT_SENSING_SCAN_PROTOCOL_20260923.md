@@ -12,6 +12,9 @@ The [joint-monitor follow-up](GLM_ROUTING_SCAN_MONITOR_20260923.md) passes a
 remain open. No stop qualification follows from that replay.
 No native scan has run yet. Approval covers one exploratory scan within the
 bounds below; earlier 0.01-rad wrist-probe results do not qualify this motion.
+The [legal base-observer replay](../2026-09-24/SCAN_BASE_OBSERVER_20260924.md)
+now processes all 26 retained paired-render pulse captures and fails closed on
+missing/stale/invalid data. Native integration, latency and braking remain open.
 
 ## Question
 

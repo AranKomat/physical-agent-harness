@@ -1,5 +1,10 @@
 # Experiment And Verification Handoff
 
+Latest: [scan base observer](2026-09-24/SCAN_BASE_OBSERVER_20260924.md) reuses
+legal RGB-D/FK and passes all 26 retained paired-render pulse captures without
+reading evaluator truth. Failure-latching tests pass. Native integration/live
+latency remain untested; no scan executed. Private suite: 1,185 plus one skip.
+
 2026-09-24 update: [scan tracking-envelope experiment](2026-09-24/SCAN_TRACKING_ENVELOPE_20260924.md)
 found the initial 0.02-rad tracking-error allowance was not covered by the
 collision bound. Tightening it to 0.003 rad passes the conditional full-path
