@@ -1,5 +1,10 @@
 # GPT-6 Sol Default And Optional Luna Comparison
 
+Historical migration record. Subsequent operator decision retires Luna from
+active configuration and further dispatch. Retain these records and results;
+GLM remains the inventory candidate, with a later matched Sol/Astra executive
+comparison planned. No new paid-call authorization accompanies that decision.
+
 Update: the pending scope below was subsequently approved and executed. See
 [matched inventory results](SOL_LUNA_INVENTORY_20260923.md). Preparation-time
 approval descriptions below are historical, not the current authorization state.

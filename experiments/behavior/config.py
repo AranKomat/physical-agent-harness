@@ -10,7 +10,6 @@ from experiments.behavior.native import BEHAVIOR_COMMIT, RPENT_COMMIT, check_sou
 PositiveInt = Annotated[int, Field(gt=0, strict=True)]
 MODEL_PRICES = {
     "openai/gpt-6-sol": ("0.000001", "0.000005"),
-    "openai/gpt-6-luna": ("0.00000005", "0.00000025"),
     "openai/gpt-6-astra": ("0.000005", "0.000025"),
 }
 
@@ -31,12 +30,12 @@ class PolicyRuntime(Runtime):
 
 
 class ModelConfig(Config):
-    # Explicit Astra remains available for historical cohorts; new runs use Sol.
-    model: Literal["openai/gpt-6-sol", "openai/gpt-6-luna", "openai/gpt-6-astra"] = "openai/gpt-6-sol"
+    # Astra remains available for matched comparisons; new runs default to Sol.
+    model: Literal["openai/gpt-6-sol", "openai/gpt-6-astra"] = "openai/gpt-6-sol"
     provider: Literal["openai/flex"] = "openai/flex"
     api_key_env: str = Field(default="OPENROUTER_API_KEY", pattern=r"^[A-Z][A-Z0-9_]*$")
-    expected_prompt_usd_per_token: Literal["0.000001", "0.00000005", "0.000005"] = "0.000001"
-    expected_completion_usd_per_token: Literal["0.000005", "0.00000025", "0.000025"] = "0.000005"
+    expected_prompt_usd_per_token: Literal["0.000001", "0.000005"] = "0.000001"
+    expected_completion_usd_per_token: Literal["0.000005", "0.000025"] = "0.000005"
 
     @model_validator(mode="before")
     @classmethod

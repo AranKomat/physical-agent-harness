@@ -43,23 +43,9 @@ def test_historical_astra_is_explicit_and_prices_cannot_cross_cohorts():
         ModelConfig(model="openai/gpt-6-astra", expected_completion_usd_per_token="0.000005")
 
 
-def test_explicit_luna_flex_comparator_mock_only():
-    cfg = ModelConfig(model="openai/gpt-6-luna")
-    assert (cfg.expected_prompt_usd_per_token, cfg.expected_completion_usd_per_token) == (
-        "0.00000005", "0.00000025")
-    endpoint = {"tag": "openai/flex", "status": 0, "context_length": 100_000,
-                "provider_name": "OpenAI", "pricing": {"prompt": "0.00000005",
-                "completion": "0.00000025", "input_cache_write": "0.0000000625"}}
-    data = {"architecture": {"input_modalities": ["image"]}, "endpoints": [endpoint]}
-    body, _, _ = request_body(cfg, qualify_endpoint(data, cfg), "JSON", {}, [], {"type": "object"})
-    assert body["model"] == "openai/gpt-6-luna"
-    assert body["service_tier"] == "flex"
-    assert body["reasoning"] == {"effort": "medium"}
-    assert body["provider"]["allow_fallbacks"] is False
-    assert ModelConfig().model == "openai/gpt-6-sol"
-    endpoint["pricing"]["prompt"] = "0.0000001"
-    with pytest.raises(ValueError, match="Pricing changed"):
-        qualify_endpoint(data, cfg)
+def test_retired_luna_is_not_an_active_model_option():
+    with pytest.raises(ValueError):
+        ModelConfig(model="openai/gpt-6-luna")
 
 
 @pytest.mark.parametrize("model,prompt,completion", [
@@ -68,6 +54,6 @@ def test_explicit_luna_flex_comparator_mock_only():
     ("openai/gpt-6-astra", "0.00000005", "0.00000025"),
 ])
 def test_luna_prices_cannot_cross_cohorts(model, prompt, completion):
-    with pytest.raises(ValueError, match="cohort"):
+    with pytest.raises(ValueError):
         ModelConfig(model=model, expected_prompt_usd_per_token=prompt,
                     expected_completion_usd_per_token=completion)
