@@ -63,3 +63,13 @@ Seven analyzer tests cover retained-data validation; the separate probe driver
 has six tests. Raw traces and private scripts remain outside the public repo.
 Original probe receipt SHA-256:
 `5595635524d5bd18f8f388f80cddefbcfb4fa2fc78cb6f06489d7fb471e20688`.
+
+## Diagnostic Preparation
+
+The private hold-only protocol and read-only substep recorder are prepared,
+not executed. Sixteen new tests validate action/callback accounting, timestep
+checks, explicit raw fallback, retained cache discrepancies and latched errors.
+The full private suite now passes **954 tests, one existing skip**; focused Ruff
+checks pass. These tests do not qualify native callback ordering or stopping.
+The native subscription and actuator wrapper still need integration and review
+before the separately authorized run. No additional action or paid call occurred.
