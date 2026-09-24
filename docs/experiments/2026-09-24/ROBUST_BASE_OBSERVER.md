@@ -218,8 +218,9 @@ Evaluator sidecar SHA-256:
 Retrospective evaluator comparison reports maximum actual base rate
 0.0569 mm/s and maximum legal observer estimate 3.902 mm/s; no base-observer
 loss occurred. Private focused verification: 87 tests passed. GPU cleanup was
-verified at 0 MiB. Full local evidence verification is recorded separately
-after the resumable copy completes.
+verified at 0 MiB. The completed local backup contains 354 captures and 2,108
+unique referenced RGB/depth artifacts; all references are present and every
+artifact matches its content-addressed SHA-256 name.
 
 ## Strict Clearance Follow-Up
 
