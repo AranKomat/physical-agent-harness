@@ -81,7 +81,10 @@ An offline translation-only calculation first enters the right radius at another
 clearance estimates.** Do not extend base motion on that basis. Next evaluate
 torso/arm posture, IK, observed obstacles, and return-path support from the retained
 endpoint; any eventual execution needs a fresh in-episode observation and its
-appropriate gates. See [endpoint reach screen](SAM_LONG_STAGING_REACH.json).
+appropriate gates. See [endpoint reach screen](SAM_LONG_STAGING_REACH.json) and the
+[torso-only screen](SAM_STAGING_TORSO_SCREEN.md). The torso-only screen suggests
+that the distance gap may be removable with a large posture change, but it is not
+an IK or clearance result.
 
 Phase 5/6 exploratory integration advanced; strict Phase 6 is not complete and
 this trial earns no Phase 7-9 manipulation completion. Repository verification:

@@ -1,0 +1,41 @@
+{
+  "scope": "offline_torso_position_screen_current_staged_surface",
+  "source_sha256": "aff718fe3398df136d3079b31755d6df33cbfd135912f0c2c20c02240725dc25",
+  "target_base_m": [0.7993792104785893, -0.2494468615530443, 0.5918658789155231],
+  "rows": [
+    {
+      "side": "left",
+      "initial_m": 0.9957001886375157,
+      "best_m": 0.0793209097135494,
+      "radius_m": 0.8715498083598944,
+      "residual_m": -0.7922288986463449,
+      "success": true,
+      "evaluations": 6725,
+      "torso_joints": {
+        "torso_joint1": 0.47691879926292324,
+        "torso_joint2": 1.258052983345005,
+        "torso_joint3": -0.013822691942811646,
+        "torso_joint4": 3.054299995171509
+      }
+    },
+    {
+      "side": "right",
+      "initial_m": 0.906126942044437,
+      "best_m": 0.0787105168397367,
+      "radius_m": 0.8710389453712257,
+      "residual_m": -0.792328428531489,
+      "success": true,
+      "evaluations": 5871,
+      "torso_joints": {
+        "torso_joint1": 0.7889018950908874,
+        "torso_joint2": 0.17772101103506618,
+        "torso_joint3": -1.1327665689527204,
+        "torso_joint4": 0.0028515920381090307
+      }
+    }
+  ],
+  "actions": 0,
+  "paid_calls": 0,
+  "motion_authorized": false,
+  "qualification": "not_ik_not_collision_not_execution"
+}
