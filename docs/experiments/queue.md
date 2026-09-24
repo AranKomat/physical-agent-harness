@@ -38,6 +38,9 @@ immutable evidence, including failed and subsequently invalidated attempts.
    [the preserved launch failures](2026-09-24/EXPLORATORY_TASK_RESTART.md).
    Connect current source-bound SAM geometry before another transit rollout;
    the legacy detection-only owner cannot supply the required metric masks.
+   The [SAM transit consumer](2026-09-24/SAM_TRANSIT_CONTRACT.md) now passes
+   retained contract replay on 13/25 observations. Live owner wiring and timing
+   remain unfinished; this is not motion qualification.
 5. Do not repeat easy association tests, the blind observer sweep, identical
    calibration pulses, or more grasp batches. Phase 2 needs genuinely new causal
    hard-case evidence; paid stages need an explicit budget extension.

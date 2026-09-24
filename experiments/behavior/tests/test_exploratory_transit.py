@@ -100,6 +100,33 @@ class Driver:
         assert len(self.report["commands"]) == len(self.commands)
 
 
+def test_sam_target_route_retains_probe_limits_and_journals(monkeypatch, tmp_path):
+    from experiments.behavior.sam_transit_target import SAMTransitTarget
+
+    d = Driver(monkeypatch, tmp_path)
+    target = SAMTransitTarget(tmp_path, session="probe", epoch=0, generation=0, tracker_id=0)
+
+    def sample(self, frame, row, output):
+        point = d.target(frame, row, output)
+        self.receipts.append({"motion_authorized": False, "surface_median_base_m": point.tolist()})
+        return point
+
+    monkeypatch.setattr(SAMTransitTarget, "__call__", sample)
+    monkeypatch.setattr(transit, "_target", lambda *args: pytest.fail("Legacy target used"))
+    d.run(sam_target=target)
+    d.clean()
+    assert d.report["passed"] and d.moving == 80
+    assert not d.report["strict_gate_passed"]
+    assert any("sam_target_proposal" in r for r in d.report["samples"])
+
+
+def test_arbitrary_target_callback_rejected(monkeypatch, tmp_path):
+    d = Driver(monkeypatch, tmp_path)
+    with pytest.raises(ValueError, match="source-bound"):
+        d.run(sam_target=lambda *args: np.ones(3))
+    assert not d.commands
+
+
 def test_one_segment_frozen_joints_stop_and_fresh_final(monkeypatch, tmp_path):
     d = Driver(monkeypatch, tmp_path)
     final = d.run()

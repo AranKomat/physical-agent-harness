@@ -137,7 +137,7 @@ def _joint_window(log, phase):
 
 def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
                             capture, latest_row, output, save_probe, robot_assets,
-                            control_only=False):
+                            control_only=False, sam_target=None):
     """Return last fresh observation; save detached {report, feedback} after cleanup.
 
     At 30 Hz, command integral <=8 cm; measured adjacent endpoint path triggers
@@ -146,6 +146,11 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
     """
     if type(control_only) is not bool:
         raise ValueError("Explicit boolean control condition required")
+    if sam_target is not None:
+        from experiments.behavior.sam_transit_target import SAMTransitTarget
+
+        if not isinstance(sam_target, SAMTransitTarget):
+            raise ValueError("Expected source-bound SAM transit target")
     started = time.monotonic()
     final, frame, target, log, zero = initial, None, None, None, None
     pairs = []
@@ -221,7 +226,10 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
                 or (phase != "entry" and (np.linalg.norm(p[:2]) > .08 or abs(p[2]) > .15))):
             raise ValueError("Joint drift or proprio speed guard")
         if phase != "abort_brake":
-            fresh_target = _target(current, row, output)
+            fresh_target = (_target(current, row, output) if sam_target is None
+                            else sam_target(current, row, output))
+            if sam_target is not None:
+                sample["sam_target_proposal"] = sam_target.receipts[-1]
             if target is not None and np.linalg.norm(fresh_target-target) > .10:
                 raise ValueError("Target continuity drift")
             target = fresh_target
