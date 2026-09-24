@@ -30,6 +30,8 @@ The strongest completed results are:
   reducing prompt tokens by 19.3% and cost by 13.1%;
 - base stop discrimination, endpoint/return mechanics, and empty-hand gripper
   aperture tracking work in the tested simulator regimes;
+- a legal RGB-D voxel gate failed even under an all-history, zero-pose-error upper
+  bound, closing the remaining derived-state hypothesis for strict clearance;
 - Behavior-Skill survives a small classical-to-policy handoff without an obvious
   immediate competence collapse, but neither policy nor hybrid conditions complete
   the radio task;
@@ -64,13 +66,13 @@ action interface. Only one actuator owner may run at a time.
 | 3. Live shadow discovery | Complete as asynchronous discovery; fails synchronous gate | Frozen four-boundary GLM cohort matched semantic visibility 4/4; 3/4 strict packets entered historical inventory. | Zero of four calls met the two-second control window. Use results only for history and fresh reacquisition requests. |
 | 4A. Discovery prompt study | Partial | V3 task-directed half achieved 2/2 radio recall, 0/2 false positives, and 3/4 strict packets. | Task-blind matched cohort stopped after one valid result, one unresolved timeout, and two unsent calls. A new declared continuation is required. |
 | 4B. Executive context study | Complete for frozen four-boundary scope | Rich and compact GPT-6 Sol Flex decisions agreed 4/4. Compact reduced prompt tokens 19.3%, cost 13.1%, and mean latency 1.17 s. | Generalization and live causal benefit remain untested. Compact V3 is the default; rich is the comparator. |
-| 5. Localization, clearance, stopping | Partial; default sensor search closed and clearance blocked | Tested base stop predicate separates all 392 moving intervals from four stationary windows. Robust RGB-D registration and source-bound stop mechanics work in retained regimes. A pinned source audit confirms there is no unused default R1Pro LiDAR/range/contact/active-camera channel in the challenge observation contract. | A materially different legal RGB-D/proprioceptive method or disclosed embodiment is required. Broader localization remains incomplete. |
+| 5. Localization, clearance, stopping | Partial; strict clearance branch closed for default cameras | Tested base stop predicate separates all 392 moving intervals from four stationary windows. Robust RGB-D registration and source-bound stop mechanics work in retained regimes. The final legal RGB-D voxel gate retained only 53.6% of newly occupied authored-vertex samples even under an all-history, zero-error upper bound. | A materially different legal sensing authority or disclosed embodiment is required. Broader localization remains incomplete. |
 | 6. Strict target-directed base transit | Blocked | Exploratory target-directed transits and braking were executed and measured. | No transit is strictly admitted because external clearance is unknown. |
 | 7. Arm/torso planning and return | Partial mechanics; strict execution blocked | Native 10 cm outward endpoint, return endpoint, 60 holds, and 348 total actions passed. cuRobo construction and no-op planning work after adapter fixes. | Current legal observations do not cover the swept whole-body path. Qualified scene collision, wheel scope, and native planner execution remain open. |
 | 8. Matched hybrid A/B/C | Exploratory handoff-preservation subquestion complete | Four starts in balanced `BA/AB/BA/AB` order completed equal policy exposure with no immediate post-handoff away action and persistent current SAM candidates. | Neither condition succeeded, acquisition diverged before treatment, and no causal benefit was shown. Strict A/B/C remains blocked by Phases 5-7. |
 | 9A. Proposal and gripper readiness | Proposal scope complete; execution partial | Exact hand geometry audited, GraspGen-X proposal path pinned, one offline candidate retained, and native empty-hand close/reopen passed 35/35 actions. | Contact calibration, payload stability, release, closer staging, and safe execution are not established. |
 | 9B-9D. Stage, grasp, verify/place | Blocked | No positive contact or task action has been qualified. | Requires Phases 5-7 plus contact/grasp verification. |
-| 10. Recurrent GPT executive | Not meaningfully started | Compact V3 context and bounded semantic cycle infrastructure are ready. | Needs a useful execution path before causal task comparison. |
+| 10. Recurrent GPT executive | Not meaningfully started | Compact V3 context and bounded semantic cycle infrastructure are ready. A no-paid fixed-routing `EpisodeRunner` radio baseline now completes its integration contract but scores Q=0. | Needs one useful, independently verified physical effect before causal task comparison. |
 | 11. Event-driven recovery | Not started | Failure history and verifier contracts exist. | Needs a real recoverable physical failure and qualified actions. |
 | 12. Memory in execution | Not started at task level | Causal memory representations and replay checks exist. | Needs an executable memory-sensitive episode; answer-only ablations are insufficient. |
 | 13. Robustness/held-out expansion | Not started | Controlled identity cases and several simulator starts exist. | Requires a working base system before seeds, layouts, distractors, and tasks are meaningful. |
@@ -185,6 +187,14 @@ historical view unions as current free space.
 This is a missing-evidence result, not evidence of a collision. It blocks strict
 Phases 6-9 under the current rules.
 
+The final bounded derived-state check is documented in
+[Phase 5E](2026-09-25/PHASE5E_LEGAL_VOXEL_GATE_20260925.md). Across 17 legal
+capture transitions, the optimistic all-causal-history, zero-error variant marked
+only 11,504 of 21,472 newly occupied authored-vertex samples free (53.6%) and 719
+of 3,816 convex-hull voxel samples free (18.8%). The legal pose trajectory was
+smooth enough to reject a gross odometry jump as the explanation. Do not build a
+permanent 3-D mapping stack for this branch.
+
 ### Hybrid intervention has no demonstrated task benefit
 
 The counterbalanced Phase 8 cohort completed four starts in `BA/AB/BA/AB` order.
@@ -277,18 +287,21 @@ Then choose one track explicitly:
    retrospective scoring. This can measure policy/system outcomes, but it cannot be
    reported as strict motion qualification.
 
-If the exploratory track is chosen, the next useful experiment is a bounded Phase 10
-radio run through the actual recurrent runtime, not another fixed-menu supervisor or
-10 cm stage/retract microdiagnostic. Integrate the existing native Behavior-Skill
-backend with `EpisodeRunner`, compact V3, a separate verifier, legal current
-observations, memory in shadow mode, fixed action/call budgets, no retries, and hidden
-task truth used only after execution. Keep `clearance=unknown` and
-`motion_qualified=false`; this is benchmark-valid exploratory evidence, not strict
-motion qualification.
+The no-paid fixed-routing `EpisodeRunner` baseline has now completed one 256-action
+Behavior-Skill radio run plus nine measured settling holds. The integration passed,
+but the radio remained off and final Q was zero. That is enough fixed-routing radio
+evidence for now.
+
+Before paid Phase 10 calls, select or construct a development fixture where a
+visible object begins inside an easily reachable workspace. Demonstrate one real,
+freshly verified grasp-and-short-lift, object displacement, or press. Keep
+`clearance=unknown`, `motion_qualified=false`, and label the result as integration
+qualification rather than BEHAVIOR benchmark success. Once that physical effect
+exists, run compact-V3 recurrent GPT against a matched fixed-routing control.
 
 Run offline/doctor/native preflight before model calls. No paid GPT execution is
 authorized by this handoff, so declare a new call and cost scope before the live run.
-After a useful recurrent episode exists, continue in this order:
+After a useful verified physical effect exists, continue in this order:
 
 1. compact-V3 GPT executive versus the same frozen-policy control;
 2. event-driven recovery from a predeclared failure;
