@@ -98,7 +98,9 @@ class FixtureNative:
 
     def bindings(self):
         return NativeBindings("synthetic-fixture-NOT-BEHAVIOR", self.observe, self.run_skill,
-                              self.stop, simulated=True, qualification_id="synthetic-contract-test-only")
+                              self.stop, simulated=True,
+                              qualification_id="synthetic-contract-test-only",
+                              motion_qualified=True, clearance_status="qualified")
 
 
 def run_demo(output: Path) -> dict:

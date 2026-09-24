@@ -41,8 +41,8 @@ def read_config(path):
         HttpTransport(**value["transport"])
         for rate in value["rates"].values():
             Rates(**rate)
-    if "allow_motion" in cfg["limits"]:
-        raise ValueError("Motion opt-in belongs on the CLI")
+    if any(key in cfg["limits"] for key in ("allow_motion", "allow_exploratory_motion")):
+        raise ValueError("Motion opt-ins belong on the CLI")
     return cfg, goals, actions, policy
 
 
@@ -59,6 +59,7 @@ def main():
     run.add_argument("--allow-network", action="store_true")
     run.add_argument("--allow-paid", action="store_true")
     run.add_argument("--allow-motion", action="store_true")
+    run.add_argument("--allow-exploratory-motion", action="store_true")
     native = commands.add_parser("serve-native")
     native.add_argument("--factory", required=True)
     native.add_argument("--episode", required=True)
@@ -133,7 +134,11 @@ def main():
                                    timeout_s=cfg["limits"].get("max_wall_s", 600))
             runner = EpisodeRunner(args.output, cfg["episode"], cfg["goal_text"], native.bindings(),
                                    goals, actions, models["executive"], models["verifier"], journal,
-                                   limits=RunLimits(**dict(cfg["limits"], allow_motion=args.allow_motion)),
+                                   limits=RunLimits(**dict(
+                                       cfg["limits"],
+                                       allow_motion=args.allow_motion,
+                                       allow_exploratory_motion=args.allow_exploratory_motion,
+                                   )),
                                    context_policy=policy, narrator_model=models.get("narrator"))
             result = runner.run()
         finally:

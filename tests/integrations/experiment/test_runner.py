@@ -21,24 +21,54 @@ from physical_harness.reasoning.context.rich import RichContextPolicy
 
 
 def build(tmp_path, *, native=None, transport=None, motion=True, observable=True,
-          qualified=True, narrator=False, policy=None):
+          qualified=True, narrator=False, policy=None, exploratory_native=False,
+          exploratory_permission=False):
+    tmp_path.mkdir(parents=True, exist_ok=True)
     episode = 'ep'
     native = native or FixtureNative(episode)
     journal = Journal(tmp_path / 'journal.sqlite', episode, max_microusd=0, max_calls=20)
     transport = transport or FixtureTransport()
     model = JsonModel(ModelSettings('fixture', paid=False), transport, journal,
                       {'default': Rates('0', '0', '0', 'synthetic')})
-    runner = EpisodeRunner(
-        tmp_path, episode, 'Close cabinet', native.bindings(),
-        [Goal('closed', 'CLOSED(cabinet)', ('cabinet', 'open_state', 'closed'),
-              'Green fixture pixels means closed', ('cabinet',),
-              observable_from_rgb=observable,
-              verifier_qualification='fixture-only' if qualified else None)],
-        [Action('close-cabinet', 'Close cabinet', ('cabinet',), 'closed')],
-        model, model, journal,
-        limits=RunLimits(allow_motion=motion, max_decisions=4),
-        context_policy=policy, narrator_model=model if narrator else None)
+    bindings = native.bindings()
+    if exploratory_native:
+        bindings = replace(bindings, motion_qualified=False, clearance_status='unknown')
+    try:
+        runner = EpisodeRunner(
+            tmp_path, episode, 'Close cabinet', bindings,
+            [Goal('closed', 'CLOSED(cabinet)', ('cabinet', 'open_state', 'closed'),
+                  'Green fixture pixels means closed', ('cabinet',),
+                  observable_from_rgb=observable,
+                  verifier_qualification='fixture-only' if qualified else None)],
+            [Action('close-cabinet', 'Close cabinet', ('cabinet',), 'closed')],
+            model, model, journal,
+            limits=RunLimits(allow_motion=motion,
+                             allow_exploratory_motion=exploratory_permission,
+                             max_decisions=4),
+            context_policy=policy, narrator_model=model if narrator else None)
+    except Exception:
+        journal.close()
+        raise
     return runner, native, transport, journal
+
+
+def test_exploratory_motion_requires_separate_opt_in_and_stays_labeled(tmp_path):
+    with pytest.raises(PermissionError, match='exploratory-motion'):
+        build(tmp_path / 'denied', exploratory_native=True)
+
+    runner, native, transport, journal = build(
+        tmp_path / 'allowed',
+        exploratory_native=True,
+        exploratory_permission=True,
+    )
+    try:
+        report = runner.run()
+        assert report['exploratory_motion'] is True
+        assert report['motion_qualified'] is False
+        assert report['clearance_status'] == 'unknown'
+    finally:
+        runner.close()
+        journal.close()
 
 
 def test_full_real_core_loop_and_frozen_replay(tmp_path):
@@ -82,6 +112,12 @@ def test_executive_prompt_spells_out_null_tool_bindings():
     assert "finish: action_id and goal_id must both be null" in EXECUTIVE_PROMPT
     assert "request_verification: action_id must be null" in EXECUTIVE_PROMPT
     assert "stop: action_id and goal_id must both be null" in EXECUTIVE_PROMPT
+
+
+def test_action_settling_reserve_is_bounded():
+    assert Action('a', 'act', (), max_action_steps=61, max_settling_steps=60).max_settling_steps == 60
+    with pytest.raises(ValueError, match='Settling reserve'):
+        Action('a', 'act', (), max_action_steps=60, max_settling_steps=60)
 
 
 def test_bounded_run_can_stop_cleanly_with_an_unresolved_goal(tmp_path):

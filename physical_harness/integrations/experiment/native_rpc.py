@@ -141,7 +141,9 @@ class ProcessNative:
 
     def bindings(self):
         return NativeBindings(self.info["name"], self.observe, self.run_skill, self.stop,
-                              simulated=True, qualification_id=self.info["qualification_id"])
+                              simulated=True, qualification_id=self.info["qualification_id"],
+                              motion_qualified=self.info.get("motion_qualified", False),
+                              clearance_status=self.info.get("clearance_status", "unknown"))
 
     def close(self):
         # Reap the entire local simulator process group, including child workers.
@@ -187,7 +189,9 @@ def serve(factory_spec: str, episode: str):
                 with redirect_stdout(sys.stderr):
                     if request["method"] == "hello":
                         result = {"name": native.name, "simulated": native.simulated,
-                                  "qualification_id": native.qualification_id}
+                                  "qualification_id": native.qualification_id,
+                                  "motion_qualified": native.motion_qualified,
+                                  "clearance_status": native.clearance_status}
                     elif request["method"] == "observe":
                         result = encode_observation(native.observe())
                     elif request["method"] == "run_skill":

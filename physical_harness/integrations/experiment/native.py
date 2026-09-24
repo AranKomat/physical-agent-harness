@@ -145,3 +145,16 @@ class NativeBindings:
     stop: Callable[[], bool]
     simulated: bool = True
     qualification_id: str | None = None
+    motion_qualified: bool = False
+    clearance_status: str = "unknown"
+
+    def __post_init__(self):
+        text(self.name, "name", 256)
+        if self.qualification_id is not None:
+            text(self.qualification_id, "qualification_id", 256)
+        if type(self.simulated) is not bool or type(self.motion_qualified) is not bool:
+            raise ValueError("Native simulation and qualification flags must be boolean")
+        if self.clearance_status not in {"unknown", "qualified"}:
+            raise ValueError("Native clearance status must be unknown or qualified")
+        if self.motion_qualified != (self.clearance_status == "qualified"):
+            raise ValueError("Motion qualification and clearance status disagree")

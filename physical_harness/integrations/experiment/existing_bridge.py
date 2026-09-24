@@ -16,7 +16,8 @@ from physical_harness.integrations.sensors.behavior import LegalObservation
 def from_existing_driver(*, name: str, episode: str, capture_legal: Callable,
                          read_rgb: Callable, run_skill: Callable, stop: Callable,
                          qualification_id: str, estimates=None, boxes=None, place=None,
-                         coverage=None) -> NativeBindings:
+                         coverage=None, motion_qualified: bool = False,
+                         clearance_status: str = "unknown") -> NativeBindings:
     """Use the private driver's actual callable implementations.
 
     capture_legal returns a validated LegalObservation or the same strict envelope.
@@ -47,7 +48,9 @@ def from_existing_driver(*, name: str, episode: str, capture_legal: Callable,
                            tuple(coverage(env)) if coverage else (), env)
 
     return NativeBindings(name, observe, run_skill, stop, simulated=True,
-                          qualification_id=qualification_id)
+                          qualification_id=qualification_id,
+                          motion_qualified=motion_qualified,
+                          clearance_status=clearance_status)
 
 
 def driver_factory(episode: str) -> NativeBindings:
@@ -76,4 +79,6 @@ def driver_factory(episode: str) -> NativeBindings:
         capture_legal=driver.capture_legal, read_rgb=driver.read_rgb,
         run_skill=driver.run_skill, stop=driver.stop,
         estimates=getattr(driver, "estimates", None), boxes=getattr(driver, "boxes", None),
-        place=getattr(driver, "place", None), coverage=getattr(driver, "coverage", None))
+        place=getattr(driver, "place", None), coverage=getattr(driver, "coverage", None),
+        motion_qualified=getattr(driver, "motion_qualified", False),
+        clearance_status=getattr(driver, "clearance_status", "unknown"))

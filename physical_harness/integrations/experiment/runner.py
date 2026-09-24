@@ -61,6 +61,7 @@ class Action:
     max_wall_s: float = 30
     max_policy_chunks: int = 20
     max_action_steps: int = 600
+    max_settling_steps: int = 0
 
     def __post_init__(self):
         for value in (self.id, self.instruction, self.skill_type):
@@ -69,6 +70,9 @@ class Action:
         number(self.max_wall_s, minimum=.01)
         integer(self.max_policy_chunks, minimum=1)
         integer(self.max_action_steps, minimum=1)
+        integer(self.max_settling_steps, minimum=0)
+        if self.max_settling_steps >= self.max_action_steps:
+            raise ValueError("Settling reserve must leave at least one task action")
         if self.goal_id is not None:
             text(self.goal_id)
 
@@ -82,6 +86,7 @@ class RunLimits:
     max_unchanged_inspections: int = 2
     max_repeated_action: int = 2
     allow_motion: bool = False
+    allow_exploratory_motion: bool = False
 
     def __post_init__(self):
         for value in (self.max_decisions, self.max_motion_calls, self.max_unchanged_inspections,
@@ -89,8 +94,10 @@ class RunLimits:
             integer(value, minimum=1)
         number(self.max_sim_s, minimum=.01)
         number(self.max_wall_s, minimum=.01)
-        if type(self.allow_motion) is not bool:
-            raise ValueError("Motion permission must be boolean")
+        if type(self.allow_motion) is not bool or type(self.allow_exploratory_motion) is not bool:
+            raise ValueError("Motion permissions must be boolean")
+        if self.allow_exploratory_motion and not self.allow_motion:
+            raise ValueError("Exploratory motion also requires motion permission")
 
 
 class NoPredicateOracle:
@@ -123,6 +130,14 @@ class EpisodeRunner:
         self.policy = context_policy or RichContextPolicy()
         if self.limits.allow_motion and not native.qualification_id:
             raise ValueError("A reviewed native binding/fixture qualification ID is required")
+        if (
+            self.limits.allow_motion
+            and not native.motion_qualified
+            and not self.limits.allow_exploratory_motion
+        ):
+            raise PermissionError(
+                "Unqualified native motion requires explicit exploratory-motion permission"
+            )
         self.world = WorldState(self.root / "world.sqlite", episode)
         self.blobs = EvidenceStore(self.root / "evidence")
         self.ledger = TaskLedger(self.world)
@@ -195,6 +210,9 @@ class EpisodeRunner:
         self.journal.put("run", "manifest", {
             "episode": episode, "goal_text": goal_text, "native": native.name,
             "native_qualification": native.qualification_id, "simulated": native.simulated,
+            "motion_qualified": native.motion_qualified,
+            "clearance_status": native.clearance_status,
+            "exploratory_motion": self.limits.allow_exploratory_motion,
             "goals": [asdict(g) for g in goals], "actions": [asdict(a) for a in actions],
             "limits": asdict(self.limits), "context_policy": asdict(self.policy),
             "memory_mode": "shadow", "spatial_memory_mode": "shadow",
@@ -431,7 +449,8 @@ class EpisodeRunner:
             max_wall_s=action.max_wall_s, max_policy_chunks=action.max_policy_chunks,
             source_observation_id=self.current.id,
             metadata={"action_id": action.id, "goal_id": action.goal_id,
-                      "max_action_steps": action.max_action_steps})
+                      "max_action_steps": action.max_action_steps,
+                      "max_settling_steps": action.max_settling_steps})
         if goal:
             self.ledger.set_status(goal.id, "running")
         if self.memory_ok:
@@ -588,6 +607,9 @@ class EpisodeRunner:
                   "harness_finished": self.loop.finished, "benchmark_success": "not_claimed",
                   "error": error, "error_message": error_message,
                   "stop_acknowledged": stop_ack,
+                  "motion_qualified": self.native.motion_qualified,
+                  "clearance_status": self.native.clearance_status,
+                  "exploratory_motion": self.limits.allow_exploratory_motion,
                   "sim_time": self.now(), "executive_calls": self.loop.calls,
                   "motion_calls": self.motion_calls, "memory_shadow_ok": self.memory_ok,
                   "spatial_keyframes": len(self.spatial_views.keyframes),

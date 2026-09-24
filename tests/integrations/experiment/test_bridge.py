@@ -5,6 +5,7 @@ import pytest
 from physical_harness.integrations.experiment.actors import Goal
 from physical_harness.integrations.experiment.existing_bridge import from_existing_driver
 from physical_harness.integrations.experiment.fixture import FixtureNative
+from physical_harness.integrations.experiment.native import NativeBindings
 from physical_harness.integrations.experiment.native_rpc import (
     decode_observation,
     encode_observation,
@@ -47,3 +48,15 @@ def test_goal_requires_subject_and_container_identity_checks():
     with pytest.raises(ValueError, match='endpoint'):
         Goal('g', 'IN(ball,basket)', ('ball', 'IN', 'basket'), 'inside', ('ball',))
     assert Goal('g', 'IN(ball,basket)', ('ball', 'IN', 'basket'), 'inside', ('ball', 'basket'))
+
+
+def test_native_motion_qualification_is_fail_closed():
+    def callback(*args):
+        return True
+
+    with pytest.raises(ValueError, match='disagree'):
+        NativeBindings('bad', callback, callback, callback,
+                       motion_qualified=True, clearance_status='unknown')
+    native = NativeBindings('exploratory', callback, callback, callback)
+    assert native.motion_qualified is False
+    assert native.clearance_status == 'unknown'

@@ -29,7 +29,8 @@ def test_native_wrapper_preserves_observer_and_never_mutates_original():
 def test_native_wrapper_rejects_unqualified_or_physical_binding(kwargs):
     w = FixtureWorld()
     n = Binding("native", w.snapshot, w.learned, w.stop, qualification_id="fixture")
-    with pytest.raises(PermissionError):
+    expected = ValueError if kwargs == {"simulated": 1} else PermissionError
+    with pytest.raises(expected):
         wrap_native(replace(n, **kwargs), w.executor(), domain="fixture")
 
 
