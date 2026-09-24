@@ -14,7 +14,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | Phase | Current scope and remaining work |
 | --- | --- |
 | 0-1 | Software and retained replay passed within their declared offline scope |
-| 2 | Partial: 10/14 scenarios; genuine crossing, full loss/reappearance and motion gaps |
+| 2 | Controlled contract gate complete: 14/14 scenarios; natural-rollout replication remains robustness evidence, not runtime authority |
 | 3 | Partial: live prospective inventory coverage incomplete; new paid calls need budget |
 | 4 | Not completed; paid comparison needs budget |
 | 5 | Partial: refreshed forward/reverse localization and shadow stop evidence; uncertainty/clearance unresolved |
@@ -43,8 +43,9 @@ immutable evidence, including failed and subsequently invalidated attempts.
    Strict clearance remains unknown; no manipulation or task success. Continue
    toward useful reachable staging, not another identical short probe.
 5. Do not repeat easy association tests, the blind observer sweep, identical
-   calibration pulses, or more grasp batches. Phase 2 needs genuinely new causal
-   hard-case evidence; paid stages need an explicit budget extension.
+   calibration pulses, or more grasp batches. The controlled Phase 2 gate is
+   complete; proceed to prospective Phase 3/4 work under an explicit paid-call
+   budget while retaining natural identity trials for later robustness.
 
 ## Evidence History
 

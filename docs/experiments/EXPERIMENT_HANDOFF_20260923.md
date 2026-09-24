@@ -1,5 +1,17 @@
 # Experiment And Verification Handoff
 
+Latest Phase 2 result: the
+[identical-object loss/reacquisition replay](2026-09-24/PHASE2_IDENTICAL_LOSS_REPLAY_20260924.md)
+completes the controlled 14/14 association matrix. Two identical pumpkins had
+valid source-bound bindings, disappeared together for three clean native RGB-D
+captures, then reappeared on exchanged sides while SAM reused IDs 0 and 1. The
+runtime retained category semantics but denied both bindings through durable
+journal replay. A quarantined evaluator scorer later found the IDs happened to
+follow the same simulator instances; that answer never entered runtime. Local
+and remote CPU reports are byte-identical. This is controlled scripted-pose
+evidence, not a natural rollout, benchmark result, motion authorization or task
+success. Phase 2 should now yield to prospective Phase 3/4 experiments.
+
 Latest Phase 7 mechanics result: the [position-interval native validation](2026-09-24/ROBUST_BASE_OBSERVER.md#position-interval-native-validation)
 completed all 348 actions, verified the 10 cm outward endpoint, return endpoint,
 60 reserved holds and final endpoint/settling state. A native sensitivity replay
@@ -37,9 +49,10 @@ of the subsequent native attempt. Phase 7 remains incomplete; exploratory
 unknown-clearance behavior is not strict qualification.
 
 2026-09-24 follow-up: [Phase 1 retained replay](2026-09-24/PHASE1_REPLAY_20260924.md)
-passes 64 checks with zero new calls and zero actions. The current Phase 2
-contract replay also passes its exercised checks, but remains partial at 10/14
-scenarios; see [the dated Phase 2 report](2026-09-24/PHASE2_ASSOCIATION_REPLAY_20260924.md).
+passes 64 checks with zero new calls and zero actions. The original Phase 2
+contract replay covered 10/14 scenarios; the later
+[identical-object loss replay](2026-09-24/PHASE2_IDENTICAL_LOSS_REPLAY_20260924.md)
+now completes the controlled 14/14 matrix without granting identity across loss.
 The [radio positive-fusion attempt](2026-09-24/PHASE5A_RADIO_JOIN_20260924.md)
 was rejected cleanly because the legal stationary capture had zero radio mask
 support; it produced no motion or target geometry and does not qualify Phase 5A.
@@ -345,7 +358,7 @@ historical diagnostics are described later in this document.
 | --- | --- | --- |
 | 0. Preflight | Software/retained audit, SAM restoration, numeric pins and native sensor smoke passed | Restore policy environment; qualify live integration and recover missing provenance where possible |
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
-| 2. Hard discovery/SAM identity and loss | Partial: natural radio displacement, sofa out-of-view/return, simultaneous chair candidates, delayed-mask handling and durable loss-packet replay | Independent physical association, valid native binding invalidation, true occlusion/crossings, robot-pixel exclusion and uncertainty; correspondence/IDs are not identity |
+| 2. Hard discovery/SAM identity and loss | Controlled contract gate complete: 14/14 scenarios, including positive two-instance association, simultaneous full loss, side-swapped ambiguous reacquisition and durable binding invalidation | Natural rollout replication remains robustness evidence; evaluator scoring, correspondence and local IDs remain non-authoritative |
 | 3. Live shadow GLM discovery | Partial: three fresh paused captures passed the provider/worker/coordinator/inventory chain after a rejected dangling-attention result; 4,145-call ceiling exhausted | Prospective coalescing/context consumer, broader coverage, and separately authorized further paid calls |
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial: bounded positive live fusion and target-support stability pass; robust base observation and source-bound 24-interval joint-position stopping passed the 348-action native out/return run; earlier raw-stop failures remain recorded | Physical calibration, complete whole-robot stopping bounds, external clearance and low-body return coverage; the simulator position-window result is not a physical stop certificate |
@@ -830,11 +843,11 @@ Its present state, by experiment name rather than ambiguous historical numbering
    frozen r4 evidence and its 64 passing checks. Do not repeat this as if unstarted
    or treat it as a live timing/model-quality result. Delayed identity-claim
    publication remains unqualified; observation-time guards cannot reconstruct it.
-2. **Discovery-to-SAM association/loss test.** Restore only the required local GPU
-   environment. Include mismatched semantics, similar objects, full disappearance,
-   reset, reappearance and source/session mismatches, not another easy continuous
-   radio track. Require current-source provenance, safe rejection/abstention and no
-   identity transfer merely because a tracker reused a number. Start with replay.
+2. **Discovery-to-SAM association/loss test: completed controlled gate.** The
+   14/14 matrix now includes mismatched semantics, identical objects, complete
+   simultaneous disappearance, reset/reappearance and source/session mismatches.
+   Local-ID reuse did not restore a binding. Retain natural task-rollout identity
+   trials for robustness rather than repeating this controlled gate.
 3. **Bounded paid prompt/context study, separately authorized.** Compare V3 delta
    versus inventory prompts on held-out views; compare compact versus rich GPT
    context on frozen causal boundaries. Predeclare accuracy/abstention, box/schema
@@ -890,6 +903,7 @@ Private result directories worth locating before resuming:
 | Phase 2 CPU contract replay, not inference | `runs/phase2-association-contracts-20260923-r2/`; r1 retained with superseded explanatory wording |
 | SAM runtime and official checkpoint restored | `runs/sam31-runtime-restore-20260923-r2/`; r1 preserves the earlier missing-weight state |
 | Fresh SAM inference / qualitative mask review | `runs/phase2-fresh-sam-20260923-r1/` / `runs/phase2-fresh-sam-analysis-20260923-r1/` |
+| Phase 2 identical-object loss/reacquisition | `runs/phase2-crossing-loss-fixture-20260924-r3/`, `runs/phase2-crossing-loss-sam31-20260924-r1/`, `runs/phase2-crossing-loss-identity-replay-20260924-r2/`, `runs/phase2-crossing-loss-identity-score-20260924-r2/` |
 
 The latest host was bootstrapped with code, CPU environment and selected
 checksum-verified evidence, not all GPU weights, simulator assets or policy runtimes.
