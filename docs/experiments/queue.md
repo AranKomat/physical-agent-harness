@@ -17,22 +17,27 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 2 | Controlled contract gate complete: 14/14 scenarios; natural-rollout replication remains robustness evidence, not runtime authority |
 | 3 | Complete as asynchronous historical discovery; four real-response calls passed semantic visibility, but 4.42--12.35 s latency fails the two-second synchronous gate |
 | 4 | 4B complete: compact context preserves 4/4 decisions while reducing prompt tokens 19.3% and cost 13.1%; 4A remains half complete and paid continuation is unauthorized |
-| 5 | Partial: localization/stop diagnostics pass their declared scope, but fixed robot and custom-camera searches cannot certify even a 5 mm segment; a different legal current-clearance authority is required |
+| 5 | Partial: localization/stop diagnostics pass their declared scope, and the native sensor-authority audit confirms there is no unused default R1Pro LiDAR/range/contact/active-camera channel; fixed and custom-camera screens cannot certify even a 5 mm segment, so a materially different legal current-clearance method or embodiment is required |
 | 6-7 | Exploratory base transit and arm endpoint/return mechanics completed; strict base transit and arm staging/return remain unqualified on external clearance |
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-14 | No qualifying end-to-end studies completed |
 
-1. Freeze the frame-704 grasp batch. [Dense-target path screening](2026-09-24/GRASP_CLOSURE_SUPPORT.md)
+1. Treat the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
+   as the end of the dormant-sensor search. The pinned default R1Pro exposes only
+   three fixed RGB-D cameras and selected proprioception to the challenge policy;
+   generic simulator LiDAR/contact internals are not legal observation channels.
+   Choose strict-blocked or explicitly exploratory execution before more motion.
+2. Freeze the frame-704 grasp batch. [Dense-target path screening](2026-09-24/GRASP_CLOSURE_SUPPORT.md)
    leaves candidate 0 only. Candidate 1 overlaps at its open endpoint; candidate
    2 overlaps nine points at path fraction 0.9375. Do not revive coarse-depth passes.
-2. Return the execution critical path to staging/sensing/stopping. The surviving
+3. Return the execution critical path to staging/sensing/stopping. The surviving
    target exceeds fixed-torso reach; current views cannot qualify whole-body motion.
    [Coverage/reach evidence](2026-09-24/GRASP_COVERAGE_STAGING.md) remains a blocker.
-3. Keep the [reverse-stop result](2026-09-24/REVERSE_STOP_PROTOCOL.md) as directional
+4. Keep the [reverse-stop result](2026-09-24/REVERSE_STOP_PROTOCOL.md) as directional
    validation only. Do not latch earlier raw passes across later failures or
    replace runtime authority with uncalibrated shadow output.
-4. The user approved bounded exploratory task trials alongside strict qualification.
+5. The user approved bounded exploratory task trials alongside strict qualification.
    Such trials do not complete strict phases. The first resumed attempt completed
    768 policy actions but zero classical actions: see
    [the preserved launch failures](2026-09-24/EXPLORATORY_TASK_RESTART.md).
@@ -42,18 +47,18 @@ immutable evidence, including failed and subsequently invalidated attempts.
    6.04 cm measured approach and experimental final stop, with 119 bound captures.
    Strict clearance remains unknown; no manipulation or task success. Continue
    toward useful reachable staging, not another identical short probe.
-5. The [Phase 3 prospective shadow replay](2026-09-24/PHASE3_PROSPECTIVE_SHADOW_REPLAY_20260924.md)
+6. The [Phase 3 prospective shadow replay](2026-09-24/PHASE3_PROSPECTIVE_SHADOW_REPLAY_20260924.md)
    passes the zero-call mechanics gate on 119 retained moving frames. Production
    defaults selected four jobs; a stress profile explicitly superseded three of
    thirteen submissions. Freeze those four production boundaries for the next
    paid run. Do not change thresholds after seeing semantic outputs or claim
    fixture responses demonstrate usefulness.
-6. Phase 4A is now [preregistered](2026-09-24/PHASE4A_FROZEN_PROTOCOL_20260924.md)
+7. Phase 4A is now [preregistered](2026-09-24/PHASE4A_FROZEN_PROTOCOL_20260924.md)
    on those same four held-out views: two radio-negative, one clipped-positive
    and one clear-positive. Preserve its prompts, 30 approximate reference
    objects, alias list and scoring. The Phase 3 V3 calls and later inventory calls
    remain independently budgeted; do not infer combined authorization.
-7. Do not repeat easy association tests, the blind observer sweep, identical
+8. Do not repeat easy association tests, the blind observer sweep, identical
    calibration pulses, or more grasp batches. The controlled Phase 2 gate is
    complete; proceed to the frozen Phase 3 real-response run under an explicit
    paid-call budget while retaining natural identity trials for later robustness.

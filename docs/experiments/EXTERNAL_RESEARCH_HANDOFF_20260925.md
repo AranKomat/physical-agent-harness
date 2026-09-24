@@ -4,7 +4,7 @@
 
 **Public repository:** `AranKomat/physical-agent-harness`
 
-**Evidence baseline:** `d81b134` (`Report Phase 9A gripper readiness`)
+**Repository state before this handoff update:** `61bf0f5` (`Add external experiment handoff`)
 
 **Operator-local experiment plan:** `PHYSICAL_AGENT_EXPERIMENT_SEQUENCE_HANDOFF_20260923.md`
 
@@ -64,7 +64,7 @@ action interface. Only one actuator owner may run at a time.
 | 3. Live shadow discovery | Complete as asynchronous discovery; fails synchronous gate | Frozen four-boundary GLM cohort matched semantic visibility 4/4; 3/4 strict packets entered historical inventory. | Zero of four calls met the two-second control window. Use results only for history and fresh reacquisition requests. |
 | 4A. Discovery prompt study | Partial | V3 task-directed half achieved 2/2 radio recall, 0/2 false positives, and 3/4 strict packets. | Task-blind matched cohort stopped after one valid result, one unresolved timeout, and two unsent calls. A new declared continuation is required. |
 | 4B. Executive context study | Complete for frozen four-boundary scope | Rich and compact GPT-6 Sol Flex decisions agreed 4/4. Compact reduced prompt tokens 19.3%, cost 13.1%, and mean latency 1.17 s. | Generalization and live causal benefit remain untested. Compact V3 is the default; rich is the comparator. |
-| 5. Localization, clearance, stopping | Partial; clearance blocked | Tested base stop predicate separates all 392 moving intervals from four stationary windows. Robust RGB-D registration and source-bound stop mechanics work in retained regimes. | Default embodiment has no demonstrated legal current sensor channel that certifies whole-body free space. Broader localization remains incomplete. |
+| 5. Localization, clearance, stopping | Partial; default sensor search closed and clearance blocked | Tested base stop predicate separates all 392 moving intervals from four stationary windows. Robust RGB-D registration and source-bound stop mechanics work in retained regimes. A pinned source audit confirms there is no unused default R1Pro LiDAR/range/contact/active-camera channel in the challenge observation contract. | A materially different legal RGB-D/proprioceptive method or disclosed embodiment is required. Broader localization remains incomplete. |
 | 6. Strict target-directed base transit | Blocked | Exploratory target-directed transits and braking were executed and measured. | No transit is strictly admitted because external clearance is unknown. |
 | 7. Arm/torso planning and return | Partial mechanics; strict execution blocked | Native 10 cm outward endpoint, return endpoint, 60 holds, and 348 total actions passed. cuRobo construction and no-op planning work after adapter fixes. | Current legal observations do not cover the swept whole-body path. Qualified scene collision, wheel scope, and native planner execution remain open. |
 | 8. Matched hybrid A/B/C | Exploratory handoff-preservation subquestion complete | Four starts in balanced `BA/AB/BA/AB` order completed equal policy exposure with no immediate post-handoff away action and persistent current SAM candidates. | Neither condition succeeded, acquisition diverged before treatment, and no causal benefit was shown. Strict A/B/C remains blocked by Phases 5-7. |
@@ -261,11 +261,11 @@ must not be retried without a newly declared scope.
 
 ## Recommended Next Decision
 
-First close the native sensor-authority audit as a written phase-level result. The
-current source inspection strongly indicates that the default challenge embodiment
-offers no unused legal LiDAR, range, contact, active-camera, or external-sensor
-channel capable of resolving the clearance gate. Confirm this in the pinned source
-and document it; do not run another camera mount or wrist-pose search.
+The native sensor-authority audit is now closed as a phase-level result. The pinned
+default challenge embodiment offers no unused legal LiDAR, range, contact,
+active-camera or external-sensor channel capable of resolving the clearance gate.
+Do not run another camera mount or wrist-pose search without a materially different
+hypothesis.
 
 Then choose one track explicitly:
 
@@ -277,17 +277,20 @@ Then choose one track explicitly:
    retrospective scoring. This can measure policy/system outcomes, but it cannot be
    reported as strict motion qualification.
 
-If the exploratory track is chosen, run at most one meaningful no-contact Phase 9B
-stage/retract integration through the normal catalog, program, executor, stop, and
-receipt interfaces. Use the already-qualified endpoint/return mechanics. Do not
-silently mark strict `known_space`, swept-collision, IK, native-codec, or stop reviews
-as passed. If this only reproduces fixture mechanics and adds no integration evidence,
-stop rather than creating another microdiagnostic.
+If the exploratory track is chosen, the next useful experiment is a bounded Phase 10
+radio run through the actual recurrent runtime, not another fixed-menu supervisor or
+10 cm stage/retract microdiagnostic. Integrate the existing native Behavior-Skill
+backend with `EpisodeRunner`, compact V3, a separate verifier, legal current
+observations, memory in shadow mode, fixed action/call budgets, no retries, and hidden
+task truth used only after execution. Keep `clearance=unknown` and
+`motion_qualified=false`; this is benchmark-valid exploratory evidence, not strict
+motion qualification.
 
-Do not begin Phases 10-14 as task-level claims until the robot can execute at least
-one useful, independently verified physical action. Once that exists, the order is:
+Run offline/doctor/native preflight before model calls. No paid GPT execution is
+authorized by this handoff, so declare a new call and cost scope before the live run.
+After a useful recurrent episode exists, continue in this order:
 
-1. recurrent compact-V3 GPT executive versus frozen policy control;
+1. compact-V3 GPT executive versus the same frozen-policy control;
 2. event-driven recovery from a predeclared failure;
 3. M0/M1/routed-M2 memory comparison on the same executable episode;
 4. seeds, placements, distractors, and a held-out task;

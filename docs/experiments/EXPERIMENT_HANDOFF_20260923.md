@@ -1,5 +1,17 @@
 # Experiment And Verification Handoff
 
+Latest Phase 5 sensor-authority decision: the
+[pinned source audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
+confirms that default challenge R1Pro has exactly three fixed onboard vision
+sensors, `lidar_links: []`, no active-camera group, and no contact/range field in
+the selected 61-D proprioception. The official wrapper adds only RGB and depth to
+the existing cameras, while challenge rules restrict policy input to onboard RGB,
+depth and proprioception. Generic OmniGibson LiDAR/contact internals and the
+world-fixed demo `external_sensor0` are not legal dormant control channels. Close
+that search. Strict clearance remains blocked; future motion must either use a
+materially different disclosed RGB-D embodiment/method or remain explicitly
+exploratory with clearance unknown.
+
 Phase 4B is complete under its
 [frozen rich-versus-compact scope](2026-09-24/PHASE4B_CONTEXT_ABLATION_20260924.md).
 All eight GPT-6 Sol Flex decisions are accepted, all four profile pairs agree,
