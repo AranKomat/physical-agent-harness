@@ -56,6 +56,16 @@ The simulator clock was not restored and fresh renders were not bit-identical.
 Treat this as a failed branching protocol and do not launch another nearby
 snapshot variant; Phase 8 still needs a newly declared clock-aware protocol or
 a counterbalanced multi-start design.
+The subsequent
+[four-start counterbalanced handoff study](2026-09-25/PHASE8_COUNTERBALANCED_HANDOFF_20260925.md)
+completed seeds 2-5 in balanced `BA/AB/BA/AB` order with zero retries, GPT calls
+or paid calls. Both conditions retained a unique current SAM candidate at all
+52 sampled boundaries and had zero immediate away actions; all eight members
+completed equal policy exposure. This closes the exploratory handoff-preservation
+subquestion. It does not show benefit: neither condition succeeded, acquisition
+actions diverged before treatment, and three of four full-window B-minus-A
+projections were nonpositive. Stop repeating nearby A/B diagnostics. Strict
+Phase 8 and C remain blocked by the Phase 5-7 execution gates.
 
 Latest Phase 5D evidence: the
 [retained base stop audit](2026-09-24/PHASE5D_BASE_STOP_AUDIT_20260924.md)
@@ -456,7 +466,7 @@ historical diagnostics are described later in this document.
 | 5. Native localization, clearance and stopping | Partial: positive live fusion passes; arm endpoint/return stopping passes; two independent 6.4/45.1 cm base traces pass frozen motion-versus-stop discrimination through `0.049 m/s`. The wrist-observer search fails at a 40.7% optimistic upper bound; default R1Pro has no actuated head camera; all 228 screened custom fixed-camera poses still leave 20/171 voxels occluded at 5 mm | External clearance now needs a different legal current-clearance authority; stop the fixed-camera branch. Broader moving-localization/calibration also remains, and simulator stop evidence is not a physical-hardware certificate |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it, and neither the wrist-observer nor fixed custom-camera screens admit even a strict 5 mm segment |
 | 7. Free-space arm staging and return | Partial: native 10 cm endpoint/return mechanics and simulator position-window stop checks pass; an eight-direction strict-clearance search found no sufficiently observed path | Qualified current swept-volume observation, cooked native-geometry equivalence and wheel coverage; fixed reset cameras leave at least 97.1% of screened endpoint moving geometry out of view |
-| 8. Matched A/B/C | Reverse-order SAM A/B pair completed with equal exposure and no immediate post-handoff policy collapse; acquisition trajectories diverged before treatment. Native serialized-state branching then failed its frozen exactness gate and does not restore simulator time | Use a newly declared clock-aware branching protocol or a counterbalanced multi-start design; strict clearance and C remain unqualified |
+| 8. Matched A/B/C | Exploratory handoff-preservation subquestion complete across four counterbalanced starts: 8/8 equal-exposure members completed, 52/52 current SAM boundaries per condition and zero immediate away actions. Neither condition succeeded; pre-treatment trajectories diverged and the directional benefit was inconsistent | Stop nearby A/B replication. Strict causal benefit and C require a qualified Phase 5-7 execution path plus independent task progress; clearance remains unknown in this cohort |
 | 9. Compiler manipulation | Retained GraspGenX inference and loading/conditioning audit; full-mask contrast gives sparse handle-like support in 4/8 proposals; scene inspection catches wrist-camera intersection in one proposal; all eight exceed held-torso reach; simulator/SAM/GraspGen-X co-residency passes at 17.05 GiB sampled peak; no execution | Closer staging and fresh observations, gripper/TCP calibration, whole-arm collision/IK/contact qualification, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
 | 11. Recovery | Fixture support only | Native detected failure -> bounded recovery -> verified progress |
