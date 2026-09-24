@@ -4,7 +4,7 @@
 
 **Public repository:** `AranKomat/physical-agent-harness`
 
-**Repository state before this handoff update:** `61bf0f5` (`Add external experiment handoff`)
+**Repository state before this handoff update:** `7963bdd` (`Close strict clearance mapping branch`)
 
 **Operator-local experiment plan:** `PHYSICAL_AGENT_EXPERIMENT_SEQUENCE_HANDOFF_20260923.md`
 
@@ -30,6 +30,9 @@ The strongest completed results are:
   reducing prompt tokens by 19.3% and cost by 13.1%;
 - base stop discrimination, endpoint/return mechanics, and empty-hand gripper
   aperture tracking work in the tested simulator regimes;
+- an explicitly non-benchmark soda-can fixture completed a real grasp and 5 cm
+  lift; evaluator-only scoring and an independent legal RGB-D/proprio verifier
+  both passed;
 - a legal RGB-D voxel gate failed even under an all-history, zero-pose-error upper
   bound, closing the remaining derived-state hypothesis for strict clearance;
 - Behavior-Skill survives a small classical-to-policy handoff without an obvious
@@ -39,8 +42,8 @@ The strongest completed results are:
   candidate requires major base/torso staging through unobserved space.
 
 No current result establishes reliable radio completion, strict navigation,
-safe manipulation, a general motor policy, GPT task benefit, memory task benefit,
-or held-out robustness.
+strictly safe manipulation, release/placement, a general motor policy, GPT task
+benefit, memory task benefit, or held-out robustness.
 
 ## Experimental Boundaries
 
@@ -71,8 +74,8 @@ action interface. Only one actuator owner may run at a time.
 | 7. Arm/torso planning and return | Partial mechanics; strict execution blocked | Native 10 cm outward endpoint, return endpoint, 60 holds, and 348 total actions passed. cuRobo construction and no-op planning work after adapter fixes. | Current legal observations do not cover the swept whole-body path. Qualified scene collision, wheel scope, and native planner execution remain open. |
 | 8. Matched hybrid A/B/C | Exploratory handoff-preservation subquestion complete | Four starts in balanced `BA/AB/BA/AB` order completed equal policy exposure with no immediate post-handoff away action and persistent current SAM candidates. | Neither condition succeeded, acquisition diverged before treatment, and no causal benefit was shown. Strict A/B/C remains blocked by Phases 5-7. |
 | 9A. Proposal and gripper readiness | Proposal scope complete; execution partial | Exact hand geometry audited, GraspGen-X proposal path pinned, one offline candidate retained, and native empty-hand close/reopen passed 35/35 actions. | Contact calibration, payload stability, release, closer staging, and safe execution are not established. |
-| 9B-9D. Stage, grasp, verify/place | Blocked | No positive contact or task action has been qualified. | Requires Phases 5-7 plus contact/grasp verification. |
-| 10. Recurrent GPT executive | Not meaningfully started | Compact V3 context and bounded semantic cycle infrastructure are ready. A no-paid fixed-routing `EpisodeRunner` radio baseline now completes its integration contract but scores Q=0. | Needs one useful, independently verified physical effect before causal task comparison. |
+| 9B-9D. Stage, grasp, verify/place | Exploratory grasp/lift integration passed; strict path blocked | A scripted development fixture completed 30/30 normal actions, retained a soda can, and lifted it 5 cm. Evaluator-only and legal RGB-D/proprio verification both passed. | Initialization was scripted, clearance stayed unknown, and release/place plus benchmark-valid staging remain untested. Strict execution remains blocked by Phases 5-7. |
+| 10. Recurrent GPT executive | Unlocked; matched execution comparison not started | Compact V3 context, bounded semantic-cycle infrastructure, a no-paid Q=0 fixed-routing radio baseline, and one executable verified physical-effect fixture now exist. | Run compact-V3 recurrent GPT versus a matched fixed-routing control and require a changed physical outcome. |
 | 11. Event-driven recovery | Not started | Failure history and verifier contracts exist. | Needs a real recoverable physical failure and qualified actions. |
 | 12. Memory in execution | Not started at task level | Causal memory representations and replay checks exist. | Needs an executable memory-sensitive episode; answer-only ablations are insufficient. |
 | 13. Robustness/held-out expansion | Not started | Controlled identity cases and several simulator starts exist. | Requires a working base system before seeds, layouts, distractors, and tasks are meaningful. |
@@ -144,6 +147,16 @@ The native empty-hand gripper probe closed from 49.999 mm to 0.00019 mm and reop
 to 49.999 mm over 35/35 actions. Maximum finger asymmetry was 1.315 micrometres and
 maximum held-channel drift was 11.761 micrometres. This does not establish contact,
 force, friction, attachment, payload stability, or release.
+
+The subsequent explicitly non-benchmark development fixture established the first
+positive contact-and-payload result. A soda can scripted into the open left gripper
+was closed on, held, and lifted with 30/30 ordinary R1Pro actions. Evaluator-only
+scoring measured a 50.015 mm height increase and only 0.003 mm change in relative
+object-to-grasp-center distance during the lift. A separate verifier used retained
+legal left-wrist RGB-D plus robot-only FK from legal proprioception: the grasp center
+moved up 50.010 mm while the retained object surface had 0.9967 mask IoU, 0.452-pixel
+centroid shift, and 0.014 mm median-depth change. See
+[Development Grasp-And-Lift Gate](2026-09-25/DEVELOPMENT_GRASP_LIFT_20260925.md).
 
 ## Major Negative Results And Blockers
 
@@ -258,6 +271,14 @@ Key private Phase 9A evidence:
 - `scripts/probe_gripper_aperture.py` SHA-256
   `07f5c76ad00a62cd5a26aae410c9f37a28246f26583b44ab50a578ab78a73bd6`.
 
+Key private Phase 9B exploratory evidence:
+
+- `runs/development-grasp-lift-20260925-r1/receipt.json` SHA-256
+  `275e0b2b3db2f7be4ff73f6a02ea9fe85865272e4571d01bb645a8d19baf28a9`;
+- `runs/development-grasp-lift-20260925-r1/legal-visual-verification.json`
+  SHA-256
+  `b9682781087a864f2798fa92c93a3b0324c9f686f0658083b443c3e5e9714af3`.
+
 Paid-call accounting at this snapshot:
 
 - reservations/cumulative count: `4,159`;
@@ -292,12 +313,14 @@ Behavior-Skill radio run plus nine measured settling holds. The integration pass
 but the radio remained off and final Q was zero. That is enough fixed-routing radio
 evidence for now.
 
-Before paid Phase 10 calls, select or construct a development fixture where a
-visible object begins inside an easily reachable workspace. Demonstrate one real,
-freshly verified grasp-and-short-lift, object displacement, or press. Keep
-`clearance=unknown`, `motion_qualified=false`, and label the result as integration
-qualification rather than BEHAVIOR benchmark success. Once that physical effect
-exists, run compact-V3 recurrent GPT against a matched fixed-routing control.
+The development physical-effect prerequisite is now satisfied by the bounded
+soda-can grasp-and-lift fixture. It remains exploratory, with `clearance=unknown`
+and `motion_qualified=false`; it is not BEHAVIOR benchmark success.
+
+The next experiment is compact-V3 recurrent GPT against a matched fixed-routing
+control on an executable fixture. Hold the initial state, action menu, budgets,
+verifier boundary, and evidence rules fixed, and require a difference in an
+independently verified physical outcome rather than a change in model prose.
 
 Run offline/doctor/native preflight before model calls. No paid GPT execution is
 authorized by this handoff, so declare a new call and cost scope before the live run.
