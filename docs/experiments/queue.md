@@ -32,9 +32,12 @@ immutable evidence, including failed and subsequently invalidated attempts.
 3. Keep the [reverse-stop result](2026-09-24/REVERSE_STOP_PROTOCOL.md) as directional
    validation only. Do not latch earlier raw passes across later failures or
    replace runtime authority with uncalibrated shadow output.
-4. Await the user's pending scope choice on bounded exploratory task trials
-   alongside strict qualification. Such trials would not complete strict phases.
-   No expanded task-motion permission is inferred from automatic continuations.
+4. The user approved bounded exploratory task trials alongside strict qualification.
+   Such trials do not complete strict phases. The first resumed attempt completed
+   768 policy actions but zero classical actions: see
+   [the preserved launch failures](2026-09-24/EXPLORATORY_TASK_RESTART.md).
+   Connect current source-bound SAM geometry before another transit rollout;
+   the legacy detection-only owner cannot supply the required metric masks.
 5. Do not repeat easy association tests, the blind observer sweep, identical
    calibration pulses, or more grasp batches. Phase 2 needs genuinely new causal
    hard-case evidence; paid stages need an explicit budget extension.
