@@ -1,25 +1,36 @@
 # Experiment And Verification Handoff
 
-Latest Phase 3 result: the
+Latest Phase 3 result: the four-call
+[frozen GLM cohort](2026-09-24/PHASE3_FROZEN_GLM_COHORT_20260924.md)
+has completed with no retries and zero robot actions. All four outputs matched
+the preregistered absent/absent/clipped/clear visibility labels semantically;
+three passed the strict JSON contract. The initial room inventory hit the 2,048
+token cap and remained rejected. Latency was 4.42-12.35 seconds (8.23-second
+median), so zero results met the two-second live-use window. Three valid results
+entered historical inventory and none wrote current geometry or authorized
+motion. Treat GLM as asynchronous historical discovery that can request fresh
+reacquisition, not a synchronous motion dependency. The earlier
 [prospective shadow replay](2026-09-24/PHASE3_PROSPECTIVE_SHADOW_REPLAY_20260924.md)
-feeds all 119 source-bound head captures from a retained moving trace through the
-production keyframe, async-worker, coordinator, inventory, cadence and journal
-path. Production defaults selected four calls over 322.931 seconds, including
-one buffered non-current view. A declared lower-threshold/12-second stress
-profile submitted 13 jobs, invoked 10 and explicitly superseded three pending
-jobs. The frozen source/action hashes are unchanged; no calls or actions were
-made. Mac and remote detailed reports are byte-identical. This closes the
-prospective scheduling/coalescing mechanics gap, not semantic usefulness or
-Phase 3. The next paid scope is frozen at those four production boundaries,
-without retries, and still requires explicit authorization.
+remains the scheduling/coalescing evidence.
 
-Phase 4A is now
+Phase 4A was
 [preregistered before output](2026-09-24/PHASE4A_FROZEN_PROTOCOL_20260924.md)
-on the same four held-out boundaries. The frozen references contain two radio
-negatives, one clipped positive, one clear positive, 30 approximate object boxes,
-fixed aliases, prompts, schemas and scoring rules. The pending four V3 calls can
-form its delta cohort; four later inventory calls remain independently budgeted.
-No Phase 4 call or completion is implied by this preparation.
+on the same held-out boundaries. Its completed
+[V3 half](2026-09-24/PHASE4A_V3_HALF_20260924.md) achieved 2/2 radio recall,
+0/2 radio false positives and 3/4 strict packets. Four of 24 primary reference
+categories were covered across views, consistent with a sparse task-directed
+delta rather than a room inventory. Phase 4A remains incomplete: the separately
+budgeted four-call task-blind inventory cohort has not been authorized or run.
+
+Latest Phase 8 evidence: the
+[balanced SAM matched handoff](2026-09-24/SAM_MATCHED_HANDOFF_BALANCED_20260924.md)
+completed a reverse-order `B -> A` pair with equal 1,152-action policy exposure,
+92 matched intervention actions and 13/13 current SAM boundary candidates in
+both conditions. B moved 63.865 mm; A's control moved 0.124 mm. Neither condition
+showed immediate away-motion after handoff, and B's full-window target projection
+was larger. This is not a causal benefit result: acquisition policy actions had
+already diverged before intervention despite identical initial proprioception.
+Strict clearance remains unknown and neither condition completed the task.
 
 Latest Phase 2 result: the
 [identical-object loss/reacquisition replay](2026-09-24/PHASE2_IDENTICAL_LOSS_REPLAY_20260924.md)
@@ -377,15 +388,15 @@ historical diagnostics are described later in this document.
 
 | Phase | Status at this snapshot | Remaining work |
 | --- | --- | --- |
-| 0. Preflight | Software/retained audit, SAM restoration, numeric pins and native sensor smoke passed | Restore policy environment; qualify live integration and recover missing provenance where possible |
-| 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
+| 0. Preflight | Software/retained audit, SAM restoration, policy environment, numeric pins and native sensor smoke passed; latest suites are 1,522 public and 1,410 private plus one skip | Recover missing historical provenance where possible; rerun focused preflight when environments change |
+| 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections; real V3 endpoint packets have now traversed the historical inventory path | Delayed identity publication remains unqualified; live outputs remain too slow for current geometry |
 | 2. Hard discovery/SAM identity and loss | Controlled contract gate complete: 14/14 scenarios, including positive two-instance association, simultaneous full loss, side-swapped ambiguous reacquisition and durable binding invalidation | Natural rollout replication remains robustness evidence; evaluator scoring, correspondence and local IDs remain non-authoritative |
-| 3. Live shadow GLM discovery | Partial: three fresh paused captures passed the real chain; a 119-frame moving replay now passes prospective selection, delayed publication, transient buffering and queue supersession mechanics with zero calls/actions | Four frozen real-response calls, semantic usefulness, duplicate/inventory behavior and broader live coverage |
-| 4. Delta/inventory and compact/rich comparisons | 4A held-out views, 30 approximate references, prompts and scoring frozen before output; no calls | Both four-call 4A cohorts, independent review, and frozen-boundary 4B compact/rich comparison |
+| 3. Live shadow GLM discovery | Four frozen real-response calls complete: 4/4 semantic visibility matches, 3/4 strict packets, three historical inventory admissions, zero actions/retries | Fails the synchronous live gate: 4.42-12.35 s latency and 0/4 within two seconds; retain as asynchronous historical discovery and broaden later only with a declared hypothesis |
+| 4. Delta/inventory and compact/rich comparisons | 4A V3 half complete: 2/2 radio recall, 0/2 false positives, 3/4 strict packets, 4/24 primary category coverage | Separately authorized four-call task-blind inventory cohort, then matched scoring; frozen-boundary 4B compact/rich comparison still needs real executable choices |
 | 5. Native localization, clearance and stopping | Partial: bounded positive live fusion and target-support stability pass; robust base observation and source-bound 24-interval joint-position stopping passed the 348-action native out/return run; earlier raw-stop failures remain recorded | Physical calibration, complete whole-robot stopping bounds, external clearance and low-body return coverage; the simulator position-window result is not a physical stop certificate |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
 | 7. Free-space arm staging and return | Partial: native 10 cm endpoint/return mechanics and simulator position-window stop checks pass; an eight-direction strict-clearance search found no sufficiently observed path | Qualified current swept-volume observation, cooked native-geometry equivalence and wheel coverage; fixed reset cameras leave at least 97.1% of screened endpoint moving geometry out of view |
-| 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
+| 8. Matched A/B/C | Reverse-order SAM A/B pair completed with equal exposure and no immediate post-handoff policy collapse; acquisition trajectories diverged before treatment | Freeze or replay the pre-intervention state, or run a declared counterbalanced multi-start design; strict clearance and C remain unqualified |
 | 9. Compiler manipulation | Retained GraspGenX inference and loading/conditioning audit; full-mask contrast gives sparse handle-like support in 4/8 proposals; scene inspection catches wrist-camera intersection in one proposal; all eight exceed held-torso reach; simulator/SAM/GraspGen-X co-residency passes at 17.05 GiB sampled peak; no execution | Closer staging and fresh observations, gripper/TCP calibration, whole-arm collision/IK/contact qualification, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
 | 11. Recovery | Fixture support only | Native detected failure -> bounded recovery -> verified progress |

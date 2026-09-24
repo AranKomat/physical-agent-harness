@@ -182,9 +182,10 @@ def main(*, capture_observer=None, dense_capture_observer=None, sam_probe=None):
     if args.sam_exploratory_transit != (sam_probe is not None):
         parser.error("SAM transit requires an explicit injected service and opt-in")
     if args.sam_exploratory_transit and (
-            args.condition != "A" or not args.extended_grounding_acquisition
+            (args.condition != "A" and not args.matched_target_handoff)
+            or not args.extended_grounding_acquisition
             or not args.robot_assets or args.grounding_port or args.exploratory_transit
-            or args.matched_target_handoff or args.feedback_hold_diagnostic
+            or args.feedback_hold_diagnostic
             or args.assisted_target_probe or args.dense_observation_diagnostic
             or capture_observer is not None or dense_capture_observer is not None):
         parser.error("SAM transit requires isolated extended A with robot assets")
@@ -205,9 +206,11 @@ def main(*, capture_observer=None, dense_capture_observer=None, sam_probe=None):
             or args.assisted_target_probe):
         parser.error("Exploratory transit requires isolated extended A grounding and robot assets")
     if args.matched_target_handoff and (
-            not args.grounding_port or not args.robot_assets or not args.extended_grounding_acquisition
+            not args.robot_assets or not args.extended_grounding_acquisition
+            or ((args.grounding_port is None) == (sam_probe is None))
             or args.exploratory_transit or args.feedback_hold_diagnostic or args.assisted_target_probe):
-        parser.error("Matched handoff requires extended grounding/robot assets and no other diagnostic")
+        parser.error("Matched handoff requires exactly one source-bound target provider, "
+                     "extended acquisition, robot assets and no other diagnostic")
     target_experiment = (args.exploratory_transit or args.matched_target_handoff
                          or args.sam_exploratory_transit)
     if capture_observer is not None and (
@@ -254,7 +257,9 @@ def main(*, capture_observer=None, dense_capture_observer=None, sam_probe=None):
     if args.sam_exploratory_transit:
         report["scope"] = "sam_target_exploratory_probe_not_strict_benchmark"
     if args.matched_target_handoff:
-        report["scope"] = "matched_acquisition_exploratory_target_handoff_not_strict_benchmark"
+        report["scope"] = ("sam_matched_acquisition_exploratory_target_handoff_not_strict_benchmark"
+                           if sam_probe is not None else
+                           "matched_acquisition_exploratory_target_handoff_not_strict_benchmark")
         report["post_handoff_policy_budget"] = POLICY_ACTIONS
         report["total_policy_action_ceiling"] = 768 + POLICY_ACTIONS
     report["policy_action_budget"] = 768 if args.extended_grounding_acquisition else POLICY_ACTIONS

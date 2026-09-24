@@ -321,6 +321,17 @@ def test_matched_cli_accepts_both_conditions(monkeypatch, tmp_path, condition):
 
 
 @pytest.mark.parametrize("condition", ["A", "B"])
+def test_matched_sam_cli_accepts_both_conditions(monkeypatch, tmp_path, condition):
+    _cli(monkeypatch, tmp_path, condition, [
+        "--extended-grounding-acquisition", "--sam-exploratory-transit",
+        "--robot-assets", "unused",
+    ])
+    with pytest.raises(LookupError, match="reached source preflight"):
+        hybrid_short.main(sam_probe=object())
+    assert not (tmp_path / "out").exists()
+
+
+@pytest.mark.parametrize("condition", ["A", "B"])
 @pytest.mark.parametrize("incompatible", [
     "--exploratory-transit", "--assisted-target-probe", "--feedback-hold-diagnostic",
 ])
