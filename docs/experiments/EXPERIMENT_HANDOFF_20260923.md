@@ -1,6 +1,24 @@
 # Experiment And Verification Handoff
 
-Latest Phase 7 milestone: the [seeded robust-observer trial](2026-09-24/ROBUST_BASE_OBSERVER.md)
+Latest Phase 7 mechanics result: the [position-interval native validation](2026-09-24/ROBUST_BASE_OBSERVER.md#position-interval-native-validation)
+completed all 348 actions, verified the 10 cm outward endpoint, return endpoint,
+60 reserved holds and final endpoint/settling state. A native sensitivity replay
+rejected all 94 clearly moving windows. This closes the endpoint/return and
+simulator position-window stop mechanics sub-gates. Strict Phase 7 remains open
+because external swept-volume visibility, complete cooked geometry and wheel
+coverage are not qualified; `motion_qualified=false` remains correct. Do not
+repeat the same trajectory solely to collect another success.
+
+The follow-up [strict clearance candidate search](2026-09-24/STRICT_CLEARANCE_SEARCH_20260924.md)
+tested eight alternative 10 cm right-EEF directions from the same fresh legal
+reset capture. Two failed continuous self-separation. Every scene-screened
+candidate left at least 97.1% of endpoint exposed moving geometry outside all
+retained camera views. Zero observed depth-point intrusions therefore did not
+qualify clearance. Do not repeat nearby arm directions; the next useful strict
+experiment needs a qualified observer-camera posture or another source of
+current legal coverage.
+
+Preceding Phase 7 trial: the [seeded robust-observer trial](2026-09-24/ROBUST_BASE_OBSERVER.md)
 completed the 10 cm outward and return endpoints with independent verification,
 plus all 60 reserved holds (348 actions total). The final raw-velocity stop
 predicate failed, so the original run remains incomplete. A source-bound
@@ -332,7 +350,7 @@ historical diagnostics are described later in this document.
 | 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
 | 5. Native localization, clearance and stopping | Partial: bounded positive live fusion and target-support stability now pass with fresh 768-window pose/mask lineage; measured base motion and paired-render correction; complete exploratory sensing sweep; retained 60-hold base replay; earlier raw-stop failures remain recorded | Calibrated localization/error bounds, live whole-robot stopping, external clearance, and low-body return coverage; target-support stability and positive fusion alone do not qualify motion |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
-| 7. Free-space arm staging and return | Partial: FK/hull/path checks plus completed 562-action exploratory one-way sensing sweep; final/historical views fail to support its return corridor | Qualified observed staging/return path and whole-robot stopping; opposite-wrist survey found no sufficient observer candidate in its bounded search |
+| 7. Free-space arm staging and return | Partial: native 10 cm endpoint/return mechanics and simulator position-window stop checks pass; an eight-direction strict-clearance search found no sufficiently observed path | Qualified current swept-volume observation, cooked native-geometry equivalence and wheel coverage; fixed reset cameras leave at least 97.1% of screened endpoint moving geometry out of view |
 | 8. Matched A/B/C | Exploratory A/B exists, not qualified comparison | Balanced starts/order and declared equal budgets after base/arm gates |
 | 9. Compiler manipulation | Retained GraspGenX inference and loading/conditioning audit; full-mask contrast gives sparse handle-like support in 4/8 proposals; scene inspection catches wrist-camera intersection in one proposal; all eight exceed held-torso reach; simulator/SAM/GraspGen-X co-residency passes at 17.05 GiB sampled peak; no execution | Closer staging and fresh observations, gripper/TCP calibration, whole-arm collision/IK/contact qualification, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |

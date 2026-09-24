@@ -165,3 +165,71 @@ stopped or modified. Analysis: `runs/coupled-final-stop-analysis-20260924-r1`
 (original predicate) and `runs/coupled-final-stop-analysis-20260924-r2`
 (explicit counterfactual candidate comparison). Public verification: 1,520
 tests, Ruff, repository ownership and local-link checks passed.
+
+## Position-Interval Native Validation
+
+Predeclared run: `native-coupled-position-stop-20260924-r1`. It retains the
+same 10 cm outward endpoint, return, fresh admissions, 348-action profile
+including reserved holds, and seeded robust base observer. The only intended
+measurement-protocol change is explicit opt-in to the 24-substep joint-position
+stop check. Raw velocity readings and their stop verdict remain in each
+verification receipt. Rejected endpoint receipts are retained before failure.
+
+This is a new attempt, not reclassification of the preceding trial. No paid
+calls, no relaxation of joint interval-speed or base-motion bounds, no use of
+evaluator poses by control, and no strict external-clearance claim.
+
+The run completed successfully under its declared protocol:
+
+- 348/348 native actions: 144 outward, 144 return and 60 reserved holds;
+- fresh outward and return geometry admission passed;
+- outward endpoint, return endpoint and final post-hold endpoint all reached;
+- all three source-bound base-settling checks passed;
+- all three 24-interval joint-position settling checks passed;
+- no joint monitor, base observer, hold monitor or owner error;
+- no paid calls and no second actuator owner.
+
+At the outward, return and final checks, maximum position-derived angular rates
+were 0.000865, 0.000944 and 0.001034 rad/s. The corresponding maximum raw
+readings were 0.01988, 0.02321 and 0.02378 in mixed joint units. The final raw
+single-sample predicate remained false, as expected from the preceding run;
+that disagreement is retained in the successful receipt rather than hidden.
+All position-derived rates remained below the unchanged 0.01 limits.
+
+Endpoint position errors were 0.000684 mm outward, 0.000776 mm on return and
+0.000619 mm after the final holds. These are simulator consistency measurements,
+not calibrated physical-robot precision. The position-stop sensitivity replay
+also rejected all 94 retained 200 ms windows with more than 5 mm native EEF
+movement; no clearly moving window was accepted as settled.
+
+This passes the native arm/torso endpoint-return mechanics and the explicitly
+qualified simulator position-window stop protocol for this motion class. It does
+**not** complete strict Phase 7: the execution remained labeled exploratory
+because external swept-volume visibility is incomplete, native cooked-shape
+equivalence remains unqualified and wheel coverage is absent. Evaluator poses
+were retrospective only and `motion_qualified=false` remains appropriate.
+
+Native receipt SHA-256:
+`b7f2d910cd73708031ff30e3b26e9977ece86cec02ab6765637581d2109159b6`.
+
+Evaluator sidecar SHA-256:
+`c168c41a5645d1e6f6eb9047381d0781ea8d06129c99f1c76d0d718e38b0556e`.
+
+Retrospective evaluator comparison reports maximum actual base rate
+0.0569 mm/s and maximum legal observer estimate 3.902 mm/s; no base-observer
+loss occurred. Private focused verification: 87 tests passed. GPU cleanup was
+verified at 0 MiB. Full local evidence verification is recorded separately
+after the resumable copy completes.
+
+## Strict Clearance Follow-Up
+
+The subsequent [strict clearance candidate search](STRICT_CLEARANCE_SEARCH_20260924.md)
+tested eight alternative 10 cm right-EEF translations from the same fresh legal
+reset capture. Two failed continuous self-separation; the six scene-screened
+candidates left 97.1% to 100.0% of endpoint exposed moving-geometry vertices
+outside all retained camera views. No observed scene-point intrusion was found,
+but unknown volume was not reclassified as free.
+
+No candidate authorizes another strict native run. This reinforces the existing
+Phase 7 boundary: endpoint/return mechanics and the simulator position-window
+stop protocol passed, while current external swept-volume observation did not.
