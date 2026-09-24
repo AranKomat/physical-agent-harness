@@ -1,5 +1,18 @@
 # Experiment And Verification Handoff
 
+Latest Phase 3 result: the
+[prospective shadow replay](2026-09-24/PHASE3_PROSPECTIVE_SHADOW_REPLAY_20260924.md)
+feeds all 119 source-bound head captures from a retained moving trace through the
+production keyframe, async-worker, coordinator, inventory, cadence and journal
+path. Production defaults selected four calls over 322.931 seconds, including
+one buffered non-current view. A declared lower-threshold/12-second stress
+profile submitted 13 jobs, invoked 10 and explicitly superseded three pending
+jobs. The frozen source/action hashes are unchanged; no calls or actions were
+made. Mac and remote detailed reports are byte-identical. This closes the
+prospective scheduling/coalescing mechanics gap, not semantic usefulness or
+Phase 3. The next paid scope is frozen at those four production boundaries,
+without retries, and still requires explicit authorization.
+
 Latest Phase 2 result: the
 [identical-object loss/reacquisition replay](2026-09-24/PHASE2_IDENTICAL_LOSS_REPLAY_20260924.md)
 completes the controlled 14/14 association matrix. Two identical pumpkins had

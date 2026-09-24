@@ -15,7 +15,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | --- | --- |
 | 0-1 | Software and retained replay passed within their declared offline scope |
 | 2 | Controlled contract gate complete: 14/14 scenarios; natural-rollout replication remains robustness evidence, not runtime authority |
-| 3 | Partial: live prospective inventory coverage incomplete; new paid calls need budget |
+| 3 | Partial: prospective scheduling/coalescing mechanics passed on one 119-frame moving trace; four frozen real-response calls need budget |
 | 4 | Not completed; paid comparison needs budget |
 | 5 | Partial: refreshed forward/reverse localization and shadow stop evidence; uncertainty/clearance unresolved |
 | 6-7 | Live SAM exploratory transit completed (6.04 cm); strict base transit and arm staging/return unqualified |
@@ -42,10 +42,16 @@ immutable evidence, including failed and subsequently invalidated attempts.
    6.04 cm measured approach and experimental final stop, with 119 bound captures.
    Strict clearance remains unknown; no manipulation or task success. Continue
    toward useful reachable staging, not another identical short probe.
-5. Do not repeat easy association tests, the blind observer sweep, identical
+5. The [Phase 3 prospective shadow replay](2026-09-24/PHASE3_PROSPECTIVE_SHADOW_REPLAY_20260924.md)
+   passes the zero-call mechanics gate on 119 retained moving frames. Production
+   defaults selected four jobs; a stress profile explicitly superseded three of
+   thirteen submissions. Freeze those four production boundaries for the next
+   paid run. Do not change thresholds after seeing semantic outputs or claim
+   fixture responses demonstrate usefulness.
+6. Do not repeat easy association tests, the blind observer sweep, identical
    calibration pulses, or more grasp batches. The controlled Phase 2 gate is
-   complete; proceed to prospective Phase 3/4 work under an explicit paid-call
-   budget while retaining natural identity trials for later robustness.
+   complete; proceed to the frozen Phase 3 real-response run under an explicit
+   paid-call budget while retaining natural identity trials for later robustness.
 
 ## Evidence History
 
