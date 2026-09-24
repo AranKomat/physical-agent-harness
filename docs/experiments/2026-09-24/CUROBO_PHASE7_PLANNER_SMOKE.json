@@ -1,0 +1,17 @@
+{
+  "scope": "planner_api_smoke_noop_empty_scene_not_motion_qualified",
+  "passed": true,
+  "plan_pose_success": true,
+  "trajectory_shape": [1, 1, 21, 11],
+  "interpolation_dt_s": 0.05,
+  "elapsed_s": 34.83103796700016,
+  "actions_sent": 0,
+  "paid_calls": 0,
+  "motion_authorized": false,
+  "collision_world": "empty",
+  "target_source": "current_final_proprioception_fk",
+  "cuRobo_revision": "78fd485fa82d9b9a063fb4985e371814587e666a",
+  "legacy_yaml_sha256": "1eec5a7f7e906f3dcc3f226607cbded009f53b7cfacb362cbfff7791196e9fa4",
+  "urdf_sha256": "b0d76760cbedfbcbe1ddc280380dd5f497bbca380313bc096d7239a2c50dae61",
+  "required_next_gate": "full_current_legal_scene_and_return_path_qualification"
+}
