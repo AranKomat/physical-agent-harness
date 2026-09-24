@@ -117,14 +117,15 @@ def fake_api():
             return SimpleNamespace(position=x, joint_names=joint_names)
     return (torch, Goal, Joint)
 
-def planner_stub():
+def planner_stub(plan_shape=(1, 3, 2)):
     torch, _, _ = fake_api()
     calls = []
     p = SimpleNamespace(joint_names=['j1', 'j2'], tool_frames=['tcp'], default_joint_state=SimpleNamespace(position=torch.zeros(2)), trajopt_solver=SimpleNamespace(config=SimpleNamespace(interpolation_dt=0.1)))
 
     def plan(goal, state):
         calls.append((goal, state))
-        return SimpleNamespace(success=torch.tensor([True]), get_interpolated_plan=lambda: SimpleNamespace(position=torch.tensor([[[0.0, 0.0], [0.01, 0.0], [0.02, 0.0]]], dtype=torch.float64)))
+        points = np.broadcast_to(np.array([[0.0, 0.0], [0.01, 0.0], [0.02, 0.0]], dtype=np.float64), plan_shape)
+        return SimpleNamespace(success=torch.tensor([True]), get_interpolated_plan=lambda: SimpleNamespace(position=TensorDouble(points)))
     p.plan_pose = plan
     return (p, calls)
 
@@ -138,6 +139,20 @@ def test_curobov2_uses_audited_new_api_shapes_and_wxyz():
     assert tuple(calls[0][0].quaternion.shape) == (1, 1, 1, 1, 4)
     assert calls[0][0].quaternion.reshape(-1).tolist() == [1.0, 0.0, 0.0, 0.0]
     assert calls[0][1].joint_names == ['j1', 'j2']
+
+@pytest.mark.parametrize('shape', [(3, 2), (1, 3, 2), (1, 1, 3, 2)])
+def test_curobov2_accepts_singleton_batch_and_goal_axes(shape):
+    p, _ = planner_stub(shape)
+    adapter = CuroboV2Planner(planner=p, install_scene=lambda p, r, d: scene_receipt(r), source_revision=CUROBO_REVISION, enabled=True, api=fake_api(), clock=lambda: 100)
+    result = adapter.plan(request(), deadline=102)
+    assert len(result.positions) == 3
+
+@pytest.mark.parametrize('shape', [(2, 1, 3, 2), (1, 2, 3, 2), (1, 1, 1, 3, 2)])
+def test_curobov2_rejects_multiple_batches(shape):
+    p, _ = planner_stub(shape)
+    adapter = CuroboV2Planner(planner=p, install_scene=lambda p, r, d: scene_receipt(r), source_revision=CUROBO_REVISION, enabled=True, api=fake_api(), clock=lambda: 100)
+    with pytest.raises(ValueError, match='Unexpected planner trajectory dimensions'):
+        adapter.plan(request(), deadline=102)
 
 @pytest.mark.parametrize('case', ['disabled', 'old_api', 'scene', 'tool', 'rate', 'failure', 'late'])
 def test_curobo_fail_closed(case):

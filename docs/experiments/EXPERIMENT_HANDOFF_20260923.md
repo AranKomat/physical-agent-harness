@@ -1,5 +1,23 @@
 # Experiment And Verification Handoff
 
+Latest Phase 7 milestone: the [seeded robust-observer trial](2026-09-24/ROBUST_BASE_OBSERVER.md)
+completed the 10 cm outward and return endpoints with independent verification,
+plus all 60 reserved holds (348 actions total). The final raw-velocity stop
+predicate failed, so the original run remains incomplete. A source-bound
+position-interval stop candidate is prepared and tested offline, not yet native
+qualified. All 354 captures and 2,108 artifacts are verified locally. No strict
+clearance or Phase 7 completion is claimed.
+
+Earlier Phase 7 work: the [coupled out-and-return attempt](2026-09-24/NATIVE_COUPLED_ROUNDTRIP.md)
+aborted at the base-rate monitor after 3.8 mm of EEF motion, then completed all
+60 reserved holds. A [separate evaluator-only diagnostic](2026-09-24/COUPLED_BASE_RATE_DIAGNOSTIC.md)
+reproduced the abort but measured actual base speed of 0.033 mm/s against the
+observer's 29.34 mm/s. This identifies an observer error in that run, not a motor
+failure or permission to relax thresholds. The [robust-observer report](2026-09-24/ROBUST_BASE_OBSERVER.md)
+contains the fixed candidate, forward/reverse sensitivity checks and the outcome
+of the subsequent native attempt. Phase 7 remains incomplete; exploratory
+unknown-clearance behavior is not strict qualification.
+
 2026-09-24 follow-up: [Phase 1 retained replay](2026-09-24/PHASE1_REPLAY_20260924.md)
 passes 64 checks with zero new calls and zero actions. The current Phase 2
 contract replay also passes its exercised checks, but remains partial at 10/14

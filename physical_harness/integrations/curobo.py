@@ -227,7 +227,12 @@ class CuroboV2Planner:
             if result is None or int(result.success.numel()) != 1 or not bool(result.success.reshape(-1)[0].item()):
                 raise ValueError("Planner did not return one successful solution")
             q = result.get_interpolated_plan().position.detach().cpu().numpy()
-            if q.ndim == 3 and q.shape[0] == 1:
+            # cuRobo may retain singleton batch/goal axes, e.g. [1, 1, T, J].
+            # Strip only leading singleton axes; a real multi-batch result must
+            # fail closed instead of being silently flattened into a trajectory.
+            if q.ndim not in (2, 3, 4) or any(size != 1 for size in q.shape[:-2]):
+                raise ValueError("Unexpected planner trajectory dimensions")
+            while q.ndim > 2:
                 q = q[0]
             if q.ndim != 2 or q.shape[1] != len(request.limits.names):
                 raise ValueError("Unexpected planner trajectory dimensions")

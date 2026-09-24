@@ -55,3 +55,23 @@ planner setup, then rerun with:
 
 Until those conditions hold, this smoke result must not be used to authorize
 the trajectory or to claim Phase 7 completion.
+
+## Partial Self-Collision Follow-Up
+
+A subsequent retained-state no-op solve with partial legacy self-collision
+spheres returned `success=false`: `Start or End state in collision` after
+30.68 seconds. It sent zero robot actions and made zero paid calls.
+
+This diagnostic included torso, left arm and left fingers (13 active joints),
+but omitted the right side and base, had no torso-link3 spheres, and installed
+no external scene. Fingers were not fixed. It is therefore neither a qualified
+whole-robot collision test nor proof that the real measured posture collides.
+Further simplified no-op checks are not the next experiment: complete geometry
+and measured fixed-joint configuration are required first.
+
+The successful no-collision solve also exposed a public adapter mismatch: its
+`[1, 1, T, J]` output was rejected by an adapter accepting only 2D/3D output.
+The adapter now accepts 2D, singleton-leading 3D and singleton-leading 4D
+trajectories, rejects multiple batches/goals and unsupported ranks, and retains
+all existing start-state, joint-limit, rate and acceleration validation.
+This software correction does not change motion authority or Phase 7 status.
