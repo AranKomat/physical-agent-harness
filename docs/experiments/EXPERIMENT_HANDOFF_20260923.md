@@ -19,8 +19,13 @@ on the same held-out boundaries. Its completed
 [V3 half](2026-09-24/PHASE4A_V3_HALF_20260924.md) achieved 2/2 radio recall,
 0/2 radio false positives and 3/4 strict packets. Four of 24 primary reference
 categories were covered across views, consistent with a sparse task-directed
-delta rather than a room inventory. Phase 4A remains incomplete: the separately
-budgeted four-call task-blind inventory cohort has not been authorized or run.
+delta rather than a room inventory. The authorized
+[task-blind inventory cohort](2026-09-24/PHASE4A_INVENTORY_PARTIAL_20260924.md)
+then dispatched two of four frozen calls: one valid 12-item packet completed in
+9.64 seconds and one request remained unknown after the 110-second timeout. The
+runner correctly made no retry and sent neither remaining request. Phase 4A
+therefore remains incomplete; the timeout and two unsent views need a newly
+declared continuation or replacement protocol before matched scoring.
 
 Latest Phase 8 evidence: the
 [balanced SAM matched handoff](2026-09-24/SAM_MATCHED_HANDOFF_BALANCED_20260924.md)
@@ -31,6 +36,33 @@ showed immediate away-motion after handoff, and B's full-window target projectio
 was larger. This is not a causal benefit result: acquisition policy actions had
 already diverged before intervention despite identical initial proprioception.
 Strict clearance remains unknown and neither condition completed the task.
+The follow-up
+[native state roundtrip diagnostic](2026-09-24/PHASE8_NATIVE_STATE_ROUNDTRIP_20260924.md)
+then tested OmniGibson serialization as a possible common branch point. Robot
+state, proprioception and mean RGB-D errors passed their frozen bounds, but the
+serialized simulator-state maximum error was `2.62e-6` against a `1e-6` gate.
+The simulator clock was not restored and fresh renders were not bit-identical.
+Treat this as a failed branching protocol and do not launch another nearby
+snapshot variant; Phase 8 still needs a newly declared clock-aware protocol or
+a counterbalanced multi-start design.
+
+Latest Phase 5D evidence: the
+[retained base stop audit](2026-09-24/PHASE5D_BASE_STOP_AUDIT_20260924.md)
+rechecks two independent 6.4 cm and 45.1 cm native transits against the frozen
+source-bound pose/joint predicate. All 392 motion intervals are rejected as
+moving, while both prehold and final five-interval windows pass in both traces.
+This closes the simulator control-facing base stop-discrimination subgate through
+the tested `0.049 m/s` command profile. It is not a physical certificate and does
+not qualify clearance, localization accuracy, navigation or task success.
+The subsequent
+[base-sweep observer search](2026-09-24/PHASE5_BASE_SWEEP_OBSERVER_SEARCH_20260924.md)
+tested 128 postures per wrist and all 16,384 pairs against the sequence-768
+target-directed 5 cm sweep. A frustum-only view appeared to cover all 3,610
+samples, but the optimistic authored-hull occlusion upper bound covered only
+1,468 (40.7%), despite excluding the opposite arm from each wrist's ray test.
+Do not run this observer setup natively. The remaining clearance gate needs a
+different authority source or sensor arrangement, not another nearby wrist-pose
+search.
 
 Latest Phase 2 result: the
 [identical-object loss/reacquisition replay](2026-09-24/PHASE2_IDENTICAL_LOSS_REPLAY_20260924.md)
@@ -392,11 +424,11 @@ historical diagnostics are described later in this document.
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections; real V3 endpoint packets have now traversed the historical inventory path | Delayed identity publication remains unqualified; live outputs remain too slow for current geometry |
 | 2. Hard discovery/SAM identity and loss | Controlled contract gate complete: 14/14 scenarios, including positive two-instance association, simultaneous full loss, side-swapped ambiguous reacquisition and durable binding invalidation | Natural rollout replication remains robustness evidence; evaluator scoring, correspondence and local IDs remain non-authoritative |
 | 3. Live shadow GLM discovery | Four frozen real-response calls complete: 4/4 semantic visibility matches, 3/4 strict packets, three historical inventory admissions, zero actions/retries | Fails the synchronous live gate: 4.42-12.35 s latency and 0/4 within two seconds; retain as asynchronous historical discovery and broaden later only with a declared hypothesis |
-| 4. Delta/inventory and compact/rich comparisons | 4A V3 half complete: 2/2 radio recall, 0/2 false positives, 3/4 strict packets, 4/24 primary category coverage | Separately authorized four-call task-blind inventory cohort, then matched scoring; frozen-boundary 4B compact/rich comparison still needs real executable choices |
-| 5. Native localization, clearance and stopping | Partial: bounded positive live fusion and target-support stability pass; robust base observation and source-bound 24-interval joint-position stopping passed the 348-action native out/return run; earlier raw-stop failures remain recorded | Physical calibration, complete whole-robot stopping bounds, external clearance and low-body return coverage; the simulator position-window result is not a physical stop certificate |
-| 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
+| 4. Delta/inventory and compact/rich comparisons | 4A V3 half complete; inventory comparator partial with one valid packet, one unresolved 110-second timeout and two calls not sent | Declare how to complete/replace the interrupted inventory cohort before matched scoring; frozen-boundary 4B compact/rich comparison still needs real executable choices |
+| 5. Native localization, clearance and stopping | Partial: positive live fusion passes; arm endpoint/return stopping passes; two independent 6.4/45.1 cm base traces pass frozen motion-versus-stop discrimination through `0.049 m/s`. The targeted 128x128 wrist-observer search fails the low-body coverage gate at a 40.7% optimistic upper bound | External clearance now needs a different authority source or sensor arrangement, plus broader moving-localization/calibration; simulator stop evidence is not a physical-hardware certificate |
+| 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it, and the tested wrist-observer approach cannot admit a strict 5 cm segment |
 | 7. Free-space arm staging and return | Partial: native 10 cm endpoint/return mechanics and simulator position-window stop checks pass; an eight-direction strict-clearance search found no sufficiently observed path | Qualified current swept-volume observation, cooked native-geometry equivalence and wheel coverage; fixed reset cameras leave at least 97.1% of screened endpoint moving geometry out of view |
-| 8. Matched A/B/C | Reverse-order SAM A/B pair completed with equal exposure and no immediate post-handoff policy collapse; acquisition trajectories diverged before treatment | Freeze or replay the pre-intervention state, or run a declared counterbalanced multi-start design; strict clearance and C remain unqualified |
+| 8. Matched A/B/C | Reverse-order SAM A/B pair completed with equal exposure and no immediate post-handoff policy collapse; acquisition trajectories diverged before treatment. Native serialized-state branching then failed its frozen exactness gate and does not restore simulator time | Use a newly declared clock-aware branching protocol or a counterbalanced multi-start design; strict clearance and C remain unqualified |
 | 9. Compiler manipulation | Retained GraspGenX inference and loading/conditioning audit; full-mask contrast gives sparse handle-like support in 4/8 proposals; scene inspection catches wrist-camera intersection in one proposal; all eight exceed held-torso reach; simulator/SAM/GraspGen-X co-residency passes at 17.05 GiB sampled peak; no execution | Closer staging and fresh observations, gripper/TCP calibration, whole-arm collision/IK/contact qualification, safe execution and independent outcome verification |
 | 10. GPT benefit | Prior supervised failures, no benefit established | Matched current-wrapper controls with useful execution backend |
 | 11. Recovery | Fixture support only | Native detected failure -> bounded recovery -> verified progress |
@@ -936,6 +968,8 @@ Private result directories worth locating before resuming:
 | SAM runtime and official checkpoint restored | `runs/sam31-runtime-restore-20260923-r2/`; r1 preserves the earlier missing-weight state |
 | Fresh SAM inference / qualitative mask review | `runs/phase2-fresh-sam-20260923-r1/` / `runs/phase2-fresh-sam-analysis-20260923-r1/` |
 | Phase 2 identical-object loss/reacquisition | `runs/phase2-crossing-loss-fixture-20260924-r3/`, `runs/phase2-crossing-loss-sam31-20260924-r1/`, `runs/phase2-crossing-loss-identity-replay-20260924-r2/`, `runs/phase2-crossing-loss-identity-score-20260924-r2/` |
+| Phase 8 native state roundtrip | `runs/backups/native-state-roundtrip-20260924-r4/receipt.json`; terminal r4 receipt SHA-256 is published in the dated report |
+| Phase 5 base-sweep observer search | `runs/base-sweep-observer-search-20260924-r2/receipt.json`; checksum is published in the dated report |
 
 The latest host was bootstrapped with code, CPU environment and selected
 checksum-verified evidence, not all GPU weights, simulator assets or policy runtimes.
