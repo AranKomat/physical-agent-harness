@@ -1,6 +1,6 @@
 # Current Experiment Queue
 
-Updated 2026-09-24. Consolidation adds no capability and authorizes no new spend
+Updated 2026-09-25. Consolidation adds no capability and authorizes no new spend
 or motion. The detailed [earlier qualification queue](qualification_queue.md)
 and dated reports remain evidence; this page is the current entry point.
 For a standalone account of completed trials, caveats and unperformed stages, read
@@ -15,12 +15,12 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | --- | --- |
 | 0-1 | Software and retained replay passed within their declared offline scope |
 | 2 | Controlled contract gate complete: 14/14 scenarios; natural-rollout replication remains robustness evidence, not runtime authority |
-| 3 | Partial: prospective scheduling/coalescing mechanics passed on one 119-frame moving trace; four frozen real-response calls need budget |
-| 4 | Not completed: 4A held-out views, references, prompts and scoring are frozen before output; both paid cohorts and 4B remain |
-| 5 | Partial: refreshed forward/reverse localization and shadow stop evidence; uncertainty/clearance unresolved |
-| 6-7 | Live SAM exploratory transit completed (6.04 cm); strict base transit and arm staging/return unqualified |
-| 8 | Exploratory comparisons only; no qualified causal benefit |
-| 9 | One retained offline grasp candidate, no executed grasp/lift |
+| 3 | Complete as asynchronous historical discovery; four real-response calls passed semantic visibility, but 4.42--12.35 s latency fails the two-second synchronous gate |
+| 4 | 4B complete: compact context preserves 4/4 decisions while reducing prompt tokens 19.3% and cost 13.1%; 4A remains half complete and paid continuation is unauthorized |
+| 5 | Partial: localization/stop diagnostics pass their declared scope, but fixed robot and custom-camera searches cannot certify even a 5 mm segment; a different legal current-clearance authority is required |
+| 6-7 | Exploratory base transit and arm endpoint/return mechanics completed; strict base transit and arm staging/return remain unqualified on external clearance |
+| 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
+| 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-14 | No qualifying end-to-end studies completed |
 
 1. Freeze the frame-704 grasp batch. [Dense-target path screening](2026-09-24/GRASP_CLOSURE_SUPPORT.md)
@@ -236,6 +236,14 @@ admits none of the eight proposals. All have zero retained inner-box support;
 nearest target points miss the box by 28-41 mm despite consistent algebraic
 transforms. Resolve the hand annotation/reference convention before another
 proposal batch. No path or motion authorization; Phase 9 stays partial.
+
+Phase 9A [readiness decision](2026-09-25/PHASE9A_GRIPPER_READINESS_20260925.md):
+the exact simulated hand and `sweep_volume_v2` annotation are sufficient for
+hash-pinned proposal-only experiments. A bounded native empty-hand probe passed
+35/35 close/reopen actions, from 49.999 mm to 0.00019 mm and back to 49.999 mm.
+This is not contact calibration or execution authority. Freeze proposal work;
+the sole retained offline candidate still requires large torso/base staging
+through unseen space, so Phases 9B--9D return to the Phase 5--7 clearance gate.
 
 Infrastructure prerequisite: [automatic GPU driver update](2026-09-23/GPU_DRIVER_UPDATE_20260923.md)
 was resolved by an approved reboot after package completion and verified backups.
