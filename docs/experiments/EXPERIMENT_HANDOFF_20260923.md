@@ -74,6 +74,23 @@ samples, but the optimistic authored-hull occlusion upper bound covered only
 Do not run this observer setup natively. The remaining clearance gate needs a
 different authority source or sensor arrangement, not another nearby wrist-pose
 search.
+The subsequent
+[R1Pro camera action-contract inspection](2026-09-24/R1PRO_CAMERA_ACTION_CONTRACT_20260924.md)
+closed the default-head-actuation branch with zero actions: native R1Pro reports
+`is_active_camera=false`, registers no camera controller or camera action
+indices, and exposes no camera state in the submitted 61-D proprioception. The
+head RGB-D sensor is fixed. A movable or additional camera would be a disclosed
+custom-embodiment experiment, not a default-R1Pro controller change. The
+world-fixed teleoperation `external_sensor0` remains inadmissible.
+The follow-up
+[fixed custom-camera coverage screen](2026-09-24/R1PRO_CUSTOM_CAMERA_COVERAGE_SCREEN_20260924.md)
+then tested 228 occlusion-aware poses against 5, 10, 20 and 50 mm versions of
+the pinned target-directed segment. Its 50 mm control exactly reproduced the
+earlier voxel result, while the union of every screened pose still missed 20 of
+171 newly occupied voxels at 5 mm. This triggers the declared stop rule: do not
+build the fixed-camera embodiment or continue broad mount searches. Strict
+execution now needs a different legal current-clearance authority; separately
+labeled policy trials may proceed only with clearance explicitly unknown.
 
 Latest Phase 2 result: the
 [identical-object loss/reacquisition replay](2026-09-24/PHASE2_IDENTICAL_LOSS_REPLAY_20260924.md)
@@ -436,8 +453,8 @@ historical diagnostics are described later in this document.
 | 2. Hard discovery/SAM identity and loss | Controlled contract gate complete: 14/14 scenarios, including positive two-instance association, simultaneous full loss, side-swapped ambiguous reacquisition and durable binding invalidation | Natural rollout replication remains robustness evidence; evaluator scoring, correspondence and local IDs remain non-authoritative |
 | 3. Live shadow GLM discovery | Four frozen real-response calls complete: 4/4 semantic visibility matches, 3/4 strict packets, three historical inventory admissions, zero actions/retries | Fails the synchronous live gate: 4.42-12.35 s latency and 0/4 within two seconds; retain as asynchronous historical discovery and broaden later only with a declared hypothesis |
 | 4. Delta/inventory and compact/rich comparisons | 4B complete: 8/8 accepted, 4/4 pairs agree, compact saves 19.3% prompt tokens and 13.1% cost; 4A V3 half complete, inventory comparator partial with one valid packet, one unresolved 110-second timeout and two calls not sent | Use compact executive context by default; separately declare how to complete or replace the interrupted 4A inventory cohort before matched discovery scoring |
-| 5. Native localization, clearance and stopping | Partial: positive live fusion passes; arm endpoint/return stopping passes; two independent 6.4/45.1 cm base traces pass frozen motion-versus-stop discrimination through `0.049 m/s`. The targeted 128x128 wrist-observer search fails the low-body coverage gate at a 40.7% optimistic upper bound | External clearance now needs a different authority source or sensor arrangement, plus broader moving-localization/calibration; simulator stop evidence is not a physical-hardware certificate |
-| 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it, and the tested wrist-observer approach cannot admit a strict 5 cm segment |
+| 5. Native localization, clearance and stopping | Partial: positive live fusion passes; arm endpoint/return stopping passes; two independent 6.4/45.1 cm base traces pass frozen motion-versus-stop discrimination through `0.049 m/s`. The wrist-observer search fails at a 40.7% optimistic upper bound; default R1Pro has no actuated head camera; all 228 screened custom fixed-camera poses still leave 20/171 voxels occluded at 5 mm | External clearance now needs a different legal current-clearance authority; stop the fixed-camera branch. Broader moving-localization/calibration also remains, and simulator stop evidence is not a physical-hardware certificate |
+| 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it, and neither the wrist-observer nor fixed custom-camera screens admit even a strict 5 mm segment |
 | 7. Free-space arm staging and return | Partial: native 10 cm endpoint/return mechanics and simulator position-window stop checks pass; an eight-direction strict-clearance search found no sufficiently observed path | Qualified current swept-volume observation, cooked native-geometry equivalence and wheel coverage; fixed reset cameras leave at least 97.1% of screened endpoint moving geometry out of view |
 | 8. Matched A/B/C | Reverse-order SAM A/B pair completed with equal exposure and no immediate post-handoff policy collapse; acquisition trajectories diverged before treatment. Native serialized-state branching then failed its frozen exactness gate and does not restore simulator time | Use a newly declared clock-aware branching protocol or a counterbalanced multi-start design; strict clearance and C remain unqualified |
 | 9. Compiler manipulation | Retained GraspGenX inference and loading/conditioning audit; full-mask contrast gives sparse handle-like support in 4/8 proposals; scene inspection catches wrist-camera intersection in one proposal; all eight exceed held-torso reach; simulator/SAM/GraspGen-X co-residency passes at 17.05 GiB sampled peak; no execution | Closer staging and fresh observations, gripper/TCP calibration, whole-arm collision/IK/contact qualification, safe execution and independent outcome verification |
