@@ -141,7 +141,7 @@ def notify_capture(observer, row, store, output):
         observer(deepcopy(row), store, output)
 
 
-def main(*, capture_observer=None, dense_capture_observer=None):
+def main(*, capture_observer=None, dense_capture_observer=None, sam_probe=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -164,6 +164,8 @@ def main(*, capture_observer=None, dense_capture_observer=None):
                         help="Separate robot-only substep feedback during 60 zero-base holds")
     parser.add_argument("--exploratory-transit", action="store_true",
                         help="One approved simulator-only target-directed probe, unknown clearance")
+    parser.add_argument("--sam-exploratory-transit", action="store_true",
+                        help="Isolated source-bound SAM exploratory probe; requires injected service")
     parser.add_argument("--matched-target-handoff", action="store_true",
                         help="Same acquisition, A zero holds/B exploratory transit, then 384 policy actions")
     parser.add_argument("--robot-assets", type=Path,
@@ -173,12 +175,22 @@ def main(*, capture_observer=None, dense_capture_observer=None):
     for flag in ("allow-simulator", "allow-unknown-clearance-exploration", "licenses-accepted"):
         parser.add_argument("--" + flag, action="store_true", required=True)
     args = parser.parse_args()
+    if args.sam_exploratory_transit != (sam_probe is not None):
+        parser.error("SAM transit requires an explicit injected service and opt-in")
+    if args.sam_exploratory_transit and (
+            args.condition != "A" or not args.extended_grounding_acquisition
+            or not args.robot_assets or args.grounding_port or args.exploratory_transit
+            or args.matched_target_handoff or args.feedback_hold_diagnostic
+            or args.assisted_target_probe or args.dense_observation_diagnostic
+            or capture_observer is not None or dense_capture_observer is not None):
+        parser.error("SAM transit requires isolated extended A with robot assets")
     if dense_capture_observer is not None and not args.dense_observation_diagnostic:
         parser.error("Dense capture observer requires the bounded dense diagnostic")
     if args.grounding_port and ((args.condition != "A" and not args.matched_target_handoff)
                                or args.assisted_target_probe):
         parser.error("Grounding shadow is isolated to policy-only A captures")
-    if args.extended_grounding_acquisition and not (args.grounding_port or capture_observer is not None):
+    if args.extended_grounding_acquisition and not (
+            args.grounding_port or capture_observer is not None or sam_probe is not None):
         parser.error("Extended acquisition requires grounding or an isolated capture observer")
     if args.feedback_hold_diagnostic and (
             args.condition != "A" or args.grounding_port or args.assisted_target_probe):
@@ -192,7 +204,8 @@ def main(*, capture_observer=None, dense_capture_observer=None):
             not args.grounding_port or not args.robot_assets or not args.extended_grounding_acquisition
             or args.exploratory_transit or args.feedback_hold_diagnostic or args.assisted_target_probe):
         parser.error("Matched handoff requires extended grounding/robot assets and no other diagnostic")
-    target_experiment = args.exploratory_transit or args.matched_target_handoff
+    target_experiment = (args.exploratory_transit or args.matched_target_handoff
+                         or args.sam_exploratory_transit)
     if capture_observer is not None and (
             args.condition != "A" or not args.extended_grounding_acquisition
             or target_experiment
@@ -234,6 +247,8 @@ def main(*, capture_observer=None, dense_capture_observer=None):
         report["scope"] = "policy_approach_then_zero_base_feedback_not_handoff_qualification"
     if args.exploratory_transit:
         report["scope"] = "one_target_directed_10cm_exploratory_probe_not_benchmark_admission"
+    if args.sam_exploratory_transit:
+        report["scope"] = "sam_target_exploratory_probe_not_strict_benchmark"
     if args.matched_target_handoff:
         report["scope"] = "matched_acquisition_exploratory_target_handoff_not_strict_benchmark"
         report["post_handoff_policy_budget"] = POLICY_ACTIONS
@@ -298,10 +313,23 @@ def main(*, capture_observer=None, dense_capture_observer=None):
 
             def capture(*, track=False):
                 current = stamp.model_copy(update={"sequence": report["native_actions"]})
-                observation = ingress.convert(evaluator.obs, current, time.monotonic())
+                if sam_probe is not None:
+                    from omnigibson.eval.utils.eval_utils import flatten_obs_dict
+
+                    frozen_step = og.sim.current_time_step_index
+                    og.sim.render()
+                    raw, _ = evaluator.env.get_obs()
+                    observation = ingress.convert(flatten_obs_dict(raw), current, time.monotonic())
+                else:
+                    observation = ingress.convert(evaluator.obs, current, time.monotonic())
                 row = capture_record(evaluator, observation, shadow if track else None)
                 report["captures"].append(row)
                 save()
+                if sam_probe is not None:
+                    row["sam_target_result"] = sam_probe.capture(row, store, output)
+                    if og.sim.current_time_step_index != frozen_step:
+                        raise ValueError("Physics advanced during synchronous SAM capture")
+                    save()
                 if args.grounding_port:
                     from experiments.behavior.target_grounding import ground_capture
 
@@ -422,12 +450,14 @@ def main(*, capture_observer=None, dense_capture_observer=None):
                     report["exploratory_transit"] = state
                     save()
 
+                sam_target = sam_probe.select(final) if sam_probe is not None else None
                 final = run_exploratory_transit(
                     final, sim=og.sim, robot=evaluator.robot, store=store,
                     gripper_ranges=report["codec"]["gripper_ranges"], step=step,
                     capture=capture, latest_row=lambda: report["captures"][-1],
                     output=output, save_probe=save_transit, robot_assets=args.robot_assets,
-                    control_only=args.matched_target_handoff and args.condition == "A")
+                    control_only=args.matched_target_handoff and args.condition == "A",
+                    sam_target=sam_target)
                 if args.matched_target_handoff:
                     final = execute_post_handoff(
                         HttpPolicyTransport(args.port), final, store, step, capture, report, save,

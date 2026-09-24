@@ -18,7 +18,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 3 | Partial: live prospective inventory coverage incomplete; new paid calls need budget |
 | 4 | Not completed; paid comparison needs budget |
 | 5 | Partial: refreshed forward/reverse localization and shadow stop evidence; uncertainty/clearance unresolved |
-| 6-7 | Strict base transit and arm staging/return unqualified |
+| 6-7 | Live SAM exploratory transit completed (6.04 cm); strict base transit and arm staging/return unqualified |
 | 8 | Exploratory comparisons only; no qualified causal benefit |
 | 9 | One retained offline grasp candidate, no executed grasp/lift |
 | 10-14 | No qualifying end-to-end studies completed |
@@ -38,9 +38,10 @@ immutable evidence, including failed and subsequently invalidated attempts.
    [the preserved launch failures](2026-09-24/EXPLORATORY_TASK_RESTART.md).
    Connect current source-bound SAM geometry before another transit rollout;
    the legacy detection-only owner cannot supply the required metric masks.
-   The [SAM transit consumer](2026-09-24/SAM_TRANSIT_CONTRACT.md) now passes
-   retained contract replay on 13/25 observations. Live owner wiring and timing
-   remain unfinished; this is not motion qualification.
+   The [live SAM probe](2026-09-24/SAM_LIVE_TRANSIT.md) now completes acquisition,
+   6.04 cm measured approach and experimental final stop, with 119 bound captures.
+   Strict clearance remains unknown; no manipulation or task success. Continue
+   toward useful reachable staging, not another identical short probe.
 5. Do not repeat easy association tests, the blind observer sweep, identical
    calibration pulses, or more grasp batches. Phase 2 needs genuinely new causal
    hard-case evidence; paid stages need an explicit budget extension.

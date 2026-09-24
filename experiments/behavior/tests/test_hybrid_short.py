@@ -72,6 +72,31 @@ def test_unbounded_acquisition_refused_before_policy_use():
         execute_policy(None, None, None, None, None, {}, None, None, action_budget=769)
 
 
+@pytest.mark.parametrize("injected,flag", [(True, False), (False, True)])
+def test_sam_transit_requires_service_and_explicit_flag(monkeypatch, tmp_path, injected, flag):
+    monkeypatch.setattr("sys.argv", ["hybrid-short", "--source", str(tmp_path),
+        "--output", str(tmp_path / "out"), "--policy-load-receipt", "unused",
+        "--condition", "A", "--allow-simulator", "--allow-unknown-clearance-exploration",
+        "--licenses-accepted", *(["--sam-exploratory-transit"] if flag else [])])
+    with pytest.raises(SystemExit) as exc:
+        main(sam_probe=object() if injected else None)
+    assert exc.value.code == 2
+    assert not (tmp_path / "out").exists()
+
+
+def test_sam_transit_configuration_reaches_source_preflight(monkeypatch, tmp_path):
+    monkeypatch.setattr("sys.argv", ["hybrid-short", "--source", str(tmp_path),
+        "--output", str(tmp_path / "out"), "--policy-load-receipt", "unused",
+        "--condition", "A", "--allow-simulator", "--allow-unknown-clearance-exploration",
+        "--licenses-accepted", "--sam-exploratory-transit", "--extended-grounding-acquisition",
+        "--robot-assets", str(tmp_path)])
+    def checked(*args):
+        raise LookupError("source preflight")
+    monkeypatch.setattr("experiments.behavior.hybrid_short.check_source", checked)
+    with pytest.raises(LookupError, match="source preflight"):
+        main(sam_probe=object())
+
+
 @pytest.mark.parametrize("flags", [
     ["--extended-grounding-acquisition"],
     ["--feedback-hold-diagnostic", "--grounding-port", "8021"],
