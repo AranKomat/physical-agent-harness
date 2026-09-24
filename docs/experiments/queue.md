@@ -16,7 +16,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 0-1 | Software and retained replay passed within their declared offline scope |
 | 2 | Controlled contract gate complete: 14/14 scenarios; natural-rollout replication remains robustness evidence, not runtime authority |
 | 3 | Partial: prospective scheduling/coalescing mechanics passed on one 119-frame moving trace; four frozen real-response calls need budget |
-| 4 | Not completed; paid comparison needs budget |
+| 4 | Not completed: 4A held-out views, references, prompts and scoring are frozen before output; both paid cohorts and 4B remain |
 | 5 | Partial: refreshed forward/reverse localization and shadow stop evidence; uncertainty/clearance unresolved |
 | 6-7 | Live SAM exploratory transit completed (6.04 cm); strict base transit and arm staging/return unqualified |
 | 8 | Exploratory comparisons only; no qualified causal benefit |
@@ -48,7 +48,12 @@ immutable evidence, including failed and subsequently invalidated attempts.
    thirteen submissions. Freeze those four production boundaries for the next
    paid run. Do not change thresholds after seeing semantic outputs or claim
    fixture responses demonstrate usefulness.
-6. Do not repeat easy association tests, the blind observer sweep, identical
+6. Phase 4A is now [preregistered](2026-09-24/PHASE4A_FROZEN_PROTOCOL_20260924.md)
+   on those same four held-out views: two radio-negative, one clipped-positive
+   and one clear-positive. Preserve its prompts, 30 approximate reference
+   objects, alias list and scoring. The Phase 3 V3 calls and later inventory calls
+   remain independently budgeted; do not infer combined authorization.
+7. Do not repeat easy association tests, the blind observer sweep, identical
    calibration pulses, or more grasp batches. The controlled Phase 2 gate is
    complete; proceed to the frozen Phase 3 real-response run under an explicit
    paid-call budget while retaining natural identity trials for later robustness.

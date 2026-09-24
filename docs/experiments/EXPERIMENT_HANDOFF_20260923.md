@@ -13,6 +13,14 @@ prospective scheduling/coalescing mechanics gap, not semantic usefulness or
 Phase 3. The next paid scope is frozen at those four production boundaries,
 without retries, and still requires explicit authorization.
 
+Phase 4A is now
+[preregistered before output](2026-09-24/PHASE4A_FROZEN_PROTOCOL_20260924.md)
+on the same four held-out boundaries. The frozen references contain two radio
+negatives, one clipped positive, one clear positive, 30 approximate object boxes,
+fixed aliases, prompts, schemas and scoring rules. The pending four V3 calls can
+form its delta cohort; four later inventory calls remain independently budgeted.
+No Phase 4 call or completion is implied by this preparation.
+
 Latest Phase 2 result: the
 [identical-object loss/reacquisition replay](2026-09-24/PHASE2_IDENTICAL_LOSS_REPLAY_20260924.md)
 completes the controlled 14/14 association matrix. Two identical pumpkins had
@@ -372,8 +380,8 @@ historical diagnostics are described later in this document.
 | 0. Preflight | Software/retained audit, SAM restoration, numeric pins and native sensor smoke passed | Restore policy environment; qualify live integration and recover missing provenance where possible |
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections | Native availability timing, delayed identity publication and live delta prompt are not qualified |
 | 2. Hard discovery/SAM identity and loss | Controlled contract gate complete: 14/14 scenarios, including positive two-instance association, simultaneous full loss, side-swapped ambiguous reacquisition and durable binding invalidation | Natural rollout replication remains robustness evidence; evaluator scoring, correspondence and local IDs remain non-authoritative |
-| 3. Live shadow GLM discovery | Partial: three fresh paused captures passed the provider/worker/coordinator/inventory chain after a rejected dangling-attention result; 4,145-call ceiling exhausted | Prospective coalescing/context consumer, broader coverage, and separately authorized further paid calls |
-| 4. Delta/inventory and compact/rich comparisons | Not done | Frozen causal boundaries, held-out views and separately authorized paid calls |
+| 3. Live shadow GLM discovery | Partial: three fresh paused captures passed the real chain; a 119-frame moving replay now passes prospective selection, delayed publication, transient buffering and queue supersession mechanics with zero calls/actions | Four frozen real-response calls, semantic usefulness, duplicate/inventory behavior and broader live coverage |
+| 4. Delta/inventory and compact/rich comparisons | 4A held-out views, 30 approximate references, prompts and scoring frozen before output; no calls | Both four-call 4A cohorts, independent review, and frozen-boundary 4B compact/rich comparison |
 | 5. Native localization, clearance and stopping | Partial: bounded positive live fusion and target-support stability pass; robust base observation and source-bound 24-interval joint-position stopping passed the 348-action native out/return run; earlier raw-stop failures remain recorded | Physical calibration, complete whole-robot stopping bounds, external clearance and low-body return coverage; the simulator position-window result is not a physical stop certificate |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it |
 | 7. Free-space arm staging and return | Partial: native 10 cm endpoint/return mechanics and simulator position-window stop checks pass; an eight-direction strict-clearance search found no sufficiently observed path | Qualified current swept-volume observation, cooked native-geometry equivalence and wheel coverage; fixed reset cameras leave at least 97.1% of screened endpoint moving geometry out of view |
