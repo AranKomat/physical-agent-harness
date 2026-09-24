@@ -166,6 +166,8 @@ def main(*, capture_observer=None, dense_capture_observer=None, sam_probe=None):
                         help="One approved simulator-only target-directed probe, unknown clearance")
     parser.add_argument("--sam-exploratory-transit", action="store_true",
                         help="Isolated source-bound SAM exploratory probe; requires injected service")
+    parser.add_argument("--sam-staging", action="store_true",
+                        help="Separate 45 cm measured-stop exploratory staging profile")
     parser.add_argument("--matched-target-handoff", action="store_true",
                         help="Same acquisition, A zero holds/B exploratory transit, then 384 policy actions")
     parser.add_argument("--robot-assets", type=Path,
@@ -175,6 +177,8 @@ def main(*, capture_observer=None, dense_capture_observer=None, sam_probe=None):
     for flag in ("allow-simulator", "allow-unknown-clearance-exploration", "licenses-accepted"):
         parser.add_argument("--" + flag, action="store_true", required=True)
     args = parser.parse_args()
+    if args.sam_staging and not args.sam_exploratory_transit:
+        parser.error("SAM staging requires explicit SAM exploratory transit")
     if args.sam_exploratory_transit != (sam_probe is not None):
         parser.error("SAM transit requires an explicit injected service and opt-in")
     if args.sam_exploratory_transit and (
@@ -457,7 +461,7 @@ def main(*, capture_observer=None, dense_capture_observer=None, sam_probe=None):
                     capture=capture, latest_row=lambda: report["captures"][-1],
                     output=output, save_probe=save_transit, robot_assets=args.robot_assets,
                     control_only=args.matched_target_handoff and args.condition == "A",
-                    sam_target=sam_target)
+                    sam_target=sam_target, profile="staging" if args.sam_staging else "probe")
                 if args.matched_target_handoff:
                     final = execute_post_handoff(
                         HttpPolicyTransport(args.port), final, store, step, capture, report, save,

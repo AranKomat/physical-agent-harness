@@ -1,0 +1,64 @@
+{
+  "scope": "exploratory_receipt_audit_not_strict_qualification",
+  "phase_complete": false,
+  "source_sha256": {
+    "owner.json": "d04403dfa74f9a27ab81543c3c5b0c38b6f55ac174495a4b7c67207a36d7bb71",
+    "sam-report.json": "3409aeff4c068fa87773849281f46292315bcda66760020cb653d70c59205615",
+    "stack/pair.json": "c544bcd0047db16b0237e19ed398fdb4df0e5406a087a7107d4e1fcd43cdfcd0",
+    "stack/A/hybrid_short.json": "aff718fe3398df136d3079b31755d6df33cbfd135912f0c2c20c02240725dc25"
+  },
+  "archived_masks_verified": true,
+  "exact_capture_binding": true,
+  "policy_actions": 768,
+  "native_actions": 1092,
+  "probe_actions": 324,
+  "phases": {
+    "final_hold": 6,
+    "move": 312,
+    "prehold": 6
+  },
+  "measured_path_m": 0.4511188030230588,
+  "commanded_integral_m": 0.5095999999999972,
+  "entry_base_from_final_base": [
+    [
+      0.9989365109774275,
+      -0.04526283644753186,
+      -0.008781951547191911,
+      0.40874929037990754
+    ],
+    [
+      0.045217214080330116,
+      0.9989629813587828,
+      -0.005325920167697017,
+      -0.18941216308056896
+    ],
+    [
+      0.009013910753209413,
+      0.004923160726911094,
+      0.9999472545596512,
+      -0.019070607068461972
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "visible_surface_planar_range_before_m": 1.279800890576819,
+  "visible_surface_planar_range_after_m": 0.8373952823392524,
+  "visible_surface_range_caveat": "View-dependent surface, not object-center truth",
+  "max_target_consumption_age_s": 1.727397040987853,
+  "median_target_consumption_age_s": 1.3664106834985432,
+  "max_sam_archive_age_s": 0.8442610729980515,
+  "tracked_proposals": 326,
+  "captures": 351,
+  "final_stop_observed": true,
+  "elapsed_probe_s": 695.8685186109942,
+  "peak_gpu_MiB": 23136,
+  "native_task_success": false,
+  "feedback_rows": 1296,
+  "clearance": "unknown",
+  "paid_calls": 0,
+  "audit_passed": true
+}

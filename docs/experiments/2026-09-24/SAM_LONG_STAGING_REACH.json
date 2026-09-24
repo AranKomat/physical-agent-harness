@@ -1,0 +1,36 @@
+{
+  "scope": "held_torso_surface_radius_not_ik_or_collision",
+  "rows": [
+    {
+      "side": "left",
+      "shoulder_base_m": [
+        0.14923679202999698,
+        0.17073435296777656,
+        1.218109799724666
+      ],
+      "radius_m": 0.8715498083598944,
+      "current_distance_m": 0.9957001886375157,
+      "first_inside_at_1cm_translation_m": 0.18
+    },
+    {
+      "side": "right",
+      "shoulder_base_m": [
+        0.14923382669782412,
+        -0.17073564702047023,
+        1.2181098886706434
+      ],
+      "radius_m": 0.8710389453712257,
+      "current_distance_m": 0.906126942044437,
+      "first_inside_at_1cm_translation_m": 0.06
+    }
+  ],
+  "source_sha256": "aff718fe3398df136d3079b31755d6df33cbfd135912f0c2c20c02240725dc25",
+  "source_stamp": {
+    "session": "f92379bf-44ca-4508-8040-deb425eed5ae",
+    "epoch": 0,
+    "sequence": 1092
+  },
+  "actions": 0,
+  "paid_calls": 0,
+  "motion_authorized": false
+}

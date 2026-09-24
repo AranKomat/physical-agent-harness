@@ -137,15 +137,24 @@ def _joint_window(log, phase):
 
 def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
                             capture, latest_row, output, save_probe, robot_assets,
-                            control_only=False, sam_target=None):
+                            control_only=False, sam_target=None, profile="probe"):
     """Return last fresh observation; save detached {report, feedback} after cleanup.
 
-    At 30 Hz, command integral <=8 cm; measured adjacent endpoint path triggers
-    braking at 8 cm and hard-abort status at 10 cm (not a physical guarantee).
+    Default: 8 cm command/stop and 10 cm hard abort. Explicit SAM-only staging:
+    60 cm command, 45 cm measured stop, 50 cm hard abort. Neither is a physical
+    guarantee; both retain the same observed speed/drift/stop rejection checks.
     Aborts never resume motion. Brake failures are retained, not treated as stops.
     """
     if type(control_only) is not bool:
         raise ValueError("Explicit boolean control condition required")
+    if profile not in ("probe", "staging"):
+        raise ValueError("Unknown exploratory profile")
+    if profile == "staging" and (sam_target is None or control_only):
+        raise ValueError("Staging profile requires SAM target and is not a matched control")
+    speed, move_actions, integral_limit, path_stop, path_abort = (
+        (.03, 80, .08, .08, .10) if profile == "probe" else (.049, 320, .60, .45, .50))
+    action_budget = move_actions + 180
+    work_wall_s = WORK_WALL_S if profile == "probe" else 900.
     if sam_target is not None:
         from experiments.behavior.sam_transit_target import SAMTransitTarget
 
@@ -170,9 +179,14 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
                   measured_path_m=0., measured_path_complete=True, hard_abort=False,
                   drive_rotation_path_rad=0., drive_rotation_limit_rad=.05,
                   brake_attempts=0, experimental_stop_observed=False, samples=[],
-                  brake_errors=[], wall_budget_s=WORK_WALL_S + BRAKE_WALL_S,
+                  brake_errors=[], wall_budget_s=work_wall_s + BRAKE_WALL_S,
                   capture_to_command_budget_s=CAPTURE_TO_COMMAND_S,
                   action_budget=MAX_ACTIONS, callback_deadlines_cooperative=True)
+    report.update(profile=profile, action_budget=action_budget, speed_m_s=speed,
+                  commanded_integral_limit_m=integral_limit, measured_stop_m=path_stop,
+                  measured_abort_m=path_abort)
+    if profile == "staging":
+        report["scope"] = "simulator_only_45cm_staging_unknown_clearance"
 
     def progress(phase):
         try:
@@ -217,9 +231,9 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
             if target is not None:
                 target = (np.linalg.inv(local) @ np.r_[target, 1.])[:3]
         frame = current
-        if report["measured_path_m"] >= .10:
+        if report["measured_path_m"] >= path_abort:
             report["hard_abort"] = True
-            raise ValueError("Measured path reached 10 cm hard abort")
+            raise ValueError("Measured path reached hard abort")
         p = np.asarray(obs.proprio)
         if (np.max(np.abs(p[JOINTS]-anchor[JOINTS])) > .03
                 or np.max(np.abs(p[FINGERS]-anchor[FINGERS])) > .006
@@ -251,7 +265,7 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
 
     def act(command, phase, deadline):
         nonlocal episode_ended, tracking_lost, sequence, sequence_known
-        if time.monotonic() >= deadline or report["actions_attempted"] >= MAX_ACTIONS:
+        if time.monotonic() >= deadline or report["actions_attempted"] >= action_budget:
             raise TimeoutError("Exploratory action/wall budget exhausted")
         if episode_ended:
             raise RuntimeError("Episode already ended")
@@ -331,12 +345,13 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
         anchor = np.asarray(initial.proprio, dtype=float)
         zero = base_hold(anchor, BodyTwist(0, 0, 0), gripper_ranges=gripper_ranges)
         fk = RobotSelfCheck(Path(robot_assets))
-        log = FeedbackDiagnostic(sim, robot, source_revision=PINNED_REVISION, max_rows=2000)
+        log = FeedbackDiagnostic(sim, robot, source_revision=PINNED_REVISION,
+                                 max_rows=max(2000, 4*action_budget))
         log.__enter__()
         context_installed = True
         # Reobserve before prehold; no old remembered target is used for entry.
         observe("entry", reobserve=True)
-        deadline = started + WORK_WALL_S
+        deadline = started + work_wall_s
         for _ in range(60):
             if act(zero, "prehold", deadline):
                 break
@@ -346,14 +361,14 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
         direction = target[:2] / np.linalg.norm(target[:2])
         report["direction_base_xy"] = direction.tolist()
         command = zero if control_only else base_hold(
-            anchor, BodyTwist(float(.03*direction[0]), float(.03*direction[1]), 0),
+            anchor, BodyTwist(float(speed*direction[0]), float(speed*direction[1]), 0),
             gripper_ranges=gripper_ranges)
-        for _ in range(80):
-            if report["measured_path_m"] >= .08:
+        for _ in range(move_actions):
+            if report["measured_path_m"] >= path_stop:
                 if control_only:
                     raise RuntimeError("Zero-base control exceeded measured path bound")
                 break
-            if report["commanded_integral_m"] + .03*CONTROL_DT > .08 + 1e-12:
+            if report["commanded_integral_m"] + speed*CONTROL_DT > integral_limit + 1e-12:
                 break
             act(command, "control_hold" if control_only else "move", deadline)
         for _ in range(60):
@@ -371,7 +386,7 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
         report["passed"] = False
         # Reserve a separate bounded brake interval, even after tracking/step errors.
         deadline = min(time.monotonic() + BRAKE_WALL_S,
-                       started + WORK_WALL_S + BRAKE_WALL_S)
+                       started + work_wall_s + BRAKE_WALL_S)
         can_brake = (zero is not None and context_installed
                      and report["native_calls_attempted"] > 0 and not episode_ended)
         if not isinstance(exc, Exception) or not sequence_known:
@@ -404,7 +419,7 @@ def run_exploratory_transit(initial, *, sim, robot, store, gripper_ranges, step,
         elif can_brake:
             for _ in range(60):
                 if (episode_ended or time.monotonic() >= deadline
-                        or report["actions_attempted"] >= MAX_ACTIONS):
+                        or report["actions_attempted"] >= action_budget):
                     break
                 report["brake_attempts"] += 1
                 try:

@@ -127,6 +127,36 @@ def test_arbitrary_target_callback_rejected(monkeypatch, tmp_path):
     assert not d.commands
 
 
+@pytest.mark.parametrize("distance", [.001, .002])
+def test_explicit_staging_bounds_without_changing_probe(monkeypatch, tmp_path, distance):
+    from experiments.behavior.sam_transit_target import SAMTransitTarget
+
+    d = Driver(monkeypatch, tmp_path)
+    d.distance = distance
+    target = SAMTransitTarget(tmp_path, session="probe", epoch=0, generation=0, tracker_id=0)
+    def sample(self, frame, row, output):
+        point = d.target(frame, row, output)
+        self.receipts.append({"surface_median_base_m": point.tolist(), "motion_authorized": False})
+        return point
+    monkeypatch.setattr(SAMTransitTarget, "__call__", sample)
+    d.run(sam_target=target, profile="staging")
+    d.clean()
+    assert d.report["passed"] and not d.report["strict_gate_passed"], d.report["error"]
+    assert d.report["action_budget"] == 500
+    assert d.report["measured_path_m"] < .5
+    assert d.report["commanded_integral_m"] <= .6000001
+    assert d.moving == (320 if distance == .001 else 225)
+
+
+def test_staging_requires_sam_and_rejects_control(monkeypatch, tmp_path):
+    d = Driver(monkeypatch, tmp_path)
+    with pytest.raises(ValueError, match="requires SAM"):
+        d.run(profile="staging")
+    with pytest.raises(ValueError, match="Unknown"):
+        d.run(profile="unbounded")
+    assert not d.commands
+
+
 def test_one_segment_frozen_joints_stop_and_fresh_final(monkeypatch, tmp_path):
     d = Driver(monkeypatch, tmp_path)
     final = d.run()
