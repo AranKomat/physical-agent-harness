@@ -1,5 +1,15 @@
 # Experiment And Verification Handoff
 
+Phase 4B is now
+[frozen before output](2026-09-24/PHASE4B_FROZEN_CONTEXT_PROTOCOL_20260924.md).
+Four causal radio boundaries produce eight counterbalanced rich/compact GPT-6
+Sol requests with identical goal, options, rules and source images. The late
+boundary preserves six verified-but-uncertain press attempts and rejects another
+blind press. All 12 source images and packet hashes pass; focused checks pass
+`6/6`. Preparation made zero calls and zero robot actions. The guarded cohort is
+pending explicit authorization for eight calls, a `$0.40` local cap and cumulative
+call ceiling 4,159 under the unchanged `$75` shared ceiling and retained holds.
+
 Latest Phase 3 result: the four-call
 [frozen GLM cohort](2026-09-24/PHASE3_FROZEN_GLM_COHORT_20260924.md)
 has completed with no retries and zero robot actions. All four outputs matched
@@ -424,7 +434,7 @@ historical diagnostics are described later in this document.
 | 1. Strict V3 retained replay | Passed bounded offline scope: six GLM packets, 67 sightings, 64 checks, 16 expected rejections; real V3 endpoint packets have now traversed the historical inventory path | Delayed identity publication remains unqualified; live outputs remain too slow for current geometry |
 | 2. Hard discovery/SAM identity and loss | Controlled contract gate complete: 14/14 scenarios, including positive two-instance association, simultaneous full loss, side-swapped ambiguous reacquisition and durable binding invalidation | Natural rollout replication remains robustness evidence; evaluator scoring, correspondence and local IDs remain non-authoritative |
 | 3. Live shadow GLM discovery | Four frozen real-response calls complete: 4/4 semantic visibility matches, 3/4 strict packets, three historical inventory admissions, zero actions/retries | Fails the synchronous live gate: 4.42-12.35 s latency and 0/4 within two seconds; retain as asynchronous historical discovery and broaden later only with a declared hypothesis |
-| 4. Delta/inventory and compact/rich comparisons | 4A V3 half complete; inventory comparator partial with one valid packet, one unresolved 110-second timeout and two calls not sent | Declare how to complete/replace the interrupted inventory cohort before matched scoring; frozen-boundary 4B compact/rich comparison still needs real executable choices |
+| 4. Delta/inventory and compact/rich comparisons | 4A V3 half complete; inventory comparator partial with one valid packet, one unresolved 110-second timeout and two calls not sent; 4B executable four-boundary/eight-call protocol frozen with all packets and source images verified | Authorize and run the guarded 4B cohort; separately declare how to complete or replace the interrupted 4A inventory cohort before matched scoring |
 | 5. Native localization, clearance and stopping | Partial: positive live fusion passes; arm endpoint/return stopping passes; two independent 6.4/45.1 cm base traces pass frozen motion-versus-stop discrimination through `0.049 m/s`. The targeted 128x128 wrist-observer search fails the low-body coverage gate at a 40.7% optimistic upper bound | External clearance now needs a different authority source or sensor arrangement, plus broader moving-localization/calibration; simulator stop evidence is not a physical-hardware certificate |
 | 6. Strict base transit | Not qualified | Small measured transit under strict gates; earlier unknown-clearance probes do not qualify it, and the tested wrist-observer approach cannot admit a strict 5 cm segment |
 | 7. Free-space arm staging and return | Partial: native 10 cm endpoint/return mechanics and simulator position-window stop checks pass; an eight-direction strict-clearance search found no sufficiently observed path | Qualified current swept-volume observation, cooked native-geometry equivalence and wheel coverage; fixed reset cameras leave at least 97.1% of screened endpoint moving geometry out of view |
