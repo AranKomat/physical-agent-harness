@@ -22,8 +22,8 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
-| 13 | Active: blue-attribute replication failed semantically; orange second-seed and derived composite-distractor cohorts passed (`0/1`, `0/1`, `1/1` each); all nine scored physical executions were valid; broad layout/task robustness remains open |
-| 14 | Not started; defer efficiency optimization until behavior survives an independent robustness axis |
+| 13 | Controlled initial scope complete with mixed evidence: blue failed under Sol, orange second-seed and composite-distractor cohorts passed; Astra corrected the exact blue packet and its post-decision lift verified; broad layout/task robustness remains open |
+| 14 | Ready for one bounded selective-model gate: validate Astra on a negative M2 packet before considering Sol-to-Astra escalation; broader end-to-end efficiency remains untested |
 
 1. Treat the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
    as the end of the dormant-sensor search. The pinned default R1Pro exposes only
