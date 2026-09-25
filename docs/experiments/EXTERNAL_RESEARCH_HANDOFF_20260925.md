@@ -47,6 +47,9 @@ The strongest completed results are:
   the radio task;
 - GraspGen-X produces geometrically useful proposals, but the sole retained
   candidate requires major base/torso staging through unobserved space.
+- the first prospective Sol-first/Astra-on-hold shadow cohort passed on a new
+  strawberry category pair: Sol scored `2/2`, one correct negative hold triggered
+  Astra, and Astra preserved it without a false correction.
 
 No current result establishes reliable radio completion, strict navigation,
 strictly safe manipulation, release/placement, a general motor policy, GPT
@@ -86,7 +89,7 @@ action interface. Only one actuator owner may run at a time.
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
 | 13. Robustness/held-out expansion | Controlled initial scope complete; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a provenance-preserving composite distractor. Astra then corrected the exact frozen blue M2 packet, and its post-decision 50.014 mm lift verified. | Broad layouts/tasks remain untested. Preserve the mixed result; do not rewrite the original Sol failure. |
-| 14. Efficiency optimization | Controlled selective-model gate complete; broad scope open | Compact context remains default. On one frozen positive/negative M2 pair, Sol scored `1/2`; Astra scored `2/2` without a false positive. | Retain Sol as default. Astra is only a review candidate for ambiguous M2 holds; two cases do not validate an automatic router. Broader end-to-end efficiency remains untested. |
+| 14. Efficiency optimization | Initial prospective selective-review gate complete; broad scope open | Compact context remains default. The six-case frozen study scored Sol `5/6` and selective review `6/6`. A preregistered new strawberry positive/negative pair scored `2/2` for both all-Sol and selective review; one correct Sol hold triggered Astra and remained a hold. | Retain Sol as default and Astra as shadow-only review for M2 visual-memory holds. Active-workload VLA/perception duty, energy, broader false-correction risk, and automatic authority remain untested. |
 
 ## Major Positive Results
 
@@ -388,13 +391,23 @@ using two Astra calls. This reduced Astra duty by 66.7% and cost by 47.6% versus
 all-Astra, at the expense of two extra calls and higher sequential latency. See
 [Phase 14 Model-Duty Comparison](2026-09-25/PHASE14_MODEL_DUTY_COMPARISON_20260925.md).
 The rule remains shadow/advisory because the six cases were accumulated and only
-one negative review case is available. Latest accounting is 4,191 cumulative
-calls, `$23.85374317140` confirmed, `$34.979327322900` unresolved,
-`$58.833070494300` exposure, and `$16.166929505700` available under `$75`.
+one negative review case was initially available.
+
+The first prospective cohort is now complete on a new strawberry category pair.
+Sol correctly lifted for strawberry and correctly held when the identical evidence
+was asked to establish apple. The correct hold triggered Astra, which also held.
+All-Sol and selective review both scored `2/2`; selective review used one extra
+call, cost `$0.02345975` total, and produced no false correction. The source
+strawberry lift rose 49.931 mm by evaluator scoring and 50.023 mm by legal RGB-D
+plus robot-only FK. See
+[Phase 14 Prospective Selective Review](2026-09-25/PHASE14_PROSPECTIVE_SELECTIVE_REVIEW_20260925.md).
+Latest accounting is 4,194 cumulative calls, `$23.87720292140` confirmed,
+`$34.979327322900` unresolved, `$58.856530244300` exposure, and
+`$16.143469755700` available under `$75`.
 Do not rerun or prompt-tune blue. Keep the same evidence contract, current
 boundary, motor backend, and verifier. Continue in this order:
 
-1. retain Sol as default and run the selective Astra rule prospectively in shadow mode;
+1. retain Sol as default and keep Astra review shadow-only while collecting broader natural M2 holds;
 2. treat the passed apple/category axis as broader fixture evidence, not general motor competence;
 3. retain the Sol failure, Astra correction, negative control, passed seed, and passed distractor together;
 4. measure VLA/perception duty only on a workload where those components are actually active.
