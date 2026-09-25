@@ -82,6 +82,14 @@ SAM gate
 83defa7f9a57063dbdf6d7739239678bdfe1e3717572e6cac6dcc81087b43c9e
 ```
 
+## Controlled Spectrum
+
+Post-hoc synthesis of the separately preregistered runs gives a controlled
+visibility spectrum. IDs 301 and 302 retained `0.6496` and `0.6607` of their
+pre-close mask area after closure and completed verified lifts. ID 304 retained
+`0.0` and executed the bounded abort. This supports current-evidence gating under
+partial versus full loss; mask-area fraction is still only a visibility proxy.
+
 ## Remaining Boundary
 
 Full occlusion is now handled conservatively, but recovery is unresolved. A
