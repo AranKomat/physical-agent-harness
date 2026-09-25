@@ -8,6 +8,14 @@ passed robot-only FK and quarantined post-control evaluator scoring, but the ful
 preregistered protocol did not pass because its independent Astra visual response
 was lost after a settled API call.
 
+A later retained run reproduced the intermediate lift before attempting release.
+The lift remained successful, but upward and lateral open-gripper retreats both
+carried the candle with the gripper. A two-second open-hold diagnostic established
+that the assisted-grasp constraint was inactive, no object was registered in hand,
+and the finger joints were fully open. The candle was therefore physically
+wedged or cupped by this fixture rather than retained by insufficient opening time
+or a stale assisted-grasp constraint.
+
 | Measurement | Result |
 | --- | ---: |
 | Native public-test ID | 301 |
@@ -24,6 +32,28 @@ was lost after a settled API call.
 The run used no learned motor policy and no model call during motion. Initial
 robot and candle poses were scripted. External clearance remained unknown and
 `motion_qualified=false`.
+
+## Release Diagnostics
+
+Three bounded follow-ups tested whether the lifted candle could be released. None
+changed the original experiment into a complete task result.
+
+| Diagnostic | Actions | Result |
+| --- | ---: | --- |
+| Open then retreat upward | 70/70 | Gripper retreated 49.999 mm; candle followed 49.999 mm; final separation 11.504 mm |
+| Hold fully open for about 2 s, then retreat upward | 118/118 | Constraint inactive and fingers fully open; candle still followed 49.994 mm |
+| Open then retreat laterally | 70/70 | Gripper retreated 49.975 mm; candle followed 47.333 mm; final separation 12.540 mm |
+
+The lateral trajectory also passed a robot-only self-collision screen over 33
+postures and 363,099 tested link pairs, with zero collisions and a minimum
+non-collision distance of 23.167 mm. External clearance nevertheless remained
+unknown. The stopping rule now closes release-direction and longer-open
+exploration for this fixture.
+
+A separate zero-action pumpkin preflight rejected both available pumpkins before
+motion. Their approximately 152.2 by 150.2 by 125.9 mm extent exceeded the
+declared 90 mm horizontal fixture bound. No smaller pumpkin or candle asset exists
+in this held-out task instance.
 
 ## Preflight
 
@@ -78,6 +108,13 @@ Accordingly, the physical subgoal is positive evidence while the overall
 preregistered experiment is a failure. Manual image review cannot replace the
 missing independent response.
 
+A new verifier was prepared against the retained lateral-release run and limited
+strictly to its `pre_close`, `post_close`, and `post_lift` captures. Its no-network
+preflight passed, including a one-call Astra Flex reservation capped at
+`$0.10809`, but it was not dispatched because the previously used explicit local
+OpenRouter credential file was unavailable. No new reservation or model call was
+made. The failed release remains excluded from the proposed lift verdict.
+
 ## Evidence
 
 ```text
@@ -99,12 +136,22 @@ quarantined evaluator sidecar
 
 visual-verifier storage-failure record
 8cbcd15a6618bb553ebc2764e388da655c1075abeb7a31fad57f1f1241561286
+
+retained lateral-release receipt
+c3713413e84f9876b2745ef3a04e9d71f947f9696518b0f55cb1ab6b9c4c2b9f
+
+retained lateral-release evaluator sidecar
+d436657897ba52fd968ffb90eff9c136d913e003537f2dc2a073f213ddd0c1f0
+
+retained-lift verifier preregistration
+5b0c890efae81a376811e473624c111dcbbbe677307f5d0136002249c8af1f43
 ```
 
 ## Next Gate
 
-Do not repeat the identical lift merely to recover the lost model response. The
-next Halloween work should add a new phase-level capability: a place/release
-effect, a new legal inspection view after occlusion, or an online executive
-boundary. Future visual-verifier calls must pass the repaired no-network storage
-preflight before dispatch.
+Do not repeat the lift, lengthen the open hold, try another release direction, or
+force the oversized pumpkin through this fixture. The next useful task-level work
+needs a release-compatible grasp/fixture or a different manipulation object, plus
+fresh legal evidence. If the explicit credential file is restored, the already
+preregistered retained-lift verifier may be dispatched exactly once; otherwise it
+remains a documented pending check rather than a reason to repeat physical motion.

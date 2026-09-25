@@ -474,6 +474,21 @@ Latest accounting is therefore 4,207 cumulative calls,
 `$23.96875242140` confirmed, `$34.979327322900` unresolved,
 `$58.948079744300` exposure, and `$16.051920255700` available under `$75`.
 
+Later release diagnostics retained another clean 50.004 mm intermediate candle
+lift but did not complete placement. An upward retreat carried the candle 49.999
+mm, a roughly two-second fully open hold followed by upward retreat carried it
+49.994 mm, and a lateral retreat carried it 47.333 mm. Evaluator-only state showed
+the assisted-grasp constraint inactive, no object registered in hand, and fully
+open fingers. The fixture therefore physically wedges or cups this candle. The
+available pumpkins exceeded the declared fixture-size bound and were rejected
+before motion. Release-direction and longer-open exploration are closed.
+
+A repaired lift-only Astra verifier is preregistered against the retained run and
+passed dry-run validation, but its single call was not dispatched because the
+previous explicit local credential file was unavailable. Accounting consequently
+remains at 4,207 calls and no new hold exists. This credential issue must not be
+worked around by repeating robot motion or by substituting manual image review.
+
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
 inference chunks, and 1,048 source-bound SAM results. Behavior-Skill supplied
