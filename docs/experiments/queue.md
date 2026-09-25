@@ -22,7 +22,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
-| 13 | Controlled initial scope includes mixed attribute evidence, a passed second seed, a passed composite distractor, and a passed live SAM tracker reset. A two-case native-instance cohort then passed ID 302 but failed ID 303: its current view was nearly black, SAM returned zero candidates, and the commanded hold was physically unstable. Astra corrected the exact frozen blue Sol error. Broad natural occlusion, layout, placement, and task robustness remain open. |
+| 13 | Controlled scope now includes mixed attributes, seed, distractor, tracker-reset, native-instance, and natural full-occlusion evidence. The native-instance cohort passed ID 302 but failed dark ID 303. A follow-up quality gate rejected the retained dark frame and a fresh ID-304 run safely stopped after 12 actions when gripper closure fully occluded the target. Astra corrected the frozen blue Sol error. Partial occlusion, broader layouts/placements, and task variation remain open. |
 | 14 | Initial selective review, neural-duty accounting, and successful classical plus learned-perception power baselines are complete. The SAM-reset lift used 0.1150 Wh over its 4.015 s post-close inference/action window; cold SAM/simulator startup used 3.2405 Wh over 318.088 s. The exact descriptor cache recorded 2 hits and 2 misses, but this was not neural embedding reuse. Learned-policy/GPT energy while succeeding, neural feature-cache savings, broader live-native review, and automatic Astra authority remain unmeasured. Sol stays default and Astra shadow-only. |
 
 1. Preserve the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
@@ -56,6 +56,10 @@ immutable evidence, including failed and subsequently invalidated attempts.
    reject near-black current images explicitly and qualify a physically stable
    hold for the changed native base/viewpoint. Exposure normalization alone does
    not address the observed hold instability.
+8. Keep the [image-quality and full-occlusion gate](2026-09-25/PHASE13_IMAGE_QUALITY_AND_OCCLUSION_GATE_20260925.md)
+   active. Dark input now rejects before motion, and post-close target loss stops
+   after the 12 close/hold actions. Do not force a tracker through complete
+   disappearance; recovery requires new legal current evidence.
 
 The [completed Phase 4A comparison](2026-09-25/PHASE4A_DISCOVERY_PROMPT_COMPARISON_20260925.md)
 preserves the original unresolved timeout and completes the semantic denominator

@@ -92,7 +92,7 @@ action interface. Only one actuator owner may run at a time.
 | 10. Recurrent GPT executive | Complete for frozen exploratory four-case scope | GPT-6 Sol scored `4/4` versus fixed routing's analytical `2/4`. All four packet-bound choices were executed for 30/30 actions and independently verified; both lifts rose 50.01 mm and both holds stayed within 0.011 mm. | Generalization beyond the scripted fixture remains untested. This is not benchmark success and strict clearance remains unknown. |
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
-| 13. Robustness/held-out expansion | Controlled initial scope complete across several axes; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a composite distractor. Astra corrected the frozen blue M2 packet. A live SAM reset lift passed. A two-case native-instance cohort then scored `1/2`: ID 302 produced a separately verified 50.000 mm lift; ID 303 had a nearly black current view, zero SAM candidates, and an unstable physical hold. | Broad natural occlusion, layouts, placements, and tasks remain open. Preserve both failures; native ID 303 couples viewpoint/illumination with base/scene compatibility and is not a SAM-only result. |
+| 13. Robustness/held-out expansion | Controlled scope complete across several axes; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a composite distractor. Astra corrected the frozen blue M2 packet. A live SAM reset lift passed. A native-instance cohort scored `1/2`: ID 302 lifted, while dark ID 303 failed. The follow-up quality gate rejected that dark retained frame and fresh ID 304 safely aborted after 12 actions when closure fully occluded the target. | Partial occlusion, layouts, placements, and tasks remain open. Full disappearance keeps current geometry unknown; recovery needs new legal evidence rather than tracker-ID persistence. |
 | 14. Efficiency optimization | Initial selective-review, active-duty, classical-power, and learned-perception-power scopes complete; broad scope open | Compact context remains default. Across scoped comparisons, selective review corrected one Sol error, preserved six correct holds, and made zero false corrections. The classical lift used 0.1410 Wh during 5.719 s manipulation. The successful SAM-reset lift used 0.1150 Wh during its 4.015 s post-close inference/action window, while cold SAM/simulator startup consumed 3.2405 Wh over 318.088 s. Its exact descriptor cache recorded two hits and two misses. | Retain Sol as default and Astra as shadow-only review. The cache hits were derived-descriptor reuse, not SAM embedding reuse. Learned-policy/GPT energy while succeeding, neural feature-cache savings, broader live-native review, automatic Astra authority, and the efficiency/competence frontier remain open. |
 
 ## Major Positive Results
@@ -199,6 +199,13 @@ The native task states also use different robot base poses, so this is not an
 isolated segmentation benchmark. Add an explicit unusable-image preflight and
 qualify hold stability before repeating broader native-instance execution. See
 [Phase 13 Native-Instance Robustness](2026-09-25/PHASE13_NATIVE_INSTANCE_ROBUSTNESS_20260925.md).
+
+The follow-up implemented that image preflight and passed its retained `3/3`
+regression. On fresh ID 304 the image was usable and SAM found the target before
+closure, but all three current cameras lost it after closure. The runtime stopped
+after the 12 close/hold actions with no lift or extra hold loop. This is the
+correct bounded full-occlusion outcome, but it is not task success or recovery.
+See [Phase 13 Image Quality And Occlusion Gate](2026-09-25/PHASE13_IMAGE_QUALITY_AND_OCCLUSION_GATE_20260925.md).
 
 ### No reliable general motor policy
 
