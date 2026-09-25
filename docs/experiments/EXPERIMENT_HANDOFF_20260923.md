@@ -444,8 +444,10 @@ Current working choices, not globally qualified winners:
   Plan a later matched Sol/Astra executive comparison; public demos are a
   motivation, not local performance evidence. Historical cohorts stay distinct. See the
   [migration and proposed comparison](2026-09-23/GPT6_SOL_LUNA_MIGRATION_20260923.md).
-- Behavior-Skill is the frozen reference motor for interpreting short handoffs.
-  It approaches and contacts the radio but has not reliably activated it.
+- Behavior-Skill is the frozen reference motor for interpreting handoffs. It
+  approaches and contacts the radio but has not reliably activated it. A later
+  1,536-action natural trash run used its canonical skills, approached a soda
+  can, and kept both grippers fully open through both pickup blocks.
 - GLM 5.3 Flash is the leading occasional scene-inventory candidate from a small
   matched-view test. Its new V3 delta prompt is still untested with the endpoint.
 - The corrected local SAM 3.1 streaming worker tracks between discovery calls.
@@ -679,7 +681,7 @@ Training overlap is disclosed: these trials are not held-out motor generalizatio
 | G0.5 | Recorded-input/interface work; complete native action interface not qualified |
 | Kmy GR00T N1.7 multitask | Working native interface; radio/trash screens had no success; navigation and late tilted trash views observed |
 | Corvid pi0.5 all-task foundation backbone | Working native interface; carried/repositioned a bin in one trash run, wrong-appliance interactions in others; no task success |
-| Behavior-Skill pi05-pt50-skill | Working reference; approaches/reaches/contacts radio but displaces or rotates it without activation; not a reliable general policy |
+| Behavior-Skill pi05-pt50-skill | Working reference; approaches/reaches/contacts radio but displaces or rotates it without activation. In a later 1,536-action natural trash run with canonical skills, it approached a soda can but never closed either gripper; not a reliable general policy. |
 
 Pins for the main recent candidates:
 
@@ -700,6 +702,16 @@ The common radio/trash screen used seed 0, ordinary starts, no GPT/memory, and a
 Kmy and Corvid reached approximately 1,720-1,908 actions before the wall cap;
 Behavior-Skill reached 3,224. Their different replanning recipes invalidate a
 simple equal-horizon performance ranking from that screen.
+
+A later natural `picking_up_trash` trial removes two limitations of those early
+screens. After a 384-action pilot proved too short, one explicit amendment froze
+the published `move to`, `pick up from`, and `place in` labels and allocated 192
+actions to each of eight blocks, for 1,536 actions total. Behavior-Skill navigated
+close to an orange soda can, but both pickup blocks kept both gripper command
+channels near `+1` and the measured finger aperture near 100 mm. Native success
+remained false and Q-score remained 0. Do not run a matched GPT condition on this
+start unless the motor backend gains a credible grasp primitive. See
+[Phase 13 Natural Trash Behavior-Skill](2026-09-26/PHASE13_NATURAL_TRASH_BEHAVIOR_SKILL_20260926.md).
 
 Corvid's longer trash follow-ups reached 6,000 actions/200 simulated seconds at
 two starts, still success=false/Q=0. A separate two-order instruction crossover

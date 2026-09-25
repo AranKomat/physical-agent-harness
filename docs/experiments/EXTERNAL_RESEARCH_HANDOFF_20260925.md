@@ -216,7 +216,7 @@ The main tested candidates were:
 
 | Candidate | Scope and outcome |
 | --- | --- |
-| Behavior-Skill `pi05-pt50-skill` | Best working reference interface. Approached and contacted the radio, but displaced or rotated it instead of activating it. One GPT-supervised radio run used 3,224 actions and 18 GPT calls and ended false/Q=0. |
+| Behavior-Skill `pi05-pt50-skill` | Best working reference interface. Approached and contacted the radio, but displaced or rotated it instead of activating it. One GPT-supervised radio run used 3,224 actions and 18 GPT calls and ended false/Q=0. A later canonical-skill natural trash run used 1,536 actions, approached a soda can, and kept both grippers fully open through both pickup blocks. |
 | Corvid `backbone_foundation_100ep` | All-task candidate. It sometimes grasped/carried a bin, but did not complete trash; radio supervision ended false/Q=0. A crossover instruction test did not show convincing redirection. |
 | Kmy GR00T N1.7 checkpoint238000 | Interface worked and navigation occurred, but no task completion was established; late trash views were markedly tilted. |
 
@@ -224,6 +224,15 @@ Official radio-only pi0.5/GR00T, RLinf PT50, Ryan all100, StarVLA, and related
 artifacts were also inspected or briefly auditioned. None established a reliable
 general motor. Several early trials were too short to count as full evaluations.
 Behavior-Skill is frozen as a reference, not declared solved or general.
+
+The natural trash follow-up addresses the earlier short-horizon and prompt-format
+confounds. One explicit amendment used the checkpoint's exact `move to`,
+`pick up from`, and `place in` labels for 192 actions per block. Pickup produced
+the largest repeated-skill base-command magnitude, while gripper commands stayed
+near `+1` and measured aperture stayed near 100 mm. The run ended false/Q0. This
+is now a substantive negative motor result; recurrent GPT is not justified on
+that exact start without a grasp-capable backend. See
+[Phase 13 Natural Trash Behavior-Skill](2026-09-26/PHASE13_NATURAL_TRASH_BEHAVIOR_SKILL_20260926.md).
 
 In the matched GPT comparison, Corvid and Behavior-Skill used the same start,
 action cap, GPT-6 Astra executive/verifier protocol, skill menu, and current-only
