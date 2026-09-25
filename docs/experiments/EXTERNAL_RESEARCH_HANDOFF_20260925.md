@@ -489,6 +489,17 @@ previous explicit local credential file was unavailable. Accounting consequently
 remains at 4,207 calls and no new hold exists. This credential issue must not be
 worked around by repeating robot motion or by substituting manual image review.
 
+A separate smaller-object control then tested the same release mechanics with the
+75.43 mm soda can. It completed all 70 actions, lifted 50.015 mm, returned within
+0.822 mm, opened fully with no active constraint or registered object in hand, and
+separated the can by 588.250 mm. The can nevertheless fell from the unsupported
+fixture release point and moved 101.928 mm during lateral retreat, so the frozen
+placement criterion failed. This narrows the next manipulation gate to a legally
+observed supporting region and a support-aware release pose; it closes further
+opening-duration, aperture, or retreat-direction tuning on the unsupported
+fixture. See
+[Phase 13 Soda-Can Release Diagnostic](2026-09-25/PHASE13_SODA_RELEASE_DIAGNOSTIC_20260925.md).
+
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
 inference chunks, and 1,048 source-bound SAM results. Behavior-Skill supplied
