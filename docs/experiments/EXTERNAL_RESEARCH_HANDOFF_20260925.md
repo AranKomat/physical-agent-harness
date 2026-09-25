@@ -85,7 +85,7 @@ action interface. Only one actuator owner may run at a time.
 | 10. Recurrent GPT executive | Complete for frozen exploratory four-case scope | GPT-6 Sol scored `4/4` versus fixed routing's analytical `2/4`. All four packet-bound choices were executed for 30/30 actions and independently verified; both lifts rose 50.01 mm and both holds stayed within 0.011 mm. | Generalization beyond the scripted fixture remains untested. This is not benchmark success and strict clearance remains unknown. |
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
-| 13. Robustness/held-out expansion | Active; first attribute replication failed | A blue-can replication preserved the Phase 12 contract and motor. M0/M1 correctly held, but M2 also held despite receiving the historical blue image. All three packet-bound physical executions passed, so the failure is semantic rather than motor or transport. | Do not rerun or tune the blue cohort. Change one independent axis next: retain orange and use a second simulator seed, then consider a predeclared distractor. |
+| 13. Robustness/held-out expansion | Active; one failed attribute axis and one passed seed axis | The blue-can replication failed semantically at M2 while all physical executions passed. The original orange result then replicated at simulator seed 71 with `hold/hold/lift` and verified progress `0/1`, `0/1`, `1/1`. | Do not rerun or tune blue. Run one predeclared orange visual-distractor axis next; broader layouts and tasks remain untested. |
 | 14. Efficiency optimization | Not started as end-to-end study | Compact context and two-rate perception evidence provide candidates. | Optimize only after competence is demonstrated. |
 
 ## Major Positive Results
@@ -346,17 +346,19 @@ Phase 12 is complete for one controlled visual-memory boundary. M0 and M1 held;
 M2 used the historical visual evidence and executed a verified lift. See
 [Phase 12 Memory In Execution](2026-09-25/PHASE12_MEMORY_EXECUTION_20260925.md).
 
-The active experiment is Phase 13 robustness. The first attribute change, orange
-to blue, failed at M2: the model held despite receiving the historical blue image.
-All three physical holds were independently valid. See
+Phase 13 robustness now has two independent axes. The first attribute change,
+orange to blue, failed at M2: the model held despite receiving the historical
+blue image. All three physical holds were independently valid. See
 [Phase 13 Blue-Attribute Replication](2026-09-25/PHASE13_BLUE_ATTRIBUTE_REPLICATION_20260925.md).
-Do not rerun or prompt-tune that cohort. Keep the same evidence contract, current
-boundary, motor backend, and verifier so subsequent failures remain attributable.
-Continue in this order:
+The original orange result then passed at simulator seed 71 with the expected
+`hold/hold/lift` decisions and verified physical effects. See
+[Phase 13 Orange Seed-71 Replication](2026-09-25/PHASE13_ORANGE_SEED71_REPLICATION_20260925.md).
+Do not rerun or prompt-tune blue. Keep the same evidence contract, current
+boundary, motor backend, and verifier. Continue in this order:
 
-1. retain the successful orange attribute and replicate across a second simulator seed;
-2. if that passes, run one predeclared visual-distractor cohort;
-3. only then consider broader layout or task variation;
+1. run one predeclared orange visual-distractor cohort;
+2. only then consider broader layout or task variation;
+3. retain both the failed attribute result and passed seed result in aggregate reporting;
 4. duty-cycle and model-cost optimization after useful behavior survives.
 
 ## What Not To Repeat
