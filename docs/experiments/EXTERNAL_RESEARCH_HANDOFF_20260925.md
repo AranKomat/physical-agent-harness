@@ -93,7 +93,7 @@ action interface. Only one actuator owner may run at a time.
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
 | 13. Robustness/held-out expansion | Controlled initial scope complete; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a provenance-preserving composite distractor. Astra then corrected the exact frozen blue M2 packet, and its post-decision 50.014 mm lift verified. | Broad layouts/tasks remain untested. Preserve the mixed result; do not rewrite the original Sol failure. |
-| 14. Efficiency optimization | Controlled selective-review and active-duty scopes complete; broad scope open | Compact context remains default. The six-case frozen study scored Sol `5/6` and selective review `6/6`; two prospective strawberry cohorts scored `6/6` for both. Astra preserved four correct Sol holds with zero false corrections. Across eight Phase 8 runs, Behavior-Skill supplied 92.60% of action time, warm chunks took about 157--160 ms median, and sparse SAM scheduling avoided 89.48% of per-action-boundary invocations with zero unavailable frame reads. | Retain Sol as default and Astra as shadow-only review for M2 visual-memory holds. Natural review triggers, cache hits, energy, automatic authority, and efficiency while achieving task success remain untested. |
+| 14. Efficiency optimization | Initial selective-review and active-duty scopes complete; broad scope open | Compact context remains default. The six-case frozen study scored Sol `5/6` and selective review `6/6`; two prospective strawberry cohorts scored `6/6` for both, and one retained natural camera-turn loss produced the same correct Sol/Astra hold. Across all scoped comparisons, selective review corrected one Sol error, preserved six correct holds, and made zero false corrections. Across eight Phase 8 runs, Behavior-Skill supplied 92.60% of action time, warm chunks took about 157--160 ms median, and sparse SAM scheduling avoided 89.48% of per-action-boundary invocations with zero unavailable frame reads. | Retain Sol as default and Astra as shadow-only review for M2 visual-memory holds. Broader live-native review, cache hits, energy, automatic authority, and efficiency while achieving task success remain untested. |
 
 ## Major Positive Results
 
@@ -412,9 +412,19 @@ negative holds and preserved all three. Across both prospective cohorts, Sol and
 selective review score `6/6`, with four correct holds reviewed and zero false
 corrections. The second cohort cost `$0.06278075`; see
 [Phase 14 Second Prospective Selective Review](2026-09-25/PHASE14_SECOND_PROSPECTIVE_SELECTIVE_REVIEW_20260925.md).
-Latest accounting is 4,201 cumulative calls, `$23.93998367140` confirmed,
-`$34.979327322900` unresolved, `$58.919310994300` exposure, and
-`$16.080689005700` available under `$75`.
+
+The first retained natural visibility-loss boundary also passed. During a real
+camera turn, the sofa was visible in a historical frame and absent from the
+current frame. Sol correctly held for current-geometry reacquisition and Astra
+preserved the hold. Across all scoped model-duty comparisons, selective review
+now corrects one Sol error, preserves six correct Sol holds, and has zero observed
+false corrections. The source lacks native timestamps, metric camera pose and
+qualified physical identity, so this remains semantic-caution evidence rather
+than motion authority. See
+[Phase 14 Natural-Loss Selective Review](2026-09-25/PHASE14_NATURAL_LOSS_SELECTIVE_REVIEW_20260925.md).
+Latest accounting is 4,203 cumulative calls, `$23.95888417140` confirmed,
+`$34.979327322900` unresolved, `$58.938211494300` exposure, and
+`$16.061788505700` available under `$75`.
 
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
@@ -429,7 +439,7 @@ telemetry, so it does not establish an efficiency/competence frontier.
 Do not rerun or prompt-tune blue. Keep the same evidence contract, current
 boundary, motor backend, and verifier. Continue in this order:
 
-1. retain Sol as default and keep Astra review shadow-only while collecting natural M2 holds or a fresh prospective Sol error;
+1. retain Sol as default and keep Astra review shadow-only while collecting a fresh live-native M2 boundary or prospective Sol error;
 2. treat the passed apple/category axis as broader fixture evidence, not general motor competence;
 3. retain the Sol failure, Astra correction, negative control, passed seed, and passed distractor together;
 4. preserve persistent policy residency and sparse SAM scheduling in the next
