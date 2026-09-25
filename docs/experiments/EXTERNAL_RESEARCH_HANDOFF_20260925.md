@@ -4,7 +4,7 @@
 
 **Public repository:** `AranKomat/physical-agent-harness`
 
-**Repository state before this handoff update:** `20f5c9b` (`Document exploratory grasp and lift gate`)
+**Repository state before this handoff update:** `852e580` (`Close Phase 10 semantic execution comparison`)
 
 **Operator-local experiment plan:** `PHYSICAL_AGENT_EXPERIMENT_SEQUENCE_HANDOFF_20260923.md`
 
@@ -33,6 +33,10 @@ The strongest completed results are:
 - an explicitly non-benchmark soda-can fixture completed a real grasp and 5 cm
   lift; evaluator-only scoring and an independent legal RGB-D/proprio verifier
   both passed;
+- GPT-6 Sol made all four bounded semantic motion choices correctly versus `2/4`
+  for fixed routing, and a subsequent event-driven recovery converted a missing
+  current-depth verification result from fixed `0/1` to GPT `1/1` through a fresh
+  stationary recapture;
 - a legal RGB-D voxel gate failed even under an all-history, zero-pose-error upper
   bound, closing the remaining derived-state hypothesis for strict clearance;
 - Behavior-Skill survives a small classical-to-policy handoff without an obvious
@@ -42,8 +46,8 @@ The strongest completed results are:
   candidate requires major base/torso staging through unobserved space.
 
 No current result establishes reliable radio completion, strict navigation,
-strictly safe manipulation, release/placement, a general motor policy, GPT task
-benefit, memory task benefit, or held-out robustness.
+strictly safe manipulation, release/placement, a general motor policy, GPT
+benchmark-task benefit, memory task benefit, or held-out robustness.
 
 ## Experimental Boundaries
 
@@ -76,7 +80,7 @@ action interface. Only one actuator owner may run at a time.
 | 9A. Proposal and gripper readiness | Proposal scope complete; execution partial | Exact hand geometry audited, GraspGen-X proposal path pinned, one offline candidate retained, and native empty-hand close/reopen passed 35/35 actions. | Contact calibration, payload stability, release, closer staging, and safe execution are not established. |
 | 9B-9D. Stage, grasp, verify/place | Exploratory grasp/lift integration passed; strict path blocked | A scripted development fixture completed 30/30 normal actions, retained a soda can, and lifted it 5 cm. Evaluator-only and legal RGB-D/proprio verification both passed. | Initialization was scripted, clearance stayed unknown, and release/place plus benchmark-valid staging remain untested. Strict execution remains blocked by Phases 5-7. |
 | 10. Recurrent GPT executive | Complete for frozen exploratory four-case scope | GPT-6 Sol scored `4/4` versus fixed routing's analytical `2/4`. All four packet-bound choices were executed for 30/30 actions and independently verified; both lifts rose 50.01 mm and both holds stayed within 0.011 mm. | Generalization beyond the scripted fixture remains untested. This is not benchmark success and strict clearance remains unknown. |
-| 11. Event-driven recovery | Protocol definition active | Phase 10 established a causal GPT physical benefit and unlocked this phase. The lift backend, legal verifier, and bounded recapture mechanics are available. | Predeclare one independently detected failure, execute GPT's bounded alternative, and require fresh verification of recovery. |
+| 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Not started at task level | Causal memory representations and replay checks exist. | Needs an executable memory-sensitive episode; answer-only ablations are insufficient. |
 | 13. Robustness/held-out expansion | Not started | Controlled identity cases and several simulator starts exist. | Requires a working base system before seeds, layouts, distractors, and tasks are meaningful. |
 | 14. Efficiency optimization | Not started as end-to-end study | Compact context and two-rate perception evidence provide candidates. | Optimize only after competence is demonstrated. |
@@ -330,21 +334,21 @@ score is GPT `4/4` versus fixed routing `2/4`, with four valid physical cases.
 The final score SHA-256 is
 `e242cbb680706018d47cb540e22b23c21ed8fc8a3acff4f296efe1c827291635`.
 
-The active experiment is now Phase 11 event-driven recovery. Use one predeclared
-failure class and do not broaden the architecture. A suitable first case is a
-completed lift whose first semantic verification is independently uncertain due
-to missing required current RGB-D evidence; GPT may request a bounded stationary
-recapture, and only fresh paired evidence may close recovery.
+Phase 11 is complete for the first predeclared failure class. A completed lift's
+first verification input lacked required current left-wrist depth; GPT requested a
+bounded stationary recapture, and fresh paired evidence closed recovery. See
+[Phase 11 Event-Driven Recovery](2026-09-25/PHASE11_EVENT_DRIVEN_RECOVERY_20260925.md).
 
-Run offline/doctor/native preflight before model calls. No paid GPT execution is
-authorized by this handoff, so declare a new call and cost scope before the live run.
-After a useful verified physical effect exists, continue in this order:
+The active experiment is now Phase 12 memory in execution. Freeze a genuinely
+memory-sensitive physical decision and compare M0 current evidence, M1 causal
+event/text history, and M2 selected historical visual evidence with the same motor,
+current evidence, action budget, and verifier. Actual decisions must execute. No
+paid GPT execution is authorized by this handoff; declare a new call and cost scope
+before live calls. Continue in this order:
 
-1. compact-V3 GPT executive versus the same frozen-policy control;
-2. event-driven recovery from a predeclared failure;
-3. M0/M1/routed-M2 memory comparison on the same executable episode;
-4. seeds, placements, distractors, and a held-out task;
-5. duty-cycle and model-cost optimization.
+1. M0/M1/M2 memory comparison on the same executable episode;
+2. seeds, placements, distractors, and a held-out task;
+3. duty-cycle and model-cost optimization.
 
 ## What Not To Repeat
 
