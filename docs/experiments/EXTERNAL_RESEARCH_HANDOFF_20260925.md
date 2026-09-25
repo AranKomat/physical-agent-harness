@@ -90,8 +90,8 @@ action interface. Only one actuator owner may run at a time.
 | 6. Strict target-directed base transit | Blocked | Exploratory target-directed transits and braking were executed and measured. | No transit is strictly admitted because external clearance is unknown. |
 | 7. Arm/torso planning and return | Partial mechanics; strict execution blocked | Native 10 cm outward endpoint, return endpoint, 60 holds, and 348 total actions passed. cuRobo construction and no-op planning work after adapter fixes. | Current legal observations do not cover the swept whole-body path. Qualified scene collision, wheel scope, and native planner execution remain open. |
 | 8. Matched hybrid A/B/C | Exploratory handoff-preservation subquestion complete | Four starts in balanced `BA/AB/BA/AB` order completed equal policy exposure with no immediate post-handoff away action and persistent current SAM candidates. | Neither condition succeeded, acquisition diverged before treatment, and no causal benefit was shown. Strict A/B/C remains blocked by Phases 5-7. |
-| 9A. Proposal and gripper readiness | Proposal scope complete; execution partial | Exact hand geometry audited, GraspGen-X proposal path pinned, one offline candidate retained, and native empty-hand close/reopen passed 35/35 actions. | Contact calibration, payload stability, release, closer staging, and safe execution are not established. |
-| 9B-9D. Stage, grasp, verify/place | Fixture compiler and exploratory grasp/lift/deposit integration passed; strict path blocked | Phase 9B now completes the public compiler/executor ownership path: 102/102 collision samples, 36/36 actions, stopped stage/return, 50.006 mm stage, and 0.009 mm return error. A scripted development fixture separately completed a verified 5 cm soda-can lift. A later task-native ashcan fixture completed all 82 close/lift/return/release/retreat actions, advanced exact task progress to 1/3, and received a supported legal-image Sol verdict matching native `Inside`. | Phase 9B used privileged fixture collision truth; initialization and destination staging in contact tasks were scripted, clearance stayed unknown, and autonomous placement plus benchmark-valid staging remain untested. Strict execution remains blocked by Phases 5-7. |
+| 9A. Proposal and gripper readiness | Proposal scope complete; execution partial | Exact hand geometry is audited; one pinned GraspGen-X run produced eight current right-wrist proposals, but all reachable learned paths failed floor or self-collision checks. A depth-cleaned analytic can candidate passes staged IK/path screens, with 430 visible target points in the closing sweep. Left and right native empty-hand close/reopen each pass 35/35 actions. | Contact calibration, payload stability, release, autonomous target selection, and strict safe execution are not established. |
+| 9B-9D. Stage, grasp, verify/place | Fixture integration passed; natural contact remains open | Phase 9B completes the public compiler/executor ownership path: 102/102 collision samples, 36/36 actions, stopped stage/return, 50.006 mm stage, and 0.009 mm return error. Scripted fixtures separately completed a verified 5 cm soda-can lift and one stable task-native ashcan deposit. A natural trash boundary now has a fresh-evidence analytic candidate whose pregrasp, grasp, and lift all pass the frozen exploratory sampled screens with 10-17 cm floor margins and no open-hand target penetration. | The natural candidate has not been executed. Its target box was assisted, external clearance remains exploratory/unknown, and the 10 mm robot self-filter is not a strict certificate. Next is one fresh same-episode ActionExecutor contact/short-lift attempt; strict execution remains blocked by Phases 5-7. |
 | 10. Recurrent GPT executive | Complete for frozen exploratory four-case scope | GPT-6 Sol scored `4/4` versus fixed routing's analytical `2/4`. All four packet-bound choices were executed for 30/30 actions and independently verified; both lifts rose 50.01 mm and both holds stayed within 0.011 mm. | Generalization beyond the scripted fixture remains untested. This is not benchmark success and strict clearance remains unknown. |
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
@@ -344,6 +344,20 @@ Key private Phase 9B exploratory evidence:
 - `runs/development-grasp-lift-20260925-r1/legal-visual-verification.json`
   SHA-256
   `b9682781087a864f2798fa92c93a3b0324c9f686f0658083b443c3e5e9714af3`.
+
+Key private natural Phase 9D readiness evidence:
+
+- right-gripper empty-hand receipt SHA-256
+  `3dfcb376bbc4600cbab4343307b12bb987dfb91244c76d5a0870de32cfed0fef`;
+- depth-cleaned target receipt SHA-256
+  `a20e33184bb30f996302f7276083ad57a237f0318abcd4fc9d2d0b0fc71e25a5`;
+- staged sequential IK receipt SHA-256
+  `27e3791bf7bf58fa52cf717950d39ae8087494578323f38a4b753ff12d90df85`;
+- final exploratory sequential path receipt SHA-256
+  `0a98ccd5aef7129441a44b6b0bafef266dad7cfef42b9d14c31092ca3e8cb69f`;
+- [Phase 9D Natural Grasp Readiness](2026-09-26/PHASE9D_NATURAL_GRASP_READINESS_20260926.md)
+  records the negative learned candidates, corrected foreground geometry, and
+  remaining contact/lift gate.
 
 Current paid-call accounting after the Halloween candle visual-verifier attempt:
 
