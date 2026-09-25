@@ -23,47 +23,28 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
 | 13 | Controlled initial scope complete with mixed evidence: blue failed under Sol, orange second-seed and composite-distractor cohorts passed; Astra corrected the exact blue packet and its post-decision lift verified; broad layout/task robustness remains open |
-| 14 | Initial prospective selective-review gate complete: the earlier six-case frozen study scored Sol `5/6` and selective review `6/6`; a new preregistered strawberry positive/negative pair scored `2/2` for both all-Sol and selective review, with one correct negative Astra confirmation and no false correction. Sol remains default, Astra remains shadow-only, and active-workload VLA/perception/energy duty remains unmeasured |
+| 14 | Initial prospective selective-review gate and frozen active-workload duty accounting complete. The earlier six-case study scored Sol `5/6` and selective review `6/6`; the preregistered strawberry pair scored `2/2` for both, with no false correction. Across eight Phase 8 runs, Behavior-Skill supplied 92.60% of action time, warm chunks took about 157--160 ms median, and sparse SAM scheduling avoided 89.48% of per-action-boundary invocations. Cache hits, energy, broader false-correction risk, and efficiency while succeeding remain unmeasured. Sol stays default and Astra shadow-only. |
 
-1. Treat the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
-   as the end of the dormant-sensor search. The pinned default R1Pro exposes only
-   three fixed RGB-D cameras and selected proprioception to the challenge policy;
-   generic simulator LiDAR/contact internals are not legal observation channels.
-   Choose strict-blocked or explicitly exploratory execution before more motion.
-2. Freeze the frame-704 grasp batch. [Dense-target path screening](2026-09-24/GRASP_CLOSURE_SUPPORT.md)
-   leaves candidate 0 only. Candidate 1 overlaps at its open endpoint; candidate
-   2 overlaps nine points at path fraction 0.9375. Do not revive coarse-depth passes.
-3. Return the execution critical path to staging/sensing/stopping. The surviving
-   target exceeds fixed-torso reach; current views cannot qualify whole-body motion.
-   [Coverage/reach evidence](2026-09-24/GRASP_COVERAGE_STAGING.md) remains a blocker.
-4. Keep the [reverse-stop result](2026-09-24/REVERSE_STOP_PROTOCOL.md) as directional
-   validation only. Do not latch earlier raw passes across later failures or
-   replace runtime authority with uncalibrated shadow output.
-5. The user approved bounded exploratory task trials alongside strict qualification.
-   Such trials do not complete strict phases. The first resumed attempt completed
-   768 policy actions but zero classical actions: see
-   [the preserved launch failures](2026-09-24/EXPLORATORY_TASK_RESTART.md).
-   Connect current source-bound SAM geometry before another transit rollout;
-   the legacy detection-only owner cannot supply the required metric masks.
-   The [live SAM probe](2026-09-24/SAM_LIVE_TRANSIT.md) now completes acquisition,
-   6.04 cm measured approach and experimental final stop, with 119 bound captures.
-   Strict clearance remains unknown; no manipulation or task success. Continue
-   toward useful reachable staging, not another identical short probe.
-6. The [Phase 3 prospective shadow replay](2026-09-24/PHASE3_PROSPECTIVE_SHADOW_REPLAY_20260924.md)
-   passes the zero-call mechanics gate on 119 retained moving frames. Production
-   defaults selected four jobs; a stress profile explicitly superseded three of
-   thirteen submissions. Freeze those four production boundaries for the next
-   paid run. Do not change thresholds after seeing semantic outputs or claim
-   fixture responses demonstrate usefulness.
-7. Phase 4A is now [preregistered](2026-09-24/PHASE4A_FROZEN_PROTOCOL_20260924.md)
-   on those same four held-out views: two radio-negative, one clipped-positive
-   and one clear-positive. Preserve its prompts, 30 approximate reference
-   objects, alias list and scoring. The Phase 3 V3 calls and later inventory calls
-   remain independently budgeted; do not infer combined authorization.
-8. Do not repeat easy association tests, the blind observer sweep, identical
-   calibration pulses, or more grasp batches. The controlled Phase 2 gate is
-   complete; proceed to the frozen Phase 3 real-response run under an explicit
-   paid-call budget while retaining natural identity trials for later robustness.
+1. Preserve the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
+   and [legal voxel gate](2026-09-25/PHASE5E_LEGAL_VOXEL_GATE_20260925.md) as the
+   strict-clearance conclusion for the default embodiment. Continue only under
+   the explicitly exploratory track unless a materially different legal current
+   clearance authority becomes available.
+2. Freeze the retained GraspGen-X batch and nearby Phase 8 handoff diagnostics.
+   The surviving proposal needs staging through unobserved space, and the balanced
+   eight-run cohort showed handoff preservation but no task success or benefit.
+3. Use the [active-neural-duty analysis](2026-09-25/PHASE14_ACTIVE_NEURAL_DUTY_20260925.md)
+   as the current efficiency baseline. Keep Behavior-Skill resident to avoid
+   approximately 40-second cold starts and preserve sparse SAM scheduling.
+4. Add cache-hit counters and time-aligned device-power telemetry prospectively
+   to the next workload that can achieve at least one task success. Do not infer
+   either metric or an efficiency/competence frontier from the failed Phase 8 cohort.
+5. Keep Sol as the default executive. Collect additional prospective, natural M2
+   hold decisions and run Astra only in shadow review. Record both corrections and
+   false corrections before granting any reviewer automatic motion authority.
+6. Do not repeat easy association tests, blind observer sweeps, identical
+   calibration pulses, SAM wording sweeps, or more grasp batches without a new
+   phase-level hypothesis.
 
 ## Evidence History
 
