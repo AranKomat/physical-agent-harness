@@ -23,7 +23,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
 | 13 | Controlled initial scope complete with mixed evidence: blue failed under Sol, orange second-seed and composite-distractor cohorts passed; Astra corrected the exact blue packet and its post-decision lift verified; broad layout/task robustness remains open |
-| 14 | Initial prospective selective-review gate and frozen active-workload duty accounting complete. The earlier six-case study scored Sol `5/6` and selective review `6/6`; the preregistered strawberry pair scored `2/2` for both, with no false correction. Across eight Phase 8 runs, Behavior-Skill supplied 92.60% of action time, warm chunks took about 157--160 ms median, and sparse SAM scheduling avoided 89.48% of per-action-boundary invocations. Cache hits, energy, broader false-correction risk, and efficiency while succeeding remain unmeasured. Sol stays default and Astra shadow-only. |
+| 14 | Controlled prospective selective-review and frozen active-workload duty accounting are complete. The earlier six-case study scored Sol `5/6` and selective review `6/6`; two preregistered strawberry cohorts now score `6/6` for both. Astra preserved four correct Sol holds with zero false corrections. Across eight Phase 8 runs, Behavior-Skill supplied 92.60% of action time, warm chunks took about 157--160 ms median, and sparse SAM scheduling avoided 89.48% of per-action-boundary invocations. Natural review triggers, cache hits, energy, and efficiency while succeeding remain unmeasured. Sol stays default and Astra shadow-only. |
 
 1. Preserve the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
    and [legal voxel gate](2026-09-25/PHASE5E_LEGAL_VOXEL_GATE_20260925.md) as the
@@ -39,9 +39,10 @@ immutable evidence, including failed and subsequently invalidated attempts.
 4. Add cache-hit counters and time-aligned device-power telemetry prospectively
    to the next workload that can achieve at least one task success. Do not infer
    either metric or an efficiency/competence frontier from the failed Phase 8 cohort.
-5. Keep Sol as the default executive. Collect additional prospective, natural M2
-   hold decisions and run Astra only in shadow review. Record both corrections and
-   false corrections before granting any reviewer automatic motion authority.
+5. Keep Sol as the default executive. The controlled category cohorts now contain
+   four correct Sol holds and zero Astra false corrections; collect natural M2 hold
+   decisions or a fresh Sol error next. Keep Astra in shadow review until corrections
+   and false corrections are measured outside scripted counterfactual prompts.
 6. Do not repeat easy association tests, blind observer sweeps, identical
    calibration pulses, SAM wording sweeps, or more grasp batches without a new
    phase-level hypothesis.

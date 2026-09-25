@@ -93,7 +93,7 @@ action interface. Only one actuator owner may run at a time.
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
 | 13. Robustness/held-out expansion | Controlled initial scope complete; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a provenance-preserving composite distractor. Astra then corrected the exact frozen blue M2 packet, and its post-decision 50.014 mm lift verified. | Broad layouts/tasks remain untested. Preserve the mixed result; do not rewrite the original Sol failure. |
-| 14. Efficiency optimization | Initial selective-review and active-duty scopes complete; broad scope open | Compact context remains default. The six-case frozen study scored Sol `5/6` and selective review `6/6`; the prospective strawberry pair scored `2/2` for both. Across eight Phase 8 runs, Behavior-Skill supplied 92.60% of action time, warm chunks took about 157--160 ms median, and sparse SAM scheduling avoided 89.48% of per-action-boundary invocations with zero unavailable frame reads. | Retain Sol as default and Astra as shadow-only review for M2 visual-memory holds. Cache hits, energy, broader false-correction risk, automatic authority, and efficiency while achieving task success remain untested. |
+| 14. Efficiency optimization | Controlled selective-review and active-duty scopes complete; broad scope open | Compact context remains default. The six-case frozen study scored Sol `5/6` and selective review `6/6`; two prospective strawberry cohorts scored `6/6` for both. Astra preserved four correct Sol holds with zero false corrections. Across eight Phase 8 runs, Behavior-Skill supplied 92.60% of action time, warm chunks took about 157--160 ms median, and sparse SAM scheduling avoided 89.48% of per-action-boundary invocations with zero unavailable frame reads. | Retain Sol as default and Astra as shadow-only review for M2 visual-memory holds. Natural review triggers, cache hits, energy, automatic authority, and efficiency while achieving task success remain untested. |
 
 ## Major Positive Results
 
@@ -405,9 +405,16 @@ call, cost `$0.02345975` total, and produced no false correction. The source
 strawberry lift rose 49.931 mm by evaluator scoring and 50.023 mm by legal RGB-D
 plus robot-only FK. See
 [Phase 14 Prospective Selective Review](2026-09-25/PHASE14_PROSPECTIVE_SELECTIVE_REVIEW_20260925.md).
-Latest accounting is 4,194 cumulative calls, `$23.87720292140` confirmed,
-`$34.979327322900` unresolved, `$58.856530244300` exposure, and
-`$16.143469755700` available under `$75`.
+
+A second prospective cohort used a separately executed and legally verified
+strawberry source at seed 31. Sol scored `4/4`; Astra reviewed the three correct
+negative holds and preserved all three. Across both prospective cohorts, Sol and
+selective review score `6/6`, with four correct holds reviewed and zero false
+corrections. The second cohort cost `$0.06278075`; see
+[Phase 14 Second Prospective Selective Review](2026-09-25/PHASE14_SECOND_PROSPECTIVE_SELECTIVE_REVIEW_20260925.md).
+Latest accounting is 4,201 cumulative calls, `$23.93998367140` confirmed,
+`$34.979327322900` unresolved, `$58.919310994300` exposure, and
+`$16.080689005700` available under `$75`.
 
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
@@ -422,7 +429,7 @@ telemetry, so it does not establish an efficiency/competence frontier.
 Do not rerun or prompt-tune blue. Keep the same evidence contract, current
 boundary, motor backend, and verifier. Continue in this order:
 
-1. retain Sol as default and keep Astra review shadow-only while collecting broader natural M2 holds;
+1. retain Sol as default and keep Astra review shadow-only while collecting natural M2 holds or a fresh prospective Sol error;
 2. treat the passed apple/category axis as broader fixture evidence, not general motor competence;
 3. retain the Sol failure, Astra correction, negative control, passed seed, and passed distractor together;
 4. preserve persistent policy residency and sparse SAM scheduling in the next
