@@ -37,6 +37,9 @@ The strongest completed results are:
   for fixed routing, and a subsequent event-driven recovery converted a missing
   current-depth verification result from fixed `0/1` to GPT `1/1` through a fresh
   stationary recapture;
+- a controlled memory-in-execution comparison produced verified progress of M0
+  `0/1`, M1 `0/1`, and M2 `1/1`, with all three packet-bound decisions physically
+  executed and independently verified;
 - a legal RGB-D voxel gate failed even under an all-history, zero-pose-error upper
   bound, closing the remaining derived-state hypothesis for strict clearance;
 - Behavior-Skill survives a small classical-to-policy handoff without an obvious
@@ -47,7 +50,7 @@ The strongest completed results are:
 
 No current result establishes reliable radio completion, strict navigation,
 strictly safe manipulation, release/placement, a general motor policy, GPT
-benchmark-task benefit, memory task benefit, or held-out robustness.
+benchmark-task benefit, general memory benefit, or held-out robustness.
 
 ## Experimental Boundaries
 
@@ -81,7 +84,7 @@ action interface. Only one actuator owner may run at a time.
 | 9B-9D. Stage, grasp, verify/place | Exploratory grasp/lift integration passed; strict path blocked | A scripted development fixture completed 30/30 normal actions, retained a soda can, and lifted it 5 cm. Evaluator-only and legal RGB-D/proprio verification both passed. | Initialization was scripted, clearance stayed unknown, and release/place plus benchmark-valid staging remain untested. Strict execution remains blocked by Phases 5-7. |
 | 10. Recurrent GPT executive | Complete for frozen exploratory four-case scope | GPT-6 Sol scored `4/4` versus fixed routing's analytical `2/4`. All four packet-bound choices were executed for 30/30 actions and independently verified; both lifts rose 50.01 mm and both holds stayed within 0.011 mm. | Generalization beyond the scripted fixture remains untested. This is not benchmark success and strict clearance remains unknown. |
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
-| 12. Memory in execution | Not started at task level | Causal memory representations and replay checks exist. | Needs an executable memory-sensitive episode; answer-only ablations are insufficient. |
+| 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
 | 13. Robustness/held-out expansion | Not started | Controlled identity cases and several simulator starts exist. | Requires a working base system before seeds, layouts, distractors, and tasks are meaningful. |
 | 14. Efficiency optimization | Not started as end-to-end study | Compact context and two-rate perception evidence provide candidates. | Optimize only after competence is demonstrated. |
 
@@ -339,16 +342,19 @@ first verification input lacked required current left-wrist depth; GPT requested
 bounded stationary recapture, and fresh paired evidence closed recovery. See
 [Phase 11 Event-Driven Recovery](2026-09-25/PHASE11_EVENT_DRIVEN_RECOVERY_20260925.md).
 
-The active experiment is now Phase 12 memory in execution. Freeze a genuinely
-memory-sensitive physical decision and compare M0 current evidence, M1 causal
-event/text history, and M2 selected historical visual evidence with the same motor,
-current evidence, action budget, and verifier. Actual decisions must execute. No
-paid GPT execution is authorized by this handoff; declare a new call and cost scope
-before live calls. Continue in this order:
+Phase 12 is complete for one controlled visual-memory boundary. M0 and M1 held;
+M2 used the historical visual evidence and executed a verified lift. See
+[Phase 12 Memory In Execution](2026-09-25/PHASE12_MEMORY_EXECUTION_20260925.md).
 
-1. M0/M1/M2 memory comparison on the same executable episode;
-2. seeds, placements, distractors, and a held-out task;
-3. duty-cycle and model-cost optimization.
+The active experiment is now Phase 13 robustness. Expand one axis at a time,
+starting with a second can color or visual distractor and then a second simulator
+seed. Keep the same evidence contract, current boundary, motor backend, and verifier
+so failures remain attributable. Continue in this order:
+
+1. replicate the visual-memory result across one new attribute/distractor axis;
+2. replicate across a second simulator seed;
+3. only then consider layout or task variation;
+4. duty-cycle and model-cost optimization after useful behavior survives.
 
 ## What Not To Repeat
 
