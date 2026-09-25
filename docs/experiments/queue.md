@@ -22,7 +22,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
-| 13 | Controlled scope now includes mixed attributes, seed, distractor, tracker reset, native-instance, partial/full occlusion, task/object transfer, and held-out manipulation diagnostics. The native-instance cohort passed ID 302 but failed dark ID 303. Fresh ID 304 safely aborted under full occlusion. Soda-can/`picking_up_trash` completed a separately verified 50.010 mm lift. The scripted Halloween candle completed a reproducible 50.004 mm intermediate lift, but its geometry prevented release; the available pumpkins are too large. A smaller soda can released cleanly. Adding a fixed support prevented its fall and produced exact final support contact, but the retreat moved the can 22.963 mm and achieved only 31.998 mm separation, narrowly failing frozen placement limits. A replacement Astra candle lift-only check is preregistered but credential-blocked. Broader layouts, qualified placements, complete tasks, and benchmark-valid held-out workflows remain open. |
+| 13 | Controlled scope now includes mixed attributes, seed, distractor, tracker reset, native-instance, partial/full occlusion, task/object transfer, and held-out manipulation diagnostics. The native-instance cohort passed ID 302 but failed dark ID 303. Fresh ID 304 safely aborted under full occlusion. Soda-can/`picking_up_trash` completed a separately verified 50.010 mm lift. The scripted Halloween candle completed a reproducible 50.004 mm intermediate lift, but its geometry prevented release; the available pumpkins are too large. A smaller soda can released cleanly. A fixed support prevented its fall but the retreat narrowly failed frozen placement limits. A subsequent one-run task-native ashcan fixture passed all frozen criteria: 82/82 actions, clean release, stable native `Inside`, and exact progress from 0/3 to 1/3 cans. It remains scripted, exploratory, clearance-unknown, and nonbenchmark. A replacement Astra candle lift-only check is preregistered but credential-blocked. Broader layouts, autonomous destination selection, qualified placements, complete tasks, and benchmark-valid held-out workflows remain open. |
 | 14 | Initial selective review, neural-duty accounting, and successful classical plus learned-perception power baselines are complete. The SAM-reset lift used 0.1150 Wh over its 4.015 s post-close inference/action window; cold SAM/simulator startup used 3.2405 Wh over 318.088 s. The exact descriptor cache recorded 2 hits and 2 misses, but this was not neural embedding reuse. Learned-policy/GPT energy while succeeding, neural feature-cache savings, broader live-native review, and automatic Astra authority remain unmeasured. Sol stays default and Astra shadow-only. |
 
 1. Preserve the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
@@ -80,6 +80,12 @@ immutable evidence, including failed and subsequently invalidated attempts.
    qualified placement. The frozen run missed retreat-motion and final-separation
    limits. Require a new independently reviewed support-aware trajectory through
    the execution boundary; do not tune this fixture.
+13. Preserve the [one-can ashcan deposit](2026-09-25/PHASE13_ONE_CAN_ASHCAN_DEPOSIT_20260925.md)
+   as the first controlled grasp/lift/release result with stable task-native
+   `Inside` progress. It qualifies one scripted exploratory subgoal, not autonomous
+   placement or benchmark success. Do not tune or repeat the fixture; move the next
+   manipulation gate to legal destination selection and native Action Compiler
+   execution.
 
 The [completed Phase 4A comparison](2026-09-25/PHASE4A_DISCOVERY_PROMPT_COMPARISON_20260925.md)
 preserves the original unresolved timeout and completes the semantic denominator

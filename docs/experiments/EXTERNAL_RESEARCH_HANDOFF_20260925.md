@@ -511,6 +511,17 @@ the next gate to a new independently reviewed support-aware trajectory through t
 Action Compiler execution boundary. See
 [Phase 13 Supported Place Diagnostic](2026-09-25/PHASE13_SUPPORTED_PLACE_DIAGNOSTIC_20260925.md).
 
+A final preregistered one-run fixture replaced the artificial pedestal with the
+task-native `ashcan.n.01_1`, scripted beneath the held can before the first legal
+observation. It completed 82/82 actions, lifted 50.015 mm, returned within
+0.822 mm, released cleanly, retreated 50.001 mm, and left the can stably `Inside`
+across post-retreat and post-settle captures with 0.001 mm settling drift. Exact
+task progress became 1/3 cans; native full-task success correctly remained false.
+This is the first controlled semantically useful deposit, but it is still a
+scripted, clearance-unknown, nonbenchmark fixture and does not close native Action
+Compiler execution. Do not repeat or tune it. See
+[Phase 13 One-Can Ashcan Deposit](2026-09-25/PHASE13_ONE_CAN_ASHCAN_DEPOSIT_20260925.md).
+
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
 inference chunks, and 1,048 source-bound SAM results. Behavior-Skill supplied
