@@ -75,8 +75,8 @@ action interface. Only one actuator owner may run at a time.
 | 8. Matched hybrid A/B/C | Exploratory handoff-preservation subquestion complete | Four starts in balanced `BA/AB/BA/AB` order completed equal policy exposure with no immediate post-handoff away action and persistent current SAM candidates. | Neither condition succeeded, acquisition diverged before treatment, and no causal benefit was shown. Strict A/B/C remains blocked by Phases 5-7. |
 | 9A. Proposal and gripper readiness | Proposal scope complete; execution partial | Exact hand geometry audited, GraspGen-X proposal path pinned, one offline candidate retained, and native empty-hand close/reopen passed 35/35 actions. | Contact calibration, payload stability, release, closer staging, and safe execution are not established. |
 | 9B-9D. Stage, grasp, verify/place | Exploratory grasp/lift integration passed; strict path blocked | A scripted development fixture completed 30/30 normal actions, retained a soda can, and lifted it 5 cm. Evaluator-only and legal RGB-D/proprio verification both passed. | Initialization was scripted, clearance stayed unknown, and release/place plus benchmark-valid staging remain untested. Strict execution remains blocked by Phases 5-7. |
-| 10. Recurrent GPT executive | Partial physical cohort: 3/4 cases valid | GPT-6 Sol made three valid packet-bound choices: lift, hold, and hold. All three were executed for 30/30 actions and independently verified; the lift rose 50.01 mm and both holds stayed within 0.011 mm. Fixed routing is analytically `2/4`. | The blue-rule/blue-can response was truncated at the 128-token cap and is inadmissible. Run one separately approved 256-token replacement, then execute/verify that case and score all four. |
-| 11. Event-driven recovery | Not started; protocol preparation gated on Phase 10 | Failure history, verifier contracts, and a recoverable scripted lift backend exist. | Define one predeclared, independently detectable failure only after Phase 10 establishes valid causal GPT execution benefit. |
+| 10. Recurrent GPT executive | Complete for frozen exploratory four-case scope | GPT-6 Sol scored `4/4` versus fixed routing's analytical `2/4`. All four packet-bound choices were executed for 30/30 actions and independently verified; both lifts rose 50.01 mm and both holds stayed within 0.011 mm. | Generalization beyond the scripted fixture remains untested. This is not benchmark success and strict clearance remains unknown. |
+| 11. Event-driven recovery | Protocol definition active | Phase 10 established a causal GPT physical benefit and unlocked this phase. The lift backend, legal verifier, and bounded recapture mechanics are available. | Predeclare one independently detected failure, execute GPT's bounded alternative, and require fresh verification of recovery. |
 | 12. Memory in execution | Not started at task level | Causal memory representations and replay checks exist. | Needs an executable memory-sensitive episode; answer-only ablations are insufficient. |
 | 13. Robustness/held-out expansion | Not started | Controlled identity cases and several simulator starts exist. | Requires a working base system before seeds, layouts, distractors, and tasks are meaningful. |
 | 14. Efficiency optimization | Not started as end-to-end study | Compact context and two-rate perception evidence provide candidates. | Optimize only after competence is demonstrated. |
@@ -281,11 +281,11 @@ Key private Phase 9B exploratory evidence:
 
 Paid-call accounting after the partial Phase 10 decision cohort:
 
-- reservations/cumulative count: `4,164`;
-- confirmed cost: `$23.69274242140`;
+- reservations/cumulative count: `4,165`;
+- confirmed cost: `$23.69443742140`;
 - unresolved holds: `$34.979327322900`;
-- total exposure: `$58.672069744300`;
-- remaining under the campaign `$75` ceiling: `$16.327930255700`.
+- total exposure: `$58.673764744300`;
+- remaining under the campaign `$75` ceiling: `$16.326235255700`.
 
 The added `$0.0138735` reservation belongs to a GPT-6 Sol Flex request that
 returned an upstream OpenRouter HTTP 429. The cohort stopped immediately, no
@@ -293,11 +293,10 @@ retry was attempted, no structured decision was accepted, and no robot action
 occurred. Preserve the unresolved hold unless provider accounting establishes a
 settlement.
 
-The fresh cohort used four authorized calls. Three decisions are valid. The
-blue-rule/blue-can response reached the provider and was billed, but its JSON and
-packet ID were truncated at the 128-token output cap. It is not accepted or
-repaired. No new paid calls are authorized by this handoff. A 256-token
-replacement requires a newly declared cumulative `4,165` ceiling and local cap.
+The blue-rule/blue-can response that hit the 128-token cap remains rejected. Its
+separately approved 256-token replacement completed cleanly; the merged decision
+report records the discarded attempt and zero automatic retries. No additional
+paid calls are authorized by this handoff.
 
 ## Recommended Next Decision
 
@@ -326,20 +325,16 @@ The development physical-effect prerequisite is now satisfied by the bounded
 soda-can grasp-and-lift fixture. It remains exploratory, with `clearance=unknown`
 and `motion_qualified=false`; it is not BEHAVIOR benchmark success.
 
-The active experiment is the frozen four-case compact-V3 recurrent GPT semantic
-choice cohort. Its protocol file SHA-256 is
-`73fdfb41eb5e98dbc7e1979367b686a200ab72fbf9747ac05763401753ca417d` and its
-internal protocol hash is
-`e68dfb2744e0028b2fe8fdcfa41e8fcdf8385d2168650065f452feba8862e553`.
-The two current images and all four packets validate without network calls.
-Hold the initial fixture, option set, budgets, verifier boundary, and evidence
-rules fixed, and require a difference in independently verified physical outcome
-rather than model prose.
+The frozen four-case compact-V3 recurrent GPT comparison is complete. The final
+score is GPT `4/4` versus fixed routing `2/4`, with four valid physical cases.
+The final score SHA-256 is
+`e242cbb680706018d47cb540e22b23c21ed8fc8a3acff4f296efe1c827291635`.
 
-A valid 256-token replacement is still needed for order 2. It requires an
-explicit `4,165` cumulative ceiling and a separately declared local cost cap.
-The campaign-wide `$75` ceiling and every unresolved hold remain in force. Do
-not repair the truncated response or rerun any valid case.
+The active experiment is now Phase 11 event-driven recovery. Use one predeclared
+failure class and do not broaden the architecture. A suitable first case is a
+completed lift whose first semantic verification is independently uncertain due
+to missing required current RGB-D evidence; GPT may request a bounded stationary
+recapture, and only fresh paired evidence may close recovery.
 
 Run offline/doctor/native preflight before model calls. No paid GPT execution is
 authorized by this handoff, so declare a new call and cost scope before the live run.
