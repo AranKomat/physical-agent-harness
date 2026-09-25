@@ -86,7 +86,7 @@ action interface. Only one actuator owner may run at a time.
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
 | 13. Robustness/held-out expansion | Controlled initial scope complete; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a provenance-preserving composite distractor. Astra then corrected the exact frozen blue M2 packet, and its post-decision 50.014 mm lift verified. | Broad layouts/tasks remain untested. Preserve the mixed result; do not rewrite the original Sol failure. |
-| 14. Efficiency optimization | Ready for one selective-model gate | Compact context remains the default. Sol handled routine and orange cases; Astra corrected the ambiguous blue case at 4.35x model cost. | Test one negative M2 Astra review before adopting Sol-to-Astra escalation. Broader end-to-end efficiency remains untested. |
+| 14. Efficiency optimization | Controlled selective-model gate complete; broad scope open | Compact context remains default. On one frozen positive/negative M2 pair, Sol scored `1/2`; Astra scored `2/2` without a false positive. | Retain Sol as default. Astra is only a review candidate for ambiguous M2 holds; two cases do not validate an automatic router. Broader end-to-end efficiency remains untested. |
 
 ## Major Positive Results
 
@@ -359,13 +359,18 @@ transport attempt remained incomplete and is not a semantic result. See
 Astra then selected the correct lift on the exact frozen blue M2 packet where Sol
 held, and a disclosed post-decision execution verified a 50.014 mm lift. See
 [Phase 13 Sol-Astra Blue Comparator](2026-09-25/PHASE13_SOL_ASTRA_BLUE_COMPARATOR_20260925.md).
+The frozen negative control then reused the blue historical image while requiring
+orange. Both Sol and Astra correctly held. Across the positive/negative pair, Sol
+scored `1/2` and Astra `2/2`; this supports targeted Astra review but not automatic
+routing. See
+[Phase 14 Selective Model Gate](2026-09-25/PHASE14_SELECTIVE_MODEL_GATE_20260925.md).
 Do not rerun or prompt-tune blue. Keep the same evidence contract, current
 boundary, motor backend, and verifier. Continue in this order:
 
-1. test one frozen negative M2 Sol/Astra case before enabling selective escalation;
-2. then either close the controlled scope or move to one broader layout/task axis;
-3. retain the Sol failure, Astra correction, passed seed, and passed distractor together;
-4. duty-cycle and model-cost optimization after useful behavior survives.
+1. retain Sol as the default and log Astra review as shadow-only until more cases exist;
+2. move to one broader layout/task axis rather than tuning the completed pair;
+3. retain the Sol failure, Astra correction, negative control, passed seed, and passed distractor together;
+4. broaden duty-cycle and model-cost optimization only after useful behavior survives.
 
 ## What Not To Repeat
 
