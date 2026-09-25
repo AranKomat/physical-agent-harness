@@ -364,6 +364,22 @@ orange. Both Sol and Astra correctly held. Across the positive/negative pair, So
 scored `1/2` and Astra `2/2`; this supports targeted Astra review but not automatic
 routing. See
 [Phase 14 Selective Model Gate](2026-09-25/PHASE14_SELECTIVE_MODEL_GATE_20260925.md).
+The next broader object/task axis also passed. The fixture changed from a soda can
+under `picking_up_trash` to an apple under the official `freeze_fruit` task while
+retaining the fixed 5 cm grasp/lift trajectory. The source apple lift and the
+category-memory `M0/M1/M2` executions all passed: Sol selected
+`hold/hold/lift`, the legal verifier measured a 50.016 mm M2 lift, and the final
+comparison scored `0/1, 0/1, 1/1`. See
+[Phase 13 Apple Category And Task Replication](2026-09-25/PHASE13_APPLE_CATEGORY_TASK_REPLICATION_20260925.md).
+This broadens object/category evidence but does not establish general motor or
+`freeze_fruit` benchmark competence because initialization and trajectory remained
+scripted.
+
+Latest paid-call accounting after the apple decisions is 4,187 cumulative calls,
+`$23.77952692140` confirmed, `$34.979327322900` unresolved,
+`$58.758854244300` total exposure, and `$16.241145755700` available under the
+retained `$75` ceiling. The three apple decisions cost `$0.0087415`; physical
+execution made no additional paid calls.
 Do not rerun or prompt-tune blue. Keep the same evidence contract, current
 boundary, motor backend, and verifier. Continue in this order:
 
