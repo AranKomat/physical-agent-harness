@@ -20,7 +20,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 5 | Partial: localization/stop diagnostics pass their declared scope, and the native sensor-authority audit confirms there is no unused default R1Pro LiDAR/range/contact/active-camera channel; fixed and custom-camera screens cannot certify even a 5 mm segment, so a materially different legal current-clearance method or embodiment is required |
 | 6-7 | Exploratory base transit and arm endpoint/return mechanics completed; strict base transit and arm staging/return remain unqualified on external clearance |
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
-| 9 | Phase 9A is complete for proposal-only research, including native empty-hand aperture tracking. Phase 13 separately demonstrated a scripted exploratory grasp/lift/release/deposit, but Phase 9B Action Compiler execution remains unqualified: three retained attempts executed zero actions, ending at an OmniGibson/cuRobo/Warp runtime boundary. |
+| 9 | Phase 9A is complete for proposal-only research, including native empty-hand aperture tracking. Phase 9B's fixture-domain Action Compiler path now passes: 102/102 collision samples, 36/36 actions through `compile_catalog` and `ActionExecutor`, completed stage/return receipts, and independently measured 50.006 mm stage with 0.009 mm return error. Phase 13 separately demonstrated a scripted exploratory grasp/lift/release/deposit. Strict legal clearance, autonomous grasp/contact execution, and benchmark-valid manipulation remain unqualified. |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
 | 13 | Controlled scope now includes mixed attributes, seed, distractor, tracker reset, native-instance, partial/full occlusion, task/object transfer, and held-out manipulation diagnostics. The native-instance cohort passed ID 302 but failed dark ID 303. Fresh ID 304 safely aborted under full occlusion. Soda-can/`picking_up_trash` completed a separately verified 50.010 mm lift. The scripted Halloween candle completed a reproducible 50.004 mm intermediate lift, but its geometry prevented release; the available pumpkins are too large. A smaller soda can released cleanly. A fixed support prevented its fall but the retreat narrowly failed frozen placement limits. A subsequent one-run task-native ashcan fixture passed all frozen criteria: 82/82 actions, clean release, stable native `Inside`, and exact progress from 0/3 to 1/3 cans. It remains scripted, exploratory, clearance-unknown, and nonbenchmark. A later natural `picking_up_trash` trial gave pinned Behavior-Skill 1,536 actions using its canonical skills: it navigated close to a soda can but kept both grippers fully open, ending false/Q0. The Astra candle lift-only call settled, but a storage failure lost its response; the frozen no-retry protocol leaves its legal visual criterion unavailable. Broader layouts, autonomous destination selection, grasp-capable natural execution, qualified placements, complete tasks, and benchmark-valid held-out workflows remain open. |
 | 14 | Initial selective review, neural-duty accounting, and successful classical plus learned-perception power baselines are complete. The SAM-reset lift used 0.1150 Wh over its 4.015 s post-close inference/action window; cold SAM/simulator startup used 3.2405 Wh over 318.088 s. The exact descriptor cache recorded 2 hits and 2 misses, but this was not neural embedding reuse. Learned-policy/GPT energy while succeeding, neural feature-cache savings, broader live-native review, and automatic Astra authority remain unmeasured. Sol stays default and Astra shadow-only. |
@@ -86,13 +86,13 @@ immutable evidence, including failed and subsequently invalidated attempts.
    placement or benchmark success. Do not tune or repeat the fixture; move the next
    manipulation gate to legal destination selection and native Action Compiler
    execution.
-14. Preserve the [Phase 9B compiled stage/return result](2026-09-25/PHASE9B_NATIVE_COMPILED_STAGE_RETURN_20260925.md)
-   as a terminal zero-action infrastructure result for the frozen fixture. The
-   pinned cuRobo extension imports, but Isaac Sim substitutes a bundled Warp
-   runtime that is uninitialized during full-scene collision construction. Do
-   not rerun or bypass collision review. Any future compiler experiment needs a
-   separately validated Warp lifecycle and error persistence before simulator
-   shutdown.
+14. Preserve the original [Phase 9B zero-action result](2026-09-25/PHASE9B_NATIVE_COMPILED_STAGE_RETURN_20260925.md)
+   together with the [successful lifecycle recovery](2026-09-26/PHASE9B_NATIVE_COMPILED_STAGE_RETURN_RECOVERY_20260926.md).
+   Uniform bundled Warp loading now permits full collision review, and restoring
+   Isaac's prior modules before sensing produced a complete 36-action compiled
+   stage/return. Do not repeat this fixture. Move Phase 9 to a separately declared
+   legal-target exploratory contact/grasp test; strict execution remains blocked
+   by external clearance.
 15. Preserve the [natural trash Behavior-Skill result](2026-09-26/PHASE13_NATURAL_TRASH_BEHAVIOR_SKILL_20260926.md)
    as a long canonical-skill motor failure, not a short-probe result. It completed
    1,536 actions and visibly approached the can, but both grippers stayed fully
