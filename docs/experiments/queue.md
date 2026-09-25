@@ -16,7 +16,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 0-1 | Software and retained replay passed within their declared offline scope |
 | 2 | Controlled contract gate complete: 14/14 scenarios; natural-rollout replication remains robustness evidence, not runtime authority |
 | 3 | Complete as asynchronous historical discovery; four real-response calls passed semantic visibility, but 4.42--12.35 s latency fails the two-second synchronous gate |
-| 4 | 4B complete: compact context preserves 4/4 decisions while reducing prompt tokens 19.3% and cost 13.1%; 4A remains half complete and paid continuation is unauthorized |
+| 4 | Complete for the frozen scope. V3 delta achieved 2/2 target recall and 0/2 false positives; task-blind inventory achieved 1/2 and 0/2 while covering 20/24 versus 4/24 frozen major-category references. Compact context preserves 4/4 decisions while reducing prompt tokens 19.3% and cost 13.1%. |
 | 5 | Partial: localization/stop diagnostics pass their declared scope, and the native sensor-authority audit confirms there is no unused default R1Pro LiDAR/range/contact/active-camera channel; fixed and custom-camera screens cannot certify even a 5 mm segment, so a materially different legal current-clearance method or embodiment is required |
 | 6-7 | Exploratory base transit and arm endpoint/return mechanics completed; strict base transit and arm staging/return remain unqualified on external clearance |
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
@@ -46,6 +46,13 @@ immutable evidence, including failed and subsequently invalidated attempts.
 6. Do not repeat easy association tests, blind observer sweeps, identical
    calibration pulses, SAM wording sweeps, or more grasp batches without a new
    phase-level hypothesis.
+
+The [completed Phase 4A comparison](2026-09-25/PHASE4A_DISCOVERY_PROMPT_COMPARISON_20260925.md)
+preserves the original unresolved timeout and completes the semantic denominator
+through a preregistered three-view continuation. Use task-aware V3 deltas for
+target-directed asynchronous discovery and task-blind inventory only for broader,
+lower-priority historical cataloging. Neither path supplies current geometry or
+motion authority.
 
 ## Evidence History
 

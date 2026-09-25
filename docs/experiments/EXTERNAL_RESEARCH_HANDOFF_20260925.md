@@ -81,7 +81,7 @@ action interface. Only one actuator owner may run at a time.
 | 1. Retained V3 replay | Complete | Six retained GLM packets, 67 sightings, and 64 causal checks passed with no future, stale, or cross-source evidence accepted. | No live semantic-accuracy or latency claim follows. |
 | 2. Discovery-to-SAM identity | Complete for controlled 14-case gate | Safe continuous binding, loss invalidation, reset/session checks, stale-source rejection, and ambiguous identical-object reacquisition all pass. | Natural-rollout replication is useful robustness evidence, not a prerequisite for the contract result. |
 | 3. Live shadow discovery | Complete as asynchronous discovery; fails synchronous gate | Frozen four-boundary GLM cohort matched semantic visibility 4/4; 3/4 strict packets entered historical inventory. | Zero of four calls met the two-second control window. Use results only for history and fresh reacquisition requests. |
-| 4A. Discovery prompt study | Partial | V3 task-directed half achieved 2/2 radio recall, 0/2 false positives, and 3/4 strict packets. | Task-blind matched cohort stopped after one valid result, one unresolved timeout, and two unsent calls. A new declared continuation is required. |
+| 4A. Discovery prompt study | Complete for frozen four-view scope | V3 achieved 2/2 radio recall and 0/2 false positives; task-blind inventory achieved 1/2 and 0/2 while covering 20/24 versus 4/24 frozen major-category references. | The original timeout remains unresolved. This is not a general perception benchmark or geometry/identity authority. |
 | 4B. Executive context study | Complete for frozen four-boundary scope | Rich and compact GPT-6 Sol Flex decisions agreed 4/4. Compact reduced prompt tokens 19.3%, cost 13.1%, and mean latency 1.17 s. | Generalization and live causal benefit remain untested. Compact V3 is the default; rich is the comparator. |
 | 5. Localization, clearance, stopping | Partial; strict clearance branch closed for default cameras | Tested base stop predicate separates all 392 moving intervals from four stationary windows. Robust RGB-D registration and source-bound stop mechanics work in retained regimes. The final legal RGB-D voxel gate retained only 53.6% of newly occupied authored-vertex samples even under an all-history, zero-error upper bound. | A materially different legal sensing authority or disclosed embodiment is required. Broader localization remains incomplete. |
 | 6. Strict target-directed base transit | Blocked | Exploratory target-directed transits and braking were executed and measured. | No transit is strictly admitted because external clearance is unknown. |
@@ -128,9 +128,10 @@ The prospective Phase 3 cohort exposed the operational limitation: GLM latency w
 results may update historical inventory and request a fresh current capture; they
 must not refresh current geometry or directly authorize motion.
 
-GPT-6 Sol Flex remains the default executive/verifier model. GPT-6 Astra should be
-retained for a future matched diagnostic because external demonstrations suggested
-it may be stronger for robotics, but that comparison has not been run. Luna was
+GPT-6 Sol Flex remains the default executive/verifier model. GPT-6 Astra has
+corrected one frozen Sol error while preserving six correct Sol holds across the
+current selective-review evidence, with zero false corrections. It remains
+shadow-only because this scope is too small for automatic motion authority. Luna was
 tested and retired: only 4/6 valid inventories, 14.28-second median latency, and
 17/39 original category coverage. Codex subscription transport is a separate
 experimental condition and is not interchangeable with API inference.
@@ -142,6 +143,17 @@ contexts agreed on all four accepted decisions: approach twice, press once, then
 stop blind pressing and request fresh unobstructed power-state evidence. Compact
 used 10,087 prompt tokens versus 12,503, cost `$0.01582075` versus `$0.01821575`,
 and reduced mean latency from 6.324 to 5.151 seconds. Use compact V3 by default.
+
+### Discovery prompt profile
+
+The completed Phase 4A comparison separates two useful roles. Task-aware V3 delta
+found the radio in both positive views with no false positive, while task-blind
+inventory found one of two radios with no false positive and covered 20/24 frozen
+major-category references versus V3's 4/24. Manual image review supported 40/48
+inventory claims and rejected eight; the clear radio was localized but mislabeled
+as a projector. Keep V3 for target-directed asynchronous discovery and inventory
+for lower-priority broad historical cataloging. See
+[Phase 4A Discovery Prompt Comparison](2026-09-25/PHASE4A_DISCOVERY_PROMPT_COMPARISON_20260925.md).
 
 ### Native motion mechanics
 
@@ -293,13 +305,13 @@ Key private Phase 9B exploratory evidence:
   SHA-256
   `b9682781087a864f2798fa92c93a3b0324c9f686f0658083b443c3e5e9714af3`.
 
-Paid-call accounting after the partial Phase 10 decision cohort:
+Current paid-call accounting after the Phase 4A continuation:
 
-- reservations/cumulative count: `4,165`;
-- confirmed cost: `$23.69443742140`;
+- reservations/cumulative count: `4,206`;
+- confirmed cost: `$23.96038742140`;
 - unresolved holds: `$34.979327322900`;
-- total exposure: `$58.673764744300`;
-- remaining under the campaign `$75` ceiling: `$16.326235255700`.
+- total exposure: `$58.939714744300`;
+- remaining under the campaign `$75` ceiling: `$16.060285255700`.
 
 The added `$0.0138735` reservation belongs to a GPT-6 Sol Flex request that
 returned an upstream OpenRouter HTTP 429. The cohort stopped immediately, no
@@ -307,10 +319,11 @@ retry was attempted, no structured decision was accepted, and no robot action
 occurred. Preserve the unresolved hold unless provider accounting establishes a
 settlement.
 
-The blue-rule/blue-can response that hit the 128-token cap remains rejected. Its
+The earlier Phase 10 blue-rule/blue-can response that hit the 128-token cap remains rejected. Its
 separately approved 256-token replacement completed cleanly; the merged decision
-report records the discarded attempt and zero automatic retries. No additional
-paid calls are authorized by this handoff.
+report records the discarded attempt and zero automatic retries. The later Phase
+4A continuation used the standing low-budget authorization and preserved every
+unresolved hold.
 
 ## Recommended Next Decision
 
@@ -422,9 +435,9 @@ false corrections. The source lacks native timestamps, metric camera pose and
 qualified physical identity, so this remains semantic-caution evidence rather
 than motion authority. See
 [Phase 14 Natural-Loss Selective Review](2026-09-25/PHASE14_NATURAL_LOSS_SELECTIVE_REVIEW_20260925.md).
-Latest accounting is 4,203 cumulative calls, `$23.95888417140` confirmed,
-`$34.979327322900` unresolved, `$58.938211494300` exposure, and
-`$16.061788505700` available under `$75`.
+After the subsequent Phase 4A continuation, latest accounting is 4,206 cumulative
+calls, `$23.96038742140` confirmed, `$34.979327322900` unresolved,
+`$58.939714744300` exposure, and `$16.060285255700` available under `$75`.
 
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
