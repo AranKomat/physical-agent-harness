@@ -22,8 +22,8 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
-| 13 | Controlled initial scope complete with mixed evidence: blue failed under Sol, orange second-seed and composite-distractor cohorts passed; Astra corrected the exact blue packet and its post-decision lift verified; broad layout/task robustness remains open |
-| 14 | Initial prospective selective-review, frozen neural-duty accounting, and one successful exploratory classical power baseline are complete. Selective review corrected one Sol error, preserved six correct holds, and made zero false corrections. Behavior-Skill supplied 92.60% of action time in the failed Phase 8 cohort; sparse SAM avoided 89.48% of per-action-boundary invocations. A verified scripted lift used 0.1410 Wh during its 5.719 s manipulation window, while cold startup consumed 1.9119 Wh and 162.441 s. Broader live-native review, representation-cache hits, learned-stack energy while succeeding, and automatic Astra authority remain unmeasured. Sol stays default and Astra shadow-only. |
+| 13 | Controlled initial scope now includes mixed attribute evidence, a passed second seed, a passed composite distractor, and a passed live SAM tracker-reset/reacquisition axis with a verified 50.008 mm lift. Astra corrected the exact frozen blue Sol error. Broad natural occlusion, layout, placement, and task robustness remain open. |
+| 14 | Initial selective review, neural-duty accounting, and successful classical plus learned-perception power baselines are complete. The SAM-reset lift used 0.1150 Wh over its 4.015 s post-close inference/action window; cold SAM/simulator startup used 3.2405 Wh over 318.088 s. The exact descriptor cache recorded 2 hits and 2 misses, but this was not neural embedding reuse. Learned-policy/GPT energy while succeeding, neural feature-cache savings, broader live-native review, and automatic Astra authority remain unmeasured. Sol stays default and Astra shadow-only. |
 
 1. Preserve the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
    and [legal voxel gate](2026-09-25/PHASE5E_LEGAL_VOXEL_GATE_20260925.md) as the
@@ -40,6 +40,10 @@ immutable evidence, including failed and subsequently invalidated attempts.
    cold startup dominates its measured time and energy. Add cache-hit counters
    and the same telemetry to the next *learned-stack* workload that succeeds; do
    not infer an efficiency/competence frontier from the failed Phase 8 cohort.
+   The subsequent [SAM-reset lift](2026-09-25/PHASE13_SAM_RESET_LIFT_AND_PHASE14_POWER_20260925.md)
+   closes that first learned-perception measurement: preserve its successful
+   current-mask gate and power evidence, but do not describe its two exact
+   descriptor hits as neural feature-cache savings.
 5. Keep Sol as the default executive. The selective rule has corrected one frozen
    Sol error and preserved six correct holds without a false correction, including
    one retained natural camera-turn loss. Collect a fresh live-native boundary or
