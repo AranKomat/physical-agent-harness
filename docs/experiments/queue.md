@@ -22,7 +22,7 @@ immutable evidence, including failed and subsequently invalidated attempts.
 | 8 | Four-start counterbalanced exploratory A/B handoff-preservation cohort complete; no task success or causal benefit, and strict A/B/C remains blocked by Phases 5--7 |
 | 9 | Phase 9A complete for proposal-only research, including native empty-hand aperture tracking; one retained offline candidate, no executed grasp/lift, contact or execution authority |
 | 10-12 | Controlled exploratory execution gates complete: recurrent GPT `4/4` versus fixed `2/4`; one recapture recovery `1/1` versus fixed `0/1`; one orange M0/M1/M2 comparison `0/1`, `0/1`, `1/1` |
-| 13 | Controlled scope now includes mixed attributes, seed, distractor, tracker reset, native-instance, partial/full occlusion, and one task/object transfer. The native-instance cohort passed ID 302 but failed dark ID 303. The quality gate rejected the dark frame; fresh ID 304 safely aborted under full occlusion. A soda-can `picking_up_trash` transfer then completed a separately verified 50.010 mm lift. Astra corrected the frozen blue Sol error. Broader layouts, placements, complete tasks, and held-out tasks remain open. |
+| 13 | Controlled scope now includes mixed attributes, seed, distractor, tracker reset, native-instance, partial/full occlusion, task/object transfer, and one Halloween candle subgoal. The native-instance cohort passed ID 302 but failed dark ID 303. Fresh ID 304 safely aborted under full occlusion. Soda-can/`picking_up_trash` completed a separately verified 50.010 mm lift. The scripted Halloween candle then completed 30/30 actions with 50.004 mm FK/evaluator lift, but SAM found 0/3 candle prompts and the settled Astra visual response was lost to a fixed local artifact-directory bug; the preregistered trial therefore did not pass. Broader layouts, placements, complete tasks, and benchmark-valid held-out workflows remain open. |
 | 14 | Initial selective review, neural-duty accounting, and successful classical plus learned-perception power baselines are complete. The SAM-reset lift used 0.1150 Wh over its 4.015 s post-close inference/action window; cold SAM/simulator startup used 3.2405 Wh over 318.088 s. The exact descriptor cache recorded 2 hits and 2 misses, but this was not neural embedding reuse. Learned-policy/GPT energy while succeeding, neural feature-cache savings, broader live-native review, and automatic Astra authority remain unmeasured. Sol stays default and Astra shadow-only. |
 
 1. Preserve the [native sensor-authority audit](2026-09-25/PHASE5_NATIVE_SENSOR_AUTHORITY_AUDIT_20260925.md)
@@ -64,6 +64,11 @@ immutable evidence, including failed and subsequently invalidated attempts.
    as a controlled positive result. It transfers the learned-perception gate and
    verified lift from strawberry/`freeze_fruit` to soda-can/`picking_up_trash`,
    but it is not a complete task episode or broad task generalization.
+10. Preserve the [Halloween candle lift](2026-09-25/PHASE13_HALLOWEEN_CANDLE_LIFT_20260925.md)
+   as positive physical-effect evidence but a failed overall protocol. The candle
+   moved 50.004 mm under both FK and evaluator scoring; the independent visual
+   verdict is unavailable, and the identical lift must not be retried merely to
+   replace that missing artifact.
 
 The [completed Phase 4A comparison](2026-09-25/PHASE4A_DISCOVERY_PROMPT_COMPARISON_20260925.md)
 preserves the original unresolved timeout and completes the semantic denominator

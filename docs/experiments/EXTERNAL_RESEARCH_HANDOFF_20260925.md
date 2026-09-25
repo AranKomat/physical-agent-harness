@@ -92,7 +92,7 @@ action interface. Only one actuator owner may run at a time.
 | 10. Recurrent GPT executive | Complete for frozen exploratory four-case scope | GPT-6 Sol scored `4/4` versus fixed routing's analytical `2/4`. All four packet-bound choices were executed for 30/30 actions and independently verified; both lifts rose 50.01 mm and both holds stayed within 0.011 mm. | Generalization beyond the scripted fixture remains untested. This is not benchmark success and strict clearance remains unknown. |
 | 11. Event-driven recovery | Complete for one predeclared exploratory failure class | A first verification input deliberately lacked current left-wrist depth. The runtime independently detected it, GPT chose fresh recapture, six stationary actions executed, and fresh legal RGB-D/proprio verification passed. Fixed no-recovery scored `0/1`; GPT recovery scored `1/1`. | Natural failures, broader recovery classes, benchmark tasks, and strict motion remain untested. |
 | 12. Memory in execution | Complete for one controlled visual-memory boundary | M0 and M1 held, while M2 used a labeled historical image to select and execute a verified 50.01 mm lift. Verified progress was `0/1`, `0/1`, and `1/1`; all conditions used the same current evidence and fixed motor. | Natural occlusion, more than one object/task, complete text summaries, and robustness remain untested. |
-| 13. Robustness/held-out expansion | Controlled scope complete across several axes; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a composite distractor. Astra corrected the frozen blue M2 packet. A live SAM reset lift passed. A native-instance cohort scored `1/2`; the quality gate then rejected dark ID 303 and fresh ID 304 safely aborted under full occlusion. A controlled transfer to soda-can/`picking_up_trash` completed a separately verified 50.010 mm lift. | Broader layouts, placements, complete workflows, and held-out tasks remain open. Full disappearance keeps current geometry unknown; recovery needs new legal evidence rather than tracker-ID persistence. |
+| 13. Robustness/held-out expansion | Controlled scope complete across several axes; broad scope open | Blue failed under Sol; orange passed at seed 71 and with a composite distractor. Astra corrected the frozen blue M2 packet. A live SAM reset lift passed. A native-instance cohort scored `1/2`; fresh ID 304 safely aborted under full occlusion. Soda-can/`picking_up_trash` completed a separately verified 50.010 mm lift. A scripted Halloween candle subgoal then completed a 50.004 mm FK/evaluator lift, but SAM found no candle and the settled Astra visual response was lost locally, so its full protocol failed. | Broader layouts, placements, complete workflows, and benchmark-valid held-out tasks remain open. Full disappearance keeps current geometry unknown; recovery needs new legal evidence rather than tracker-ID persistence. |
 | 14. Efficiency optimization | Initial selective-review, active-duty, classical-power, and learned-perception-power scopes complete; broad scope open | Compact context remains default. Across scoped comparisons, selective review corrected one Sol error, preserved six correct holds, and made zero false corrections. The classical lift used 0.1410 Wh during 5.719 s manipulation. The successful SAM-reset lift used 0.1150 Wh during its 4.015 s post-close inference/action window, while cold SAM/simulator startup consumed 3.2405 Wh over 318.088 s. Its exact descriptor cache recorded two hits and two misses. | Retain Sol as default and Astra as shadow-only review. The cache hits were derived-descriptor reuse, not SAM embedding reuse. Learned-policy/GPT energy while succeeding, neural feature-cache savings, broader live-native review, automatic Astra authority, and the efficiency/competence frontier remain open. |
 
 ## Major Positive Results
@@ -326,13 +326,13 @@ Key private Phase 9B exploratory evidence:
   SHA-256
   `b9682781087a864f2798fa92c93a3b0324c9f686f0658083b443c3e5e9714af3`.
 
-Current paid-call accounting after the Phase 4A continuation:
+Current paid-call accounting after the Halloween candle visual-verifier attempt:
 
-- reservations/cumulative count: `4,206`;
-- confirmed cost: `$23.96038742140`;
+- reservations/cumulative count: `4,207`;
+- confirmed cost: `$23.96875242140`;
 - unresolved holds: `$34.979327322900`;
-- total exposure: `$58.939714744300`;
-- remaining under the campaign `$75` ceiling: `$16.060285255700`.
+- total exposure: `$58.948079744300`;
+- remaining under the campaign `$75` ceiling: `$16.051920255700`.
 
 The added `$0.0138735` reservation belongs to a GPT-6 Sol Flex request that
 returned an upstream OpenRouter HTTP 429. The cohort stopped immediately, no
@@ -459,6 +459,20 @@ than motion authority. See
 After the subsequent Phase 4A continuation, latest accounting is 4,206 cumulative
 calls, `$23.96038742140` confirmed, `$34.979327322900` unresolved,
 `$58.939714744300` exposure, and `$16.060285255700` available under `$75`.
+
+The first controlled Halloween candle subgoal then completed the fixed 30-action
+grasp/lift and measured 50.004 mm lift through both robot-only FK and quarantined
+post-control evaluator state. A zero-action preflight established that the candle
+fit only narrowly within the declared fixture aperture, and bounded SAM 3.1
+compatibility returned zero candidates for all three candle prompts. One
+preregistered Astra post-motion visual-verifier call settled at `$0.008365`, but
+its response body was lost after settlement because the local wrapper had not
+created its response directory. No retry occurred, so the full protocol failed
+despite the positive physical effect. See
+[Phase 13 Halloween Candle Lift](2026-09-25/PHASE13_HALLOWEEN_CANDLE_LIFT_20260925.md).
+Latest accounting is therefore 4,207 cumulative calls,
+`$23.96875242140` confirmed, `$34.979327322900` unresolved,
+`$58.948079744300` exposure, and `$16.051920255700` available under `$75`.
 
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
