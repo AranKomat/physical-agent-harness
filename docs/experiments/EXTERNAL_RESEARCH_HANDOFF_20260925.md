@@ -500,6 +500,17 @@ opening-duration, aperture, or retreat-direction tuning on the unsupported
 fixture. See
 [Phase 13 Soda-Can Release Diagnostic](2026-09-25/PHASE13_SODA_RELEASE_DIAGNOSTIC_20260925.md).
 
+One subsequent controlled fixture injected a fixed 30 mm-radius support under the
+same release pose before the first legal observation. The corrected run completed
+70/70 actions, lifted 41.532 mm, returned within 1.042 mm, opened with no active
+constraint or object in hand, and ended with the can bottom exactly on the support
+top at a 20.469 mm center offset. It nevertheless failed the frozen place protocol:
+the retreat moved the can 22.963 mm versus a 20 mm cap and achieved 31.998 mm final
+separation versus a 35 mm minimum. This closes pedestal/threshold tuning and moves
+the next gate to a new independently reviewed support-aware trajectory through the
+Action Compiler execution boundary. See
+[Phase 13 Supported Place Diagnostic](2026-09-25/PHASE13_SUPPORTED_PLACE_DIAGNOSTIC_20260925.md).
+
 Frozen active-workload neural-duty accounting is also complete for the eight-run
 Phase 8 Behavior-Skill/SAM cohort. It validates 9,216 policy actions, 288 policy
 inference chunks, and 1,048 source-bound SAM results. Behavior-Skill supplied
