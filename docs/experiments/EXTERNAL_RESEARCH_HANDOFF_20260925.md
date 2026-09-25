@@ -380,13 +380,24 @@ Latest paid-call accounting after the apple decisions is 4,187 cumulative calls,
 `$58.758854244300` total exposure, and `$16.241145755700` available under the
 retained `$75` ceiling. The three apple decisions cost `$0.0087415`; physical
 execution made no additional paid calls.
+
+Phase 14 now also has a six-case executive model-duty comparison. All-Sol scored
+`5/6` for `$0.02258675`; all-Astra scored `6/6` for `$0.10857125`; and the
+predeclared selective Sol-to-Astra review rule scored `6/6` for `$0.05694175`
+using two Astra calls. This reduced Astra duty by 66.7% and cost by 47.6% versus
+all-Astra, at the expense of two extra calls and higher sequential latency. See
+[Phase 14 Model-Duty Comparison](2026-09-25/PHASE14_MODEL_DUTY_COMPARISON_20260925.md).
+The rule remains shadow/advisory because the six cases were accumulated and only
+one negative review case is available. Latest accounting is 4,191 cumulative
+calls, `$23.85374317140` confirmed, `$34.979327322900` unresolved,
+`$58.833070494300` exposure, and `$16.166929505700` available under `$75`.
 Do not rerun or prompt-tune blue. Keep the same evidence contract, current
 boundary, motor backend, and verifier. Continue in this order:
 
-1. retain Sol as the default and log Astra review as shadow-only until more cases exist;
-2. move to one broader layout/task axis rather than tuning the completed pair;
+1. retain Sol as default and run the selective Astra rule prospectively in shadow mode;
+2. treat the passed apple/category axis as broader fixture evidence, not general motor competence;
 3. retain the Sol failure, Astra correction, negative control, passed seed, and passed distractor together;
-4. broaden duty-cycle and model-cost optimization only after useful behavior survives.
+4. measure VLA/perception duty only on a workload where those components are actually active.
 
 ## What Not To Repeat
 
