@@ -42,8 +42,10 @@ It does not establish autonomous placement or benchmark success. The robot, can,
 and ashcan poses were scripted before the first legal observation. The run placed
 one of the three required cans, and the public Action Compiler did not select or
 authorize the trajectory. Evaluator poses and task predicates were quarantined
-from control. The retained legal wrist images visually agree with the evaluator,
-but no separate model-based visual-verifier call was made.
+from control. A later frozen GPT-6 Sol verifier used only three retained legal
+left-wrist images, cited all three, and independently returned a supported
+`verified` verdict matching the native `Inside` and stability results. See
+[One-Can Ashcan Visual Verification](../2026-09-26/PHASE13_ONE_CAN_ASHCAN_VISUAL_VERIFICATION_20260926.md).
 
 ## Causal Controls
 
@@ -82,8 +84,7 @@ was derived.
 ## Next Gate
 
 Treat the concrete unlock criterion for later integrated phases as met only in
-the controlled exploratory sense. The next useful step is not another deposit
-fixture. It is to integrate a legally selected destination and support-aware
-trajectory through the Action Compiler, or formally record why the default R1Pro
-sensing cannot authorize that route. Complete-task and benchmark-valid claims
-remain open.
+the controlled exploratory sense. The retained effect now also has a supported
+model-based post-action verdict, so another verifier call or deposit fixture is
+not the next gate. Complete-task and benchmark-valid claims remain open, as do
+legally selected destinations and strict support-aware execution.
